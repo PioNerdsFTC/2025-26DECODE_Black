@@ -1,1 +1,1 @@
-Before issuing a pull request, please see the contributing page.
+Please make sure your code is either mostly readable or you can explain it to someone
