@@ -18,9 +18,15 @@ jobs:
     permissions:
       contents: read
       packages: write
+      
 
     steps:
     - uses: actions/checkout@v4
+    - name: Fail if not master branch
+      if: github.ref != 'refs/heads/master'
+      run: |
+        echo "This workflow only runs on master branch."
+        exit 1
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
