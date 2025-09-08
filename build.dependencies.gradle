@@ -1,6 +1,6 @@
 repositories {
     mavenCentral()
-    google() // Needed for androidx
+    google()
     maven { url = 'https://maven.brott.dev/' }
 }
 
