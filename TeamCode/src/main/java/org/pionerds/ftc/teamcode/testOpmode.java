@@ -5,9 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "Test opmode")
 public class testOpmode extends LinearOpMode{
-    public void main(String[] args) {
-        System.out.println("Hello, PionerDS!");
-    }
 
     @Override
     public void runOpMode() throws InterruptedException {
