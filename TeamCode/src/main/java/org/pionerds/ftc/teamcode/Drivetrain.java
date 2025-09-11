@@ -23,6 +23,7 @@ public class Drivetrain {
     }
 
     public void drivetrainMain(Gamepad driverGamepad){
+
         driveDPad(driverGamepad);
     }
 
@@ -30,7 +31,7 @@ public class Drivetrain {
 
         if (driverGamepad.dpad_down){
             try {
-
+              
             } catch (Exception e) {
                 Log.e("Error","Cannot power motors dpad_down");
             }
@@ -38,6 +39,7 @@ public class Drivetrain {
         if (driverGamepad.dpad_up){
             try {
 
+            }
             } catch (Exception e) {
                 Log.e("Error", "Cannot power motors dpad_up");
             }
@@ -62,6 +64,7 @@ public class Drivetrain {
     public void bumperTurn(Gamepad driverGamepad){
             if (driverGamepad.right_bumper) {
                 try {
+
                     motor[0].setPower(maxPow);
                     motor[1].setPower(maxPow);
                     motor[2].setPower(maxPow);
@@ -71,6 +74,7 @@ public class Drivetrain {
                 }
             }
             if (driverGamepad.left_bumper){
+
             try {
                 motor[0].setPower(-maxPow);
                 motor[1].setPower(-maxPow);

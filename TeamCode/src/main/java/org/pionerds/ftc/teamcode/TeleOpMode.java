@@ -18,7 +18,10 @@ public class TeleOpMode extends LinearOpMode {
         telemetry.addLine("Robot initialized (TeleOp)");
         telemetry.update();
 
-        while (opModeIsActive() && hardware.continueRunning) {}
+        while (opModeIsActive() && hardware.continueRunning) {
+            hardware.tick();
+            sleep(1);
+        }
 
         hardware.stop();
     }
