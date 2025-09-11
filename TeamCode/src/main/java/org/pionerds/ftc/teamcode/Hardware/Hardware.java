@@ -18,9 +18,7 @@ final public class Hardware {
      */
     HardwareMap map;
 
-    public void init(HardwareMap hardwareMap) {
-
-    }
+    public void init(HardwareMap hardwareMap) { }
 
     public void stop() {
         continueRunning = false;

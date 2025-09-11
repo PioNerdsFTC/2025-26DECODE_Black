@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-import org.pionerds.ftc.teamcode.Environment;
+import org.pionerds.ftc.teamcode.Utils.Environment;
 
 /**
  * Hardware mapping class for the robot.
