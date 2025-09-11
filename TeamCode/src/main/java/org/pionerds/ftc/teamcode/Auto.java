@@ -3,23 +3,23 @@ package org.pionerds.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.pionerds.ftc.teamcode.Robot.Robot;
+import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
 @Autonomous(name = "Autonymous")
 public class Auto extends LinearOpMode {
-    final Robot robot = new Robot();
+    final Hardware hardware = new Hardware();
 
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();
 
-        robot.init();
+        hardware.init();
 
         telemetry.addLine("Robot initialized (Auto)");
         telemetry.update();
 
         while (opModeIsActive()) {}
 
-        robot.stop();
+        hardware.stop();
     }
 }
