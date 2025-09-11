@@ -29,6 +29,7 @@ final public class Hardware {
      */
     public void init(HardwareMap hardwareMap) {
         mapping.init(this, hardwareMap);
+        drivetrain.init(this);
     }
 
     /** Runs for each iteration of the OpMode, may or may not be necessary */
