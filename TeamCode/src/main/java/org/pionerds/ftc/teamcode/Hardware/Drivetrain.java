@@ -1,15 +1,29 @@
-package org.pionerds.ftc.teamcode;
+package org.pionerds.ftc.teamcode.Hardware;
+
+import static com.qualcomm.robotcore.hardware.DcMotorSimple.*;
 
 import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class Drivetrain {
 
+    Hardware hardware = null;
+
     public DcMotor[] motors = { null, null, null, null }; //front right, front left, back left, back right
 
-    static private double maxPow = 0.8;
+    public void init(Hardware hardware) {
+        this.hardware = hardware;
+
+        motors[0] = this.hardware.mapping.mapMotor("motor0", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+        motors[1] = this.hardware.mapping.mapMotor("motor1", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+        motors[2] = this.hardware.mapping.mapMotor("motor2", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+        motors[3] = this.hardware.mapping.mapMotor("motor3", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+    }
+
+    static private final double maxPow = 0.8;
 
     public void setDriveMotorsPow(double[] powVals){
         motors[0].setPower(powVals[0]);
