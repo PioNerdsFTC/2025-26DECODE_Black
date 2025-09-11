@@ -5,18 +5,25 @@
  */
 
 buildscript {
+<<<<<<< HEAD
     ext {
 <<<<<<< HEAD
 =======
         agp_version1 = '8.1.1'
     }
+=======
+>>>>>>> 0d02081 (made gradle version correct 8.13)
     repositories {
         mavenCentral()
         google()
     }
     dependencies {
         // Note for FTC Teams: Do not modify this yourself.
+<<<<<<< HEAD
         classpath "com.android.tools.build:gradle:$agp_version1"
+=======
+        classpath 'com.android.tools.build:gradle:8.13.0'
+>>>>>>> 0d02081 (made gradle version correct 8.13)
     }
 }
 
