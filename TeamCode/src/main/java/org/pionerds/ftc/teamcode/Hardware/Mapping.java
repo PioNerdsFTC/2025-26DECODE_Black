@@ -21,7 +21,7 @@ public class Mapping {
     /**
      * The hardware object.
      */
-    private Hardware hardware;
+    private final Hardware hardware;
 
     /**
      * Constructor for the hardware mapping class.

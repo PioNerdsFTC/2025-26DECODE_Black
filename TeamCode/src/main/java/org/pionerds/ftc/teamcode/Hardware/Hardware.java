@@ -18,8 +18,17 @@ final public class Hardware {
      */
     HardwareMap map;
 
+    /**
+     * Initialize all hardware
+     * @param hardwareMap All the hardware devices, contained inside a map.
+     */
     public void init(HardwareMap hardwareMap) {
         this.map = hardwareMap;
+    }
+
+    /** Runs for each iteration of the OpMode, may or may not be necessary */
+    public void tick() {
+
     }
 
     public void stop() {
