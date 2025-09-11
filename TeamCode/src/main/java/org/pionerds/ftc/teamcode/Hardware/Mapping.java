@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.CRServoImplEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -21,14 +22,17 @@ public class Mapping {
     /**
      * The hardware object.
      */
-    private final Hardware hardware;
+    private Hardware hardware;
+    private HardwareMap map = null;
 
     /**
      * Constructor for the hardware mapping class.
      *
      * @param hardware The Hardware object.
      */
-    Mapping(Hardware hardware) {
+
+    public void init(Hardware hardware, HardwareMap map) {
+        this.map = map;
         this.hardware = hardware;
     }
 
@@ -48,7 +52,7 @@ public class Mapping {
         DcMotorImplEx motor = null;
 
         try {
-            motor = hardware.map.get(DcMotorImplEx.class, motorName);
+            motor = this.map.get(DcMotorImplEx.class, motorName);
             motor.setDirection(motorDirection);
             motor.setZeroPowerBehavior(motorZeroPowerBehavior);
             motor.getMotorType().setGearing(gearRatio);
@@ -74,7 +78,7 @@ public class Mapping {
     ) {
         CRServoImplEx continuousServo = null;
         try {
-           continuousServo = hardware.map.get(CRServoImplEx.class, servoName);
+           continuousServo = this.map.get(CRServoImplEx.class, servoName);
            continuousServo.setDirection(servoDirection);
         } catch (Exception e) {
             Log.e("Error", "Cannot map continuous servo: " + servoName);
@@ -94,7 +98,7 @@ public class Mapping {
         IMU imu = null;
 
         try {
-            imu = hardware.map.get(IMU.class, "imu");
+            imu = this.map.get(IMU.class, "imu");
         } catch (Exception e) {
             Log.e("Error", "Cannot map IMU, is it named 'imu'?");
 
@@ -114,7 +118,7 @@ public class Mapping {
         ServoImplEx servoMotor = null;
 
         try {
-            servoMotor = hardware.map.get(ServoImplEx.class, servoMotorName);
+            servoMotor = this.map.get(ServoImplEx.class, servoMotorName);
         } catch (Exception e) {
             Log.e("Error", "Cannot map servo motor with name " + servoMotorName);
 
