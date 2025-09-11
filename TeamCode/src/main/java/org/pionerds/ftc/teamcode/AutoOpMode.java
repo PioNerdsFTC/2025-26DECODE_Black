@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
-@Autonomous(name = "Autonymous")
+@Autonomous(name = "Autonomous")
 public class AutoOpMode extends LinearOpMode {
     final Hardware hardware = new Hardware();
 
