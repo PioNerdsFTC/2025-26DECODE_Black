@@ -28,7 +28,9 @@ public class Mapping {
      *
      * @param hardware The Hardware object.
      */
-    Mapping(Hardware hardware) { }
+    Mapping(Hardware hardware) {
+        this.hardware = hardware;
+    }
 
     /**
      * @param motorName              The name of the motor.
