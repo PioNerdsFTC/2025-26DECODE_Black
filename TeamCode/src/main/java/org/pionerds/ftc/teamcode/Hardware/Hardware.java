@@ -18,15 +18,6 @@ final public class Hardware {
      */
     public boolean continueRunning = true;
 
-    /**
-     * The hardware map.
-     */
-    HardwareMap map;
-
-    /**
-     * Initialize all hardware
-     * @param hardwareMap All the hardware devices, contained inside a map.
-     */
     public void init(HardwareMap hardwareMap) {
         mapping.init(this, hardwareMap);
         drivetrain.init(this);

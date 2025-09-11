@@ -25,11 +25,11 @@ public class Drivetrain {
 
     static private final double maxPow = 0.8;
 
-    public void setDriveMotorsPow(double motor0, double motor1, double motor2, double motor3){
-        motors[0].setPower(motor0);
-        motors[1].setPower(motor1);
-        motors[2].setPower(motor2);
-        motors[3].setPower(motor3);
+    public void setDriveMotorsPow(double pow0, double pow1, double pow2, double pow3){
+        motors[0].setPower(pow0);
+        motors[1].setPower(pow1);
+        motors[2].setPower(pow2);
+        motors[3].setPower(pow3);
     }
 
     public double[] expandRotVals(double powVal){
