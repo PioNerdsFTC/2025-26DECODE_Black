@@ -18,7 +18,10 @@ public class AutoOpMode extends LinearOpMode {
         telemetry.addLine("Robot initialized (Auto)");
         telemetry.update();
 
-        while (opModeIsActive() && hardware.continueRunning) {}
+        while (opModeIsActive() && hardware.continueRunning) {
+            hardware.tick();
+            sleep(1);
+        }
 
         hardware.stop();
     }
