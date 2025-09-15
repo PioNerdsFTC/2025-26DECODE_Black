@@ -1,5 +1,5 @@
 package org.pionerds.ftc.teamcode;
 
 public enum VisionCommands {
-    RESUME,STOP,CLOSE
+    RESUME,STOP,CLOSE,PAUSE
 }

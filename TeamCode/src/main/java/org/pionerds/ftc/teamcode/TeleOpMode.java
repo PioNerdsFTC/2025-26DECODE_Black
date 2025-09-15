@@ -12,10 +12,7 @@ public class TeleOpMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Initialization
-        Vision vision = new Vision();
         waitForStart();
-        vision.initAprilTag();
-
         hardware.init(hardwareMap);
 
         telemetry.addLine("Robot initialized (TeleOp)");
