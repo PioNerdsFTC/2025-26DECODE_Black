@@ -1,5 +1,7 @@
 package org.pionerds.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -31,39 +33,39 @@ public class Drivetrain {
 
         if (driverGamepad.dpad_down) {
             try {
-
+                telemetry.addLine("Dpad Down");
+                telemetry.update();
             } catch (Exception e) {
                 Log.e("Error", "Cannot power motors dpad_down");
             }
         }
         if (driverGamepad.dpad_up) {
             try {
-
+                telemetry.addLine("Dpad Up");
+                telemetry.update();
+            } catch (Exception e) {
+                Log.e("Error", "Cannot power motors dpad_up");
             }
-        } catch(Exception e){
-            Log.e("Error", "Cannot power motors dpad_up");
         }
-    }
-        if(driverGamepad.dpad_left)
-
-    {
-        try {
-
-        } catch (Exception e) {
-            Log.e("Error", "Cannot power motors dpad_left");
+        if (driverGamepad.dpad_left) {
+            try {
+                telemetry.addLine("Dpad Left");
+                telemetry.update();
+            } catch (Exception e) {
+                Log.e("Error", "Cannot power motors dpad_left");
+            }
         }
-    }
-        if(driverGamepad.dpad_right)
-
-    {
-        try {
-
-        } catch (Exception e) {
-            Log.e("Error", "Cannot power motors dpad_right");
+        if (driverGamepad.dpad_right) {
+            try {
+                telemetry.addLine("Dpad Right");
+                telemetry.update();
+            } catch (Exception e) {
+                Log.e("Error", "Cannot power motors dpad_right");
+            }
         }
     }
 
-    public void bumperTurn(Gamepad driverGamepad) {
+    void bumperTurn(Gamepad driverGamepad) {
         if (driverGamepad.right_bumper) {
             try {
 
