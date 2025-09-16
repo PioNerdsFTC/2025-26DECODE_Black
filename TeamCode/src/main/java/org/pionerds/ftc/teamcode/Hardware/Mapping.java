@@ -11,7 +11,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.util.SerialNumber;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.pionerds.ftc.teamcode.Utils.Environment;
 
 /**
@@ -34,6 +37,7 @@ public class Mapping {
     public void init(Hardware hardware, HardwareMap map) {
         this.map = map;
         this.hardware = hardware;
+
     }
 
     /**
@@ -43,7 +47,7 @@ public class Mapping {
      * @param motorZeroPowerBehavior The zero power behavior of the motor.
      * @return The motor object.
      */
-    DcMotorImplEx mapMotor(
+    DcMotorImplEx getMotor(
             String motorName,
             Double gearRatio,
             DcMotorSimple.Direction motorDirection,
@@ -72,7 +76,7 @@ public class Mapping {
      * @param servoDirection Direction of crServo
      * @return The servo
      */
-    CRServo mapContinuousServo(
+    CRServo getContinuousServo(
             String servoName,
             CRServoImplEx.Direction servoDirection
     ) {
@@ -93,7 +97,7 @@ public class Mapping {
      *
      * @return the IMU
      */
-    IMU mapIMU() {
+    IMU getIMU() {
 
         IMU imu = null;
 
@@ -114,7 +118,7 @@ public class Mapping {
      * @param servoMotorName The name of the servo motor
      * @return The servo motor
      */
-    ServoImplEx mapServoMotor(String servoMotorName) {
+    ServoImplEx getServoMotor(String servoMotorName) {
         ServoImplEx servoMotor = null;
 
         try {
@@ -126,5 +130,25 @@ public class Mapping {
         }
 
         return servoMotor;
+    }
+
+    /**
+     * Map a servo motor from the hardware map
+     *
+     * @param webcamName The name of the webcam
+     * @return The webcam
+     */
+    CameraName getWebcam(String webcamName) {
+        CameraName webcam = null;
+
+        try {
+            webcam = this.map.get(WebcamName.class, webcamName);
+        } catch (Exception e) {
+            Log.e("Error", "Cannot map servo motor with name " + webcam);
+
+            if (!Environment.competing) hardware.continueRunning = false;
+        }
+
+        return webcam;
     }
 }

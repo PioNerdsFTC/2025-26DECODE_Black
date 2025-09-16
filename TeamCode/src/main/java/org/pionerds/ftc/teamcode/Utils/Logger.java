@@ -22,7 +22,7 @@ public class Logger {
     public void error() { }
 
     /** Log a simple log message */
-    public void info() { }
+    public void info() {}
 
     /** Log a debug log message */
     public void debug() { }
