@@ -6,15 +6,16 @@
 
 buildscript {
     ext {
-        agp_version = '8.1.1'
+        agp_version1 = '8.1.1'
     }
+
     repositories {
         mavenCentral()
         google()
     }
     dependencies {
         // Note for FTC Teams: Do not modify this yourself.
-        classpath "com.android.tools.build:gradle:$agp_version"
+        classpath "com.android.tools.build:gradle:$agp_version1"
     }
 }
 
