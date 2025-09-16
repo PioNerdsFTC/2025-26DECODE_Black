@@ -12,6 +12,7 @@ final public class Hardware {
 
     Drivetrain drivetrain = new Drivetrain();
     Mapping mapping = new Mapping();
+    Vision vision = new Vision();
 
     /**
      * Whether the hardware class is able to continue running.
@@ -21,6 +22,7 @@ final public class Hardware {
     public void init(HardwareMap hardwareMap) {
         mapping.init(this, hardwareMap);
         drivetrain.init(this);
+        vision.init(this);
     }
 
     /** Runs for each iteration of the OpMode, may or may not be necessary */

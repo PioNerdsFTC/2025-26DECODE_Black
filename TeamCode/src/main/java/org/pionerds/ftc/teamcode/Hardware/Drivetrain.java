@@ -17,10 +17,10 @@ public class Drivetrain {
     public void init(Hardware hardware) {
         this.hardware = hardware;
 
-        motors[0] = this.hardware.mapping.mapMotor("motor0", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
-        motors[1] = this.hardware.mapping.mapMotor("motor1", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
-        motors[2] = this.hardware.mapping.mapMotor("motor2", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
-        motors[3] = this.hardware.mapping.mapMotor("motor3", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+        motors[0] = this.hardware.mapping.getMotor("motor0", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+        motors[1] = this.hardware.mapping.getMotor("motor1", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+        motors[2] = this.hardware.mapping.getMotor("motor2", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+        motors[3] = this.hardware.mapping.getMotor("motor3", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
     static private final double maxPow = 0.8;
