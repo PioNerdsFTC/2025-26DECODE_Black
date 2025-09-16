@@ -45,10 +45,10 @@ public class Drivetrain {
 
         if (driverGamepad.dpad_down){
             try {
-                motors[0].setPower(maxPow);
-                motors[1].setPower(maxPow);
-                motors[2].setPower(maxPow);
-                motors[3].setPower(maxPow);
+                motors[0].setPower(-maxPow);
+                motors[1].setPower(-maxPow);
+                motors[2].setPower(-maxPow);
+                motors[3].setPower(-maxPow);
             } catch (Exception e) {
                 Log.e("Error","Cannot power motors dpad_down");
             }
@@ -66,10 +66,10 @@ public class Drivetrain {
         }
         if (driverGamepad.dpad_left){
             try {
-                motors[0].setPower(maxPow);
+                motors[0].setPower(-maxPow);
                 motors[1].setPower(maxPow);
                 motors[2].setPower(maxPow);
-                motors[3].setPower(maxPow);
+                motors[3].setPower(-maxPow);
 
             } catch (Exception e) {
                 Log.e("Error", "Cannot power motors dpad_left");
@@ -78,8 +78,8 @@ public class Drivetrain {
         if (driverGamepad.dpad_right){
             try {
                 motors[0].setPower(maxPow);
-                motors[1].setPower(maxPow);
-                motors[2].setPower(maxPow);
+                motors[1].setPower(-maxPow);
+                motors[2].setPower(-maxPow);
                 motors[3].setPower(maxPow);
 
             }
@@ -93,9 +93,9 @@ public class Drivetrain {
             if (driverGamepad.right_bumper) {
                 try {
                     motors[0].setPower(maxPow);
-                    motors[1].setPower(maxPow);
+                    motors[1].setPower(-maxPow);
                     motors[2].setPower(maxPow);
-                    motors[3].setPower(maxPow);
+                    motors[3].setPower(-maxPow);
                 } catch (Exception e) {
                     Log.e("Error", "Cannot power motors right_bumper");
                 }
@@ -104,9 +104,9 @@ public class Drivetrain {
 
             try {
                 motors[0].setPower(-maxPow);
-                motors[1].setPower(-maxPow);
+                motors[1].setPower(maxPow);
                 motors[2].setPower(-maxPow);
-                motors[3].setPower(-maxPow);
+                motors[3].setPower(maxPow);
             } catch (Exception e) {
                 Log.e("Error","Cannot power motors left_bumper");
             }
