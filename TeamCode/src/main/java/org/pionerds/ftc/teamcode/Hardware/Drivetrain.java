@@ -66,10 +66,10 @@ public class Drivetrain {
         }
         else if (driverGamepad.dpad_left){
             try {
-                motors[0].setPower(-maxPow);
-                motors[1].setPower(maxPow);
+                motors[0].setPower(maxPow);
+                motors[1].setPower(0);
                 motors[2].setPower(maxPow);
-                motors[3].setPower(-maxPow);
+                motors[3].setPower(0);
 
             } catch (Exception e) {
                 Log.e("Error", "Cannot power motors dpad_left");
@@ -77,9 +77,9 @@ public class Drivetrain {
         }
         else if (driverGamepad.dpad_right){
             try {
-                motors[0].setPower(maxPow);
-                motors[1].setPower(-maxPow);
-                motors[2].setPower(-maxPow);
+                motors[0].setPower(0);
+                motors[1].setPower(maxPow);
+                motors[2].setPower(0);
                 motors[3].setPower(maxPow);
 
             }
