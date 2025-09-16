@@ -19,7 +19,7 @@ public class AutoOpMode extends LinearOpMode {
         telemetry.update();
 
         while (opModeIsActive() && hardware.continueRunning) {
-            hardware.tick();
+
             sleep(1);
         }
 
