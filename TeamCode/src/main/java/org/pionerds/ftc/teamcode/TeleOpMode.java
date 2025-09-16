@@ -19,7 +19,7 @@ public class TeleOpMode extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive() && hardware.continueRunning) {
-            hardware.tick();
+            hardware.tick(gamepad1);
             sleep(1);
         }
 

@@ -19,7 +19,7 @@ public class AutoOpMode extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive() && hardware.continueRunning) {
-            hardware.tick();
+
             sleep(1);
         }
 

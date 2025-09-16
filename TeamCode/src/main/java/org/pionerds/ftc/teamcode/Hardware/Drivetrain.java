@@ -45,15 +45,15 @@ public class Drivetrain {
 
         if (driverGamepad.dpad_down){
             try {
-                motors[0].setPower(maxPow);
-                motors[1].setPower(maxPow);
-                motors[2].setPower(maxPow);
-                motors[3].setPower(maxPow);
+                motors[0].setPower(-maxPow);
+                motors[1].setPower(-maxPow);
+                motors[2].setPower(-maxPow);
+                motors[3].setPower(-maxPow);
             } catch (Exception e) {
                 Log.e("Error","Cannot power motors dpad_down");
             }
         }
-        if (driverGamepad.dpad_up){
+        else if (driverGamepad.dpad_up){
             try {
                 motors[0].setPower(maxPow);
                 motors[1].setPower(maxPow);
@@ -64,27 +64,40 @@ public class Drivetrain {
                 Log.e("Error", "Cannot power motors dpad_up");
             }
         }
-        if (driverGamepad.dpad_left){
+        else if (driverGamepad.dpad_left){
             try {
                 motors[0].setPower(maxPow);
-                motors[1].setPower(maxPow);
+                motors[1].setPower(0);
                 motors[2].setPower(maxPow);
-                motors[3].setPower(maxPow);
+                motors[3].setPower(0);
 
             } catch (Exception e) {
                 Log.e("Error", "Cannot power motors dpad_left");
             }
         }
-        if (driverGamepad.dpad_right){
+        else if (driverGamepad.dpad_right){
             try {
-                motors[0].setPower(maxPow);
+                motors[0].setPower(0);
                 motors[1].setPower(maxPow);
-                motors[2].setPower(maxPow);
+                motors[2].setPower(0);
                 motors[3].setPower(maxPow);
 
             }
             catch (Exception e) {
                 Log.e("Error", "Cannot power motors dpad_right");
+            }
+        }
+        else {
+            try {
+                motors[0].setPower(0);
+                motors[1].setPower(0);
+                motors[2].setPower(0);
+                motors[3].setPower(0);
+
+
+            }
+            catch (Exception e){
+                Log.e("Error","Unable to power down motors");
             }
         }
     }
@@ -93,9 +106,9 @@ public class Drivetrain {
             if (driverGamepad.right_bumper) {
                 try {
                     motors[0].setPower(maxPow);
-                    motors[1].setPower(maxPow);
+                    motors[1].setPower(-maxPow);
                     motors[2].setPower(maxPow);
-                    motors[3].setPower(maxPow);
+                    motors[3].setPower(-maxPow);
                 } catch (Exception e) {
                     Log.e("Error", "Cannot power motors right_bumper");
                 }
@@ -104,9 +117,9 @@ public class Drivetrain {
 
             try {
                 motors[0].setPower(-maxPow);
-                motors[1].setPower(-maxPow);
+                motors[1].setPower(maxPow);
                 motors[2].setPower(-maxPow);
-                motors[3].setPower(-maxPow);
+                motors[3].setPower(maxPow);
             } catch (Exception e) {
                 Log.e("Error","Cannot power motors left_bumper");
             }

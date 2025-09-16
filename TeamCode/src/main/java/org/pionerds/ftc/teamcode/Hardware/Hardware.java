@@ -1,5 +1,6 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -38,15 +39,15 @@ final public class Hardware {
     }
 
     /** Runs for each iteration of the OpMode, may or may not be necessary */
-    public void tick() {
+    public void tick(Gamepad gamepad1) {
         try {
-            // stuff here
+          this.drivetrain.driveDPad(gamepad1);
         } catch(Exception e) {
             this.telemetry.addLine(e.getMessage());
             if (!Environment.competing) this.continueRunning = false;
         }
     }
-
+  
     public void stop() {
         continueRunning = false;
     }
