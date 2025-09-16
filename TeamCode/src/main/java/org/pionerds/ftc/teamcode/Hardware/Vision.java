@@ -1,11 +1,6 @@
-package org.pionerds.ftc.teamcode;
+package org.pionerds.ftc.teamcode.Hardware;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -28,10 +23,10 @@ public class Vision {
      */
     private VisionPortal visionPortal;
 
-    public Vision(Telemetry telemetry){
-        initAprilTag();
+    public void init(Hardware hardware) {
+        initAprilTag(hardware);
     }
-    public void initAprilTag() {
+    public void initAprilTag(Hardware hardware) {
 
         // Create the AprilTag processor.
         aprilTag = new AprilTagProcessor.Builder()
@@ -66,7 +61,7 @@ public class Vision {
 
         // Set the camera (webcam vs. built-in RC phone camera).
         if (USE_WEBCAM) {
-            builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
+            builder.setCamera(hardware.mapping.getWebcam("Webcam 1"));
         } else {
             builder.setCamera(BuiltinCameraDirection.BACK);
         }

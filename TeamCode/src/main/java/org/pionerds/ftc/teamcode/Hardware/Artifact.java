@@ -1,4 +1,4 @@
-package org.pionerds.ftc.teamcode;
+package org.pionerds.ftc.teamcode.Hardware;
 
 public enum Artifact {
     GREEN,
