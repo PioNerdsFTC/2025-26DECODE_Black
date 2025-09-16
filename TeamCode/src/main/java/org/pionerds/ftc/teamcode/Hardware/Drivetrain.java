@@ -17,10 +17,10 @@ public class Drivetrain {
     public void init(Hardware hardware) {
         this.hardware = hardware;
 
-        motors[0] = this.hardware.mapping.getMotor("motor0", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
-        motors[1] = this.hardware.mapping.getMotor("motor1", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
-        motors[2] = this.hardware.mapping.getMotor("motor2", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
-        motors[3] = this.hardware.mapping.getMotor("motor3", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+        motors[0] = this.hardware.mapping.mapMotor("motor0", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
+        motors[1] = this.hardware.mapping.mapMotor("motor1", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
+        motors[2] = this.hardware.mapping.mapMotor("motor2", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
+        motors[3] = this.hardware.mapping.mapMotor("motor3", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     static private final double maxPow = 0.8;
@@ -45,8 +45,8 @@ public class Drivetrain {
 
         if (driverGamepad.dpad_down){
             try {
-                motors[0].setPower(-maxPow);
-                motors[1].setPower(maxPow);
+                motors[0].setPower(maxPow);
+                motors[1].setPower(-maxPow);
                 motors[2].setPower(maxPow);
                 motors[3].setPower(-maxPow);
             } catch (Exception e) {
@@ -55,8 +55,8 @@ public class Drivetrain {
         }
         else if (driverGamepad.dpad_up){
             try {
-                motors[0].setPower(maxPow);
-                motors[1].setPower(-maxPow);
+                motors[0].setPower(-maxPow);
+                motors[1].setPower(maxPow);
                 motors[2].setPower(-maxPow);
                 motors[3].setPower(maxPow);
 
