@@ -1,5 +1,6 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.Map;
@@ -24,8 +25,8 @@ final public class Hardware {
     }
 
     /** Runs for each iteration of the OpMode, may or may not be necessary */
-    public void tick() {
-
+    public void tick(Gamepad gamepad1) {
+        this.drivetrain.driveDPad(gamepad1);
     }
 
     public void stop() {
