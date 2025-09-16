@@ -95,7 +95,7 @@ public class ConceptAprilTag extends LinearOpMode {
         if (opModeIsActive()) {
             while (opModeIsActive()) {
 
-                telemetryAprilTag();
+                //telemetryAprilTag();
 
                 // Push telemetry to the Driver Station.
                 telemetry.update();
