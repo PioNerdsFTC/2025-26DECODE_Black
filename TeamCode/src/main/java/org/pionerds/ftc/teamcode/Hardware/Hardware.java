@@ -13,7 +13,7 @@ final public class Hardware {
 
     Drivetrain drivetrain = new Drivetrain();
     Mapping mapping = new Mapping();
-    Vision vision = new Vision();
+    public Vision vision = new Vision();
 
     /**
      * Whether the hardware class is able to continue running.

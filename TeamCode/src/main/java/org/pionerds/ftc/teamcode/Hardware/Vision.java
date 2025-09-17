@@ -6,9 +6,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
+import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Vision {
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
@@ -91,7 +95,26 @@ public class Vision {
 
     }   // end method initAprilTag()
 
-    public List<AprilTagDetection> currentDetections(){return aprilTag.getDetections();}
+    public ArrayList<AprilTagDetection> currentDetections(){
+        if(aprilTag.getDetections()==null){return new ArrayList<AprilTagDetection>();}
+        return aprilTag.getDetections();
+    }
+
+    public ArrayList<String> currentDetectionsNames() {
+        ArrayList<String> detectionNames = new ArrayList<String>();
+        List<AprilTagDetection> currentDetections = this.currentDetections();
+
+        // iterate and get names
+        for(AprilTagDetection detection: this.currentDetections()){
+            if(detection==null){detectionNames.add("(String) null");}
+            if((detection!=null)&&(detection.metadata!=null)){
+                detectionNames.add(detection.metadata.name);
+            }
+
+        }
+
+        return detectionNames;
+    }
 
     public void controlVisionPortal(VisionCommands command){
         if(command==VisionCommands.RESUME){
