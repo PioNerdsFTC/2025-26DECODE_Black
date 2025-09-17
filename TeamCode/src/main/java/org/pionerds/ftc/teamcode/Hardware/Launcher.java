@@ -10,6 +10,10 @@ public class Launcher {
     public DcMotor launcher0;
     public DcMotor launcher1;
 
+    Launcher() {
+
+    }
+
     public void init(Hardware hardware) {
         this.hardware = hardware;
 
