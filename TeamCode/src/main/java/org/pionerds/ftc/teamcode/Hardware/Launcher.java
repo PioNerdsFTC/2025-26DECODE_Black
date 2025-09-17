@@ -13,8 +13,8 @@ public class Launcher {
     public void init(Hardware hardware) {
         this.hardware = hardware;
 
-        launcher0 = this.hardware.mapping.mapMotor("launcher0", 3.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
-        launcher1 = this.hardware.mapping.mapMotor("launcher1", 3.0, DcMotorSimple.Direction.REVERSE, DcMotor.ZeroPowerBehavior.FLOAT);
+        launcher0 = this.hardware.mapping.getMotor("launcher0", 3.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+        launcher1 = this.hardware.mapping.getMotor("launcher1", 3.0, DcMotorSimple.Direction.REVERSE, DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
     public void setLauncherPower(double power) {
