@@ -105,9 +105,9 @@ public class Drivetrain {
     public void bumperTurn(Gamepad driverGamepad){
             if (driverGamepad.right_bumper) {
                 try {
-                    motors[0].setPower(maxPow);
+                    motors[0].setPower(-maxPow);
                     motors[1].setPower(-maxPow);
-                    motors[2].setPower(maxPow);
+                    motors[2].setPower(-maxPow);
                     motors[3].setPower(-maxPow);
                 } catch (Exception e) {
                     Log.e("Error", "Cannot power motors right_bumper");
@@ -116,9 +116,9 @@ public class Drivetrain {
             if (driverGamepad.left_bumper){
 
             try {
-                motors[0].setPower(-maxPow);
+                motors[0].setPower(maxPow);
                 motors[1].setPower(maxPow);
-                motors[2].setPower(-maxPow);
+                motors[2].setPower(maxPow);
                 motors[3].setPower(maxPow);
             } catch (Exception e) {
                 Log.e("Error","Cannot power motors left_bumper");
