@@ -11,12 +11,12 @@ public class TeleOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        waitForStart();
-
-        hardware.init(hardwareMap);
+        hardware.init(hardwareMap, telemetry);
 
         telemetry.addLine("Robot initialized (TeleOp)");
         telemetry.update();
+
+        waitForStart();
 
         while (opModeIsActive() && hardware.continueRunning) {
             hardware.tick(gamepad1);

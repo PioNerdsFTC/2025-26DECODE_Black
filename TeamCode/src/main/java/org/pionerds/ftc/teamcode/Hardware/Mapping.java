@@ -37,6 +37,7 @@ public class Mapping {
     public void init(Hardware hardware, HardwareMap map) {
         this.map = map;
         this.hardware = hardware;
+
     }
 
     /**
