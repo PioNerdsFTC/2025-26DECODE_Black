@@ -10,11 +10,13 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.io.IOException;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Vision {
+    private boolean obeliskIdentified = false;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     /**
@@ -100,20 +102,58 @@ public class Vision {
         return aprilTag.getDetections();
     }
 
-    public ArrayList<String> currentDetectionsNames() {
-        ArrayList<String> detectionNames = new ArrayList<String>();
+    public ArrayList<AprilTagMetadata> currentDetectionsMetadata() {
+        ArrayList<AprilTagMetadata> detectionNames = new ArrayList<AprilTagMetadata>();
         List<AprilTagDetection> currentDetections = this.currentDetections();
 
         // iterate and get names
         for(AprilTagDetection detection: this.currentDetections()){
-            if(detection==null){detectionNames.add("(String) null");}
             if((detection!=null)&&(detection.metadata!=null)){
-                detectionNames.add(detection.metadata.name);
+                detectionNames.add(detection.metadata);
             }
 
         }
 
         return detectionNames;
+    }
+
+    Artifact[] artifactAlgorithm = new Artifact[3];
+    public Artifact[] getArtifactPattern() {
+        if(!obeliskIdentified){
+            ArrayList<AprilTagMetadata> currentDetectionMetadata = currentDetectionsMetadata();
+            for (AprilTagMetadata metadata : currentDetectionMetadata) {
+                if (metadata.name.equals("Obelisk_GPP")) {
+                    artifactAlgorithm[0] = Artifact.GREEN;
+                    artifactAlgorithm[1] = Artifact.PURPLE;
+                    artifactAlgorithm[2] = Artifact.PURPLE;
+                    obeliskIdentified = true;
+                    return artifactAlgorithm;
+                } else if (metadata.name.equals("Obelisk_PGP")) {
+                    artifactAlgorithm[0] = Artifact.PURPLE;
+                    artifactAlgorithm[1] = Artifact.GREEN;
+                    artifactAlgorithm[2] = Artifact.PURPLE;
+                    obeliskIdentified = true;
+                    return artifactAlgorithm;
+                } else if (metadata.name.equals("Obelisk_PPG")) {
+                    artifactAlgorithm[0] = Artifact.PURPLE;
+                    artifactAlgorithm[1] = Artifact.PURPLE;
+                    artifactAlgorithm[2] = Artifact.GREEN;
+                    obeliskIdentified = true;
+                    return artifactAlgorithm;
+                }
+            }
+            // Set default (MOST PROBABLE POINTS!)
+            artifactAlgorithm[0] = Artifact.PURPLE;
+            artifactAlgorithm[1] = Artifact.PURPLE;
+            artifactAlgorithm[2] = Artifact.PURPLE;
+            // DO NOT UPDATE OBELISK IDENTIFIED
+            return artifactAlgorithm;
+        }
+        return artifactAlgorithm;
+    }
+
+    public boolean isObeliskIdentified(){
+        return obeliskIdentified;
     }
 
     public void controlVisionPortal(VisionCommands command){
