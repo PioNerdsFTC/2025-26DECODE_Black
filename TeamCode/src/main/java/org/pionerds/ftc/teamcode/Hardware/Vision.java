@@ -13,9 +13,21 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+<<<<<<< HEAD
 public class Vision {
 
     private static final boolean USE_WEBCAM = true; // true for webcam, false for phone camera
+=======
+import java.io.IOException;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+public class Vision {
+    private boolean obeliskIdentified = false;
+    private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+>>>>>>> fb8a2e7 (getArtifactPattern() method that if nothing is detected will return Artifact[] <-- {Artifact.P,Artifact.P,Artifact.P} because PPP is the best combination if undetected due to a 2/3 chance of a an Artifact needing to be purple. Once detected, boolean obeliskIdentified will switch to true, which can be accessed by Hardware.vision.isObeliskIdentified. This boolean is also used by the getArtifactPattern() method, so that once it is identified, it will stop attempting to scan for the Obelisk AprilTags and parse them and what not, just return the list that is store privately in the Vision.java class.)
 
     /**
      * The variable to store our instance of the AprilTag processor.
@@ -101,25 +113,75 @@ public class Vision {
         return aprilTag.getDetections();
     }
 
-    public ArrayList<String> currentDetectionsNames() {
-        ArrayList<String> detectionNames = new ArrayList<String>();
+    public ArrayList<AprilTagMetadata> currentDetectionsMetadata() {
+        ArrayList<AprilTagMetadata> detectionNames = new ArrayList<AprilTagMetadata>();
         List<AprilTagDetection> currentDetections = this.currentDetections();
 
         // iterate and get names
+<<<<<<< HEAD
         for (AprilTagDetection detection : this.currentDetections()) {
             if (detection == null) {
                 detectionNames.add("(String) null");
             }
             if ((detection != null) && (detection.metadata != null)) {
                 detectionNames.add(detection.metadata.name);
+=======
+        for(AprilTagDetection detection: this.currentDetections()){
+            if((detection!=null)&&(detection.metadata!=null)){
+                detectionNames.add(detection.metadata);
+>>>>>>> fb8a2e7 (getArtifactPattern() method that if nothing is detected will return Artifact[] <-- {Artifact.P,Artifact.P,Artifact.P} because PPP is the best combination if undetected due to a 2/3 chance of a an Artifact needing to be purple. Once detected, boolean obeliskIdentified will switch to true, which can be accessed by Hardware.vision.isObeliskIdentified. This boolean is also used by the getArtifactPattern() method, so that once it is identified, it will stop attempting to scan for the Obelisk AprilTags and parse them and what not, just return the list that is store privately in the Vision.java class.)
             }
         }
 
         return detectionNames;
     }
 
+<<<<<<< HEAD
     public void controlVisionPortal(VisionCommands command) {
         if (command == VisionCommands.RESUME) {
+=======
+    Artifact[] artifactAlgorithm = new Artifact[3];
+    public Artifact[] getArtifactPattern() {
+        if(!obeliskIdentified){
+            ArrayList<AprilTagMetadata> currentDetectionMetadata = currentDetectionsMetadata();
+            for (AprilTagMetadata metadata : currentDetectionMetadata) {
+                if (metadata.name.equals("Obelisk_GPP")) {
+                    artifactAlgorithm[0] = Artifact.GREEN;
+                    artifactAlgorithm[1] = Artifact.PURPLE;
+                    artifactAlgorithm[2] = Artifact.PURPLE;
+                    obeliskIdentified = true;
+                    return artifactAlgorithm;
+                } else if (metadata.name.equals("Obelisk_PGP")) {
+                    artifactAlgorithm[0] = Artifact.PURPLE;
+                    artifactAlgorithm[1] = Artifact.GREEN;
+                    artifactAlgorithm[2] = Artifact.PURPLE;
+                    obeliskIdentified = true;
+                    return artifactAlgorithm;
+                } else if (metadata.name.equals("Obelisk_PPG")) {
+                    artifactAlgorithm[0] = Artifact.PURPLE;
+                    artifactAlgorithm[1] = Artifact.PURPLE;
+                    artifactAlgorithm[2] = Artifact.GREEN;
+                    obeliskIdentified = true;
+                    return artifactAlgorithm;
+                }
+            }
+            // Set default (MOST PROBABLE POINTS!)
+            artifactAlgorithm[0] = Artifact.PURPLE;
+            artifactAlgorithm[1] = Artifact.PURPLE;
+            artifactAlgorithm[2] = Artifact.PURPLE;
+            // DO NOT UPDATE OBELISK IDENTIFIED
+            return artifactAlgorithm;
+        }
+        return artifactAlgorithm;
+    }
+
+    public boolean isObeliskIdentified(){
+        return obeliskIdentified;
+    }
+
+    public void controlVisionPortal(VisionCommands command){
+        if(command==VisionCommands.RESUME){
+>>>>>>> fb8a2e7 (getArtifactPattern() method that if nothing is detected will return Artifact[] <-- {Artifact.P,Artifact.P,Artifact.P} because PPP is the best combination if undetected due to a 2/3 chance of a an Artifact needing to be purple. Once detected, boolean obeliskIdentified will switch to true, which can be accessed by Hardware.vision.isObeliskIdentified. This boolean is also used by the getArtifactPattern() method, so that once it is identified, it will stop attempting to scan for the Obelisk AprilTags and parse them and what not, just return the list that is store privately in the Vision.java class.)
             visionPortal.resumeStreaming();
         } else if (command == VisionCommands.CLOSE) {
             visionPortal.close();
