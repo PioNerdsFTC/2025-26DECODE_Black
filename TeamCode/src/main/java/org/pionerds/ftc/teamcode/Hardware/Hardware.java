@@ -42,8 +42,9 @@ final public class Hardware {
     /** Runs for each iteration of the OpMode, may or may not be necessary */
     public void tick(Gamepad gamepad1) {
         try {
-          this.drivetrain.driveDPad(gamepad1);
+        //  this.drivetrain.driveDPad(gamepad1);
           this.launcher.launcherButton(gamepad1);
+          this.drivetrain.stickDrive(gamepad1);
         } catch(Exception e) {
             this.telemetry.addLine(e.getMessage());
             if (!Environment.competing) this.continueRunning = false;

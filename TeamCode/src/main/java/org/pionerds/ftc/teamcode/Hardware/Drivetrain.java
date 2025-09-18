@@ -125,4 +125,24 @@ public class Drivetrain {
             }
         }
     }
+
+    public void stopMotors(){
+        for (DcMotor motor : motors){
+            motor.setPower(0);
+        }
+    }
+
+    public void stickDrive(Gamepad gamepad1){
+        double x = gamepad1.left_stick_x;
+        double y = gamepad1.left_stick_y;
+        if (Math.abs(x)<0.2 && Math.abs(y)<0.2){
+            stopMotors();
+        }
+        else {
+            motors[0].setPower((-x-y)/2);
+            motors[1].setPower((-x+y)/2);
+            motors[2].setPower((x+y)/2);
+            motors[3].setPower((x-y)/2);
+        }
+    }
 }
