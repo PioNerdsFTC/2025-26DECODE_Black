@@ -3,6 +3,8 @@ package org.pionerds.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
+import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
+import org.pionerds.ftc.teamcode.Hardware.AprilTagRelativeDistance;
 import org.pionerds.ftc.teamcode.Hardware.Artifact;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.VisionCommands;
@@ -27,18 +29,32 @@ public class TeleOpMode extends LinearOpMode {
         while (opModeIsActive() && hardware.continueRunning) {
             hardware.tick(gamepad1);
 
-            // add obelisk stuff to telemetry
-            telemetry.addLine(
-                "obeliskIdentified: " + hardware.vision.isObeliskIdentified()
-            );
-            for (AprilTagMetadata metadata : hardware.vision.currentDetectionsMetadata()) {
-                telemetry.addLine("AprilTag: \"" + metadata.name + "\"");
+            /* add obelisk stuff to telemetry
+            telemetry.addLine("obeliskIdentified: "+hardware.vision.isObeliskIdentified());
+            for(AprilTagMetadata metadata: hardware.vision.currentDetectionsMetadata()){
+                telemetry.addLine("AprilTag: \""+metadata.name+"\"");
                 telemetry.addLine("" + metadata.id);
             }
+            */
 
-            for (int i = 0; i < 3; i++) {
+            /* Add Artifact Pattern to Telemetry
+            for(int i=0;i<3;i++){
                 Artifact a = hardware.vision.getArtifactPattern()[i];
                 telemetry.addLine("Artifact: " + a.name());
+            }
+            */
+
+            // Add AprilTagRelativeDistance data to Telemetry
+            AprilTagRelativeDistance distanceToBlueTarget;
+            distanceToBlueTarget = hardware.vision.getTagPosition(
+                AprilTagNames.BlueTarget
+            );
+            if (distanceToBlueTarget != null) {
+                telemetry.addLine("BlueTarget Distances");
+                telemetry.addLine("x: " + distanceToBlueTarget.x());
+                telemetry.addLine("y: " + distanceToBlueTarget.y());
+                telemetry.addLine("z: " + distanceToBlueTarget.z());
+                telemetry.addLine("Range: " + distanceToBlueTarget.Range());
             }
 
             telemetry.update();
