@@ -3,6 +3,7 @@ package org.pionerds.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Vision {
+    private final DistanceUnit DISTANCE_UNIT = DistanceUnit.CM;
     private boolean obeliskIdentified = false;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -97,6 +99,17 @@ public class Vision {
 
     }   // end method initAprilTag()
 
+    public AprilTagRelativeDistance getTagPosition(AprilTagNames tagName){
+        for(AprilTagDetection detection: currentDetections()){
+            if(!(detection==null) && !(detection.metadata == null) && detection.metadata.name.equals(tagName.name())){
+                return new AprilTagRelativeDistance(detection.robotPose.getPosition().toUnit(DISTANCE_UNIT));
+            }
+        }
+        return null;
+    }
+
+
+
     public ArrayList<AprilTagDetection> currentDetections(){
         if(aprilTag.getDetections()==null){return new ArrayList<AprilTagDetection>();}
         return aprilTag.getDetections();
@@ -166,6 +179,7 @@ public class Vision {
         } else if(command==VisionCommands.PAUSE){
             visionPortal.stopStreaming();
         }
+
     }
 
 
