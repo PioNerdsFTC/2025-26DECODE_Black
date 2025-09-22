@@ -42,8 +42,15 @@ final public class Hardware {
     /** Runs for each iteration of the OpMode, may or may not be necessary */
     public void tick(Gamepad gamepad1) {
         try {
-          this.drivetrain.driveDPad(gamepad1);
           this.launcher.launcherButton(gamepad1);
+          double[] motorSpeed = this.drivetrain.stickDrive(gamepad1);
+
+          if (gamepad1.right_bumper || gamepad1.left_bumper) {
+              motorSpeed = this.drivetrain.bumperTurn(gamepad1);
+          }
+
+          this.drivetrain.setDriveMotorsPow(motorSpeed[0], motorSpeed[1], motorSpeed[2], motorSpeed[3]);
+
         } catch(Exception e) {
             this.telemetry.addLine(e.getMessage());
             if (!Environment.competing) this.continueRunning = false;
