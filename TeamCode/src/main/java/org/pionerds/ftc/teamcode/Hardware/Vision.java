@@ -183,5 +183,19 @@ public class Vision {
 
     }
 
+    /*
+    telemetry.addLine("obeliskIdentified: "+hardware.vision.isObeliskIdentified());
+            for(AprilTagMetadata metadata: hardware.vision.currentDetectionsMetadata()){
+                telemetry.addLine("AprilTag: \""+metadata.name+"\"");
+                telemetry.addLine("" + metadata.id);
+            }
+     */
+
+    /* Add Artifact Pattern to Telemetry
+            for(int i=0;i<3;i++){
+                Artifact a = hardware.vision.getArtifactPattern()[i];
+                telemetry.addLine("Artifact: " + a.name());
+            }
+    */
 
 }
