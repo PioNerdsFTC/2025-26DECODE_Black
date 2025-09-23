@@ -31,7 +31,7 @@ public class TeleOpMode extends LinearOpMode {
         // Main loop!
         while (opModeIsActive() && hardware.continueRunning) {
             hardware.tick(gamepad1);
-
+          
             // Add AprilTagPoseFtc data to Telemetry
             AprilTagPoseFtc distanceToBlueTarget;
             distanceToBlueTarget = hardware.vision.getTagPosition(AprilTagNames.BlueTarget);
@@ -47,7 +47,7 @@ public class TeleOpMode extends LinearOpMode {
 
             telemetry.update();
             sleep(1);
-        }
+
 
         hardware.stop();
     }
