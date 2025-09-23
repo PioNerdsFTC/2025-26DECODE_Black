@@ -40,7 +40,7 @@ final public class Hardware {
     }
 
     /** Runs for each iteration of the OpMode, may or may not be necessary */
-    public void tick(Gamepad gamepad1) {
+    /*public void tick(Gamepad gamepad1) {
         try {
           this.launcher.launcherButton(gamepad1);
           double[] motorSpeed = this.drivetrain.stickDrive(gamepad1);
@@ -56,7 +56,7 @@ final public class Hardware {
             if (!Environment.competing) this.continueRunning = false;
         }
     }
-  
+  */
     public void stop() {
         continueRunning = false;
     }
