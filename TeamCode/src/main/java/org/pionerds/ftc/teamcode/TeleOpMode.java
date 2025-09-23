@@ -17,7 +17,8 @@ public class TeleOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        hardware.init(hardwareMap);
+
+        hardware.init(hardwareMap, telemetry);
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
@@ -25,25 +26,11 @@ public class TeleOpMode extends LinearOpMode {
 
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
+      
 
-        // Main Loop!
+        // Main loop!
         while (opModeIsActive() && hardware.continueRunning) {
             hardware.tick(gamepad1);
-
-            /* add obelisk stuff to telemetry
-            telemetry.addLine("obeliskIdentified: "+hardware.vision.isObeliskIdentified());
-            for(AprilTagMetadata metadata: hardware.vision.currentDetectionsMetadata()){
-                telemetry.addLine("AprilTag: \""+metadata.name+"\"");
-                telemetry.addLine("" + metadata.id);
-            }
-            */
-
-            /* Add Artifact Pattern to Telemetry
-            for(int i=0;i<3;i++){
-                Artifact a = hardware.vision.getArtifactPattern()[i];
-                telemetry.addLine("Artifact: " + a.name());
-            }
-            */
 
             // Add AprilTagPoseFtc data to Telemetry
             AprilTagPoseFtc distanceToBlueTarget;
