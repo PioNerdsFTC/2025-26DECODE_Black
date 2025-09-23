@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.pionerds.ftc.teamcode.Utils.Environment;
 
 /**
@@ -16,6 +17,8 @@ final public class Hardware {
     public Mapping mapping = new Mapping();
     public Vision vision = new Vision();
     public Launcher launcher = new Launcher();
+
+    public Gyro gyro = new Gyro();
 
 
     private Telemetry telemetry = null;
@@ -33,6 +36,8 @@ final public class Hardware {
             drivetrain.init(this);
             vision.init(this);
             launcher.init(this);
+            gyro.init(this);
+
         } catch(Exception e) {
             telemetry.addLine(e.getMessage());
             this.continueRunning = false;
@@ -42,12 +47,19 @@ final public class Hardware {
     /** Runs for each iteration of the OpMode, may or may not be necessary */
     public void tick(Gamepad gamepad1) {
         try {
+
+            YawPitchRollAngles angles = gyro.getAngles();
+
           this.launcher.launcherButton(gamepad1);
           double[] motorSpeed = this.drivetrain.stickDrive(gamepad1);
+          this.drivetrain.stickTurn(gamepad1,motorSpeed);
 
           if (gamepad1.right_bumper || gamepad1.left_bumper) {
               motorSpeed = this.drivetrain.bumperTurn(gamepad1);
           }
+
+          this.drivetrain.stickTurn(gamepad1,motorSpeed);
+
 
           this.drivetrain.setDriveMotorsPow(motorSpeed[0], motorSpeed[1], motorSpeed[2], motorSpeed[3]);
 
