@@ -8,6 +8,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
+import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class Vision {
                 .setDrawTagOutline(true)
                 //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 .setTagLibrary(AprilTagGameDatabase.getDecodeTagLibrary())
-                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+                .setOutputUnits(DISTANCE_UNIT, AngleUnit.DEGREES)
 
                 // == CAMERA CALIBRATION ==
                 // If you do not manually specify calibration parameters, the SDK will attempt
@@ -99,10 +100,10 @@ public class Vision {
 
     }   // end method initAprilTag()
 
-    public AprilTagRelativeDistance getTagPosition(AprilTagNames tagName){
+    public AprilTagPoseFtc getTagPosition(AprilTagNames tagName){
         for(AprilTagDetection detection: currentDetections()){
             if(!(detection==null) && !(detection.metadata == null) && detection.metadata.name.equals(tagName.name())){
-                return new AprilTagRelativeDistance(detection.robotPose.getPosition().toUnit(DISTANCE_UNIT));
+                return detection.ftcPose;
             }
         }
         return null;
