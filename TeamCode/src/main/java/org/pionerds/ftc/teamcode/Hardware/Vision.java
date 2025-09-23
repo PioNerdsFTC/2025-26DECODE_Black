@@ -12,6 +12,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
+import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 <<<<<<< HEAD
@@ -61,7 +62,25 @@ public class Vision {
             //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
             // ... these parameters are fx, fy, cx, cy.
 
+<<<<<<< HEAD
             .build();
+=======
+                // The following default settings are available to un-comment and edit as needed.
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+                .setDrawTagOutline(true)
+                //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+                .setTagLibrary(AprilTagGameDatabase.getDecodeTagLibrary())
+                .setOutputUnits(DISTANCE_UNIT, AngleUnit.DEGREES)
+
+                // == CAMERA CALIBRATION ==
+                // If you do not manually specify calibration parameters, the SDK will attempt
+                // to load a predefined calibration for your camera.
+                //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
+                // ... these parameters are fx, fy, cx, cy.
+
+                .build();
+>>>>>>> 7480db9 (distance now works with ftcPose instead of custom wrapper class of robotPose or rawPose.)
 
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
         // eg: Some typical detection data using a Logitech C920 WebCam
@@ -110,10 +129,10 @@ public class Vision {
 
     }   // end method initAprilTag()
 
-    public AprilTagRelativeDistance getTagPosition(AprilTagNames tagName){
+    public AprilTagPoseFtc getTagPosition(AprilTagNames tagName){
         for(AprilTagDetection detection: currentDetections()){
             if(!(detection==null) && !(detection.metadata == null) && detection.metadata.name.equals(tagName.name())){
-                return new AprilTagRelativeDistance(detection.robotPose.getPosition().toUnit(DISTANCE_UNIT));
+                return detection.ftcPose;
             }
         }
         return null;
