@@ -11,7 +11,6 @@ import org.pionerds.ftc.teamcode.Utils.Environment;
  * This should include helper classes and direct controllers for the hardware.
  */
 final public class Hardware {
-
     public Drivetrain drivetrain = new Drivetrain();
     public Mapping mapping = new Mapping();
     public Vision vision = new Vision();
@@ -19,6 +18,7 @@ final public class Hardware {
 
 
     private Telemetry telemetry = null;
+
 
     /**
      * Whether the hardware class is able to continue running.
