@@ -1,12 +1,8 @@
 package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-<<<<<<< HEAD
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-=======
-
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
->>>>>>> 7480db9 (distance now works with ftcPose instead of custom wrapper class of robotPose or rawPose.)
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
@@ -34,32 +30,36 @@ public class TeleOpMode extends LinearOpMode {
         while (opModeIsActive() && hardware.continueRunning) {
             hardware.tick(gamepad1);
 
-            /* add obelisk stuff to telemetry
-            telemetry.addLine("obeliskIdentified: "+hardware.vision.isObeliskIdentified());
-            for(AprilTagMetadata metadata: hardware.vision.currentDetectionsMetadata()){
-                telemetry.addLine("AprilTag: \""+metadata.name+"\"");
-                telemetry.addLine("" + metadata.id);
-            }
-            */
-
-            /* Add Artifact Pattern to Telemetry
-            for(int i=0;i<3;i++){
-                Artifact a = hardware.vision.getArtifactPattern()[i];
-                telemetry.addLine("Artifact: " + a.name());
-            }
-            */
-
             // Add AprilTagPoseFtc data to Telemetry
             AprilTagPoseFtc distanceToBlueTarget;
-            distanceToBlueTarget = hardware.vision.getTagPosition(AprilTagNames.BlueTarget);
-            if(distanceToBlueTarget != null){
+            distanceToBlueTarget = hardware.vision.getTagPosition(
+                AprilTagNames.BlueTarget
+            );
+            if (distanceToBlueTarget != null) {
                 telemetry.addLine("BlueTarget Distances");
-                telemetry.addLine("x: "+Math.round(distanceToBlueTarget.x*100)/100);
-                telemetry.addLine("y: "+Math.round(distanceToBlueTarget.y*100)/100);
-                telemetry.addLine("z: "+Math.round(distanceToBlueTarget.z*100)/100);
-                telemetry.addLine("Range: "+(Math.round(distanceToBlueTarget.range * ((double)61/356) * 100)) / 100);
-                telemetry.addLine("Pythag A,B: "+(Math.sqrt(Math.pow((distanceToBlueTarget.x),2)) + Math.pow((distanceToBlueTarget.y),2)));
-
+                telemetry.addLine(
+                    "x: " + Math.round(distanceToBlueTarget.x * 100) / 100
+                );
+                telemetry.addLine(
+                    "y: " + Math.round(distanceToBlueTarget.y * 100) / 100
+                );
+                telemetry.addLine(
+                    "z: " + Math.round(distanceToBlueTarget.z * 100) / 100
+                );
+                telemetry.addLine(
+                    "Range: " +
+                        (Math.round(
+                                distanceToBlueTarget.range *
+                                    ((double) 61 / 356) *
+                                    100
+                            )) /
+                        100
+                );
+                telemetry.addLine(
+                    "Pythag A,B: " +
+                        (Math.sqrt(Math.pow((distanceToBlueTarget.x), 2)) +
+                            Math.pow((distanceToBlueTarget.y), 2))
+                );
             }
 
             telemetry.update();
