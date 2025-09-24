@@ -86,8 +86,7 @@ public class Drivetrain {
             }
         }
 
-        return motorSpeed;
-    }
+
 
     public double[] bumperTurn(Gamepad driverGamepad){
         double[] motorSpeed = { 0.0, 0.0, 0.0, 0.0 };
