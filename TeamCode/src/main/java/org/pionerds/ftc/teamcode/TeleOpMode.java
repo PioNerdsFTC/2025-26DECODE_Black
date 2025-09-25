@@ -44,7 +44,6 @@ public class TeleOpMode extends LinearOpMode {
             telemetry.update();
             sleep(1);
         }
-
         hardware.stop();
     }
 }
