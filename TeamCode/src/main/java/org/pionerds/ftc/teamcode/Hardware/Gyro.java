@@ -6,12 +6,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 
 public class Gyro {
-
     Hardware hardware = null;
 
     private IMU gyro = null;
     private IMU.Parameters params;
-
 
     public void init(Hardware hardware){
         this.hardware = hardware;
@@ -21,9 +19,7 @@ public class Gyro {
                 new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
                         RevHubOrientationOnRobot.UsbFacingDirection.UP
-
                 )
-
         );
         gyro.initialize(params);
         gyro.getRobotYawPitchRollAngles();
@@ -32,8 +28,4 @@ public class Gyro {
     public YawPitchRollAngles getAngles(){
         return gyro.getRobotYawPitchRollAngles();
     }
-
-
-
-
 }
