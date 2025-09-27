@@ -1,13 +1,13 @@
-package org.pionerds.ftc.teamcode.Pathfinding.tuning;
+package org.pionerds.ftc.teamcode.Pathfinding.Tuning;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.pionerds.ftc.teamcode.Pathfinding.Junk.MecanumDrive;
-import org.pionerds.ftc.teamcode.Pathfinding.Junk.TankDrive;
-import org.pionerds.ftc.teamcode.Pathfinding.Junk.ThreeDeadWheelLocalizer;
-import org.pionerds.ftc.teamcode.Pathfinding.Junk.TwoDeadWheelLocalizer;
+import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.MecanumDrive;
+import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.TankDrive;
+import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.ThreeDeadWheelLocalizer;
+import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.TwoDeadWheelLocalizer;
 
 public final class ManualFeedbackTuner extends LinearOpMode {
     public static double DISTANCE = 64;

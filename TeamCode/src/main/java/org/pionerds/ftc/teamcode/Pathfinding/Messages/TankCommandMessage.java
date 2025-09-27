@@ -1,4 +1,4 @@
-package org.pionerds.ftc.teamcode.Pathfinding.messages;
+package org.pionerds.ftc.teamcode.Pathfinding.Messages;
 
 public final class TankCommandMessage {
     public long timestamp;

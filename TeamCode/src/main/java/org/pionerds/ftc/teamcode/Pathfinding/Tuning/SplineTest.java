@@ -1,12 +1,12 @@
-package org.pionerds.ftc.teamcode.Pathfinding.tuning;
+package org.pionerds.ftc.teamcode.Pathfinding.Tuning;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.pionerds.ftc.teamcode.Pathfinding.Junk.MecanumDrive;
-import org.pionerds.ftc.teamcode.Pathfinding.Junk.TankDrive;
+import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.MecanumDrive;
+import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.TankDrive;
 
 public final class SplineTest extends LinearOpMode {
     @Override
