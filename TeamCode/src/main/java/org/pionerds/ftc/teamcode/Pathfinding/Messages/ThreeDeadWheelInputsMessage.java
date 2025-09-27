@@ -1,4 +1,4 @@
-package org.pionerds.ftc.teamcode.Pathfinding.messages;
+package org.pionerds.ftc.teamcode.Pathfinding.Messages;
 
 import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 
