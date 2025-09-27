@@ -1,10 +1,12 @@
 package org.pionerds.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
-@Autonomous(name = "Autonomous")
+@Config
+@Autonomous(name = "Autonomous", group = "Autonomous")
 public class AutoOpMode extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
