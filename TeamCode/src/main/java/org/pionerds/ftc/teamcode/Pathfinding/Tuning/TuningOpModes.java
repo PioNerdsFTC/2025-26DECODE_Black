@@ -11,7 +11,6 @@ import com.acmerobotics.roadrunner.ftc.DeadWheelDirectionDebugger;
 import com.acmerobotics.roadrunner.ftc.DriveType;
 import com.acmerobotics.roadrunner.ftc.DriveView;
 import com.acmerobotics.roadrunner.ftc.DriveViewFactory;
-import com.acmerobotics.roadrunner.ftc.Encoder;
 import com.acmerobotics.roadrunner.ftc.EncoderGroup;
 import com.acmerobotics.roadrunner.ftc.EncoderRef;
 import com.acmerobotics.roadrunner.ftc.ForwardPushTest;
