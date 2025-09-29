@@ -43,9 +43,6 @@ import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.MecanumDrive;
 import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.OTOSLocalizer;
 import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.PinpointLocalizer;
-import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.TankDrive;
-import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.ThreeDeadWheelLocalizer;
-import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.TwoDeadWheelLocalizer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -146,23 +143,6 @@ public final class TuningOpModes {
                     leftEncs.add(new EncoderRef(0, 1));
                     rightEncs.add(new EncoderRef(0, 2));
                     rightEncs.add(new EncoderRef(0, 3));
-                } else if (md.localizer instanceof ThreeDeadWheelLocalizer) {
-                    ThreeDeadWheelLocalizer dl = (ThreeDeadWheelLocalizer) md.localizer;
-                    encoderGroups.add(new LynxQuadratureEncoderGroup(
-                            hardwareMap.getAll(LynxModule.class),
-                            Arrays.asList(dl.par0, dl.par1, dl.perp)
-                    ));
-                    parEncs.add(new EncoderRef(0, 0));
-                    parEncs.add(new EncoderRef(0, 1));
-                    perpEncs.add(new EncoderRef(0, 2));
-                } else if (md.localizer instanceof TwoDeadWheelLocalizer) {
-                    TwoDeadWheelLocalizer dl = (TwoDeadWheelLocalizer) md.localizer;
-                    encoderGroups.add(new LynxQuadratureEncoderGroup(
-                            hardwareMap.getAll(LynxModule.class),
-                            Arrays.asList(dl.par, dl.perp)
-                    ));
-                    parEncs.add(new EncoderRef(0, 0));
-                    perpEncs.add(new EncoderRef(0, 1));
                 } else if (md.localizer instanceof OTOSLocalizer) {
                     OTOSLocalizer ol = (OTOSLocalizer) md.localizer;
                     encoderGroups.add(new OTOSEncoderGroup(ol.otos));
@@ -203,83 +183,6 @@ public final class TuningOpModes {
                         () -> new MotorFeedforward(MecanumDrive.PARAMS.kS,
                                 MecanumDrive.PARAMS.kV / MecanumDrive.PARAMS.inPerTick,
                                 MecanumDrive.PARAMS.kA / MecanumDrive.PARAMS.inPerTick),
-                        0
-                );
-            };
-        } else if (DRIVE_CLASS.equals(TankDrive.class)) {
-            dvf = hardwareMap -> {
-                TankDrive td = new TankDrive(hardwareMap, new Pose2d(0, 0, 0));
-                LazyImu lazyImu = td.lazyImu;
-
-                List<EncoderGroup> encoderGroups = new ArrayList<>();
-                List<EncoderRef> leftEncs = new ArrayList<>(), rightEncs = new ArrayList<>();
-                List<EncoderRef> parEncs = new ArrayList<>(), perpEncs = new ArrayList<>();
-                if (td.localizer instanceof TankDrive.DriveLocalizer) {
-                    TankDrive.DriveLocalizer dl = (TankDrive.DriveLocalizer) td.localizer;
-                    List<Encoder> allEncoders = new ArrayList<>();
-                    allEncoders.addAll(dl.leftEncs);
-                    allEncoders.addAll(dl.rightEncs);
-                    encoderGroups.add(new LynxQuadratureEncoderGroup(
-                            hardwareMap.getAll(LynxModule.class),
-                            allEncoders
-                    ));
-                    for (int i = 0; i < dl.leftEncs.size(); i++) {
-                        leftEncs.add(new EncoderRef(0, i));
-                    }
-                    for (int i = 0; i < dl.rightEncs.size(); i++) {
-                        rightEncs.add(new EncoderRef(0, dl.leftEncs.size() + i));
-                    }
-                } else if (td.localizer instanceof ThreeDeadWheelLocalizer) {
-                    ThreeDeadWheelLocalizer dl = (ThreeDeadWheelLocalizer) td.localizer;
-                    encoderGroups.add(new LynxQuadratureEncoderGroup(
-                            hardwareMap.getAll(LynxModule.class),
-                            Arrays.asList(dl.par0, dl.par1, dl.perp)
-                    ));
-                    parEncs.add(new EncoderRef(0, 0));
-                    parEncs.add(new EncoderRef(0, 1));
-                    perpEncs.add(new EncoderRef(0, 2));
-                } else if (td.localizer instanceof TwoDeadWheelLocalizer) {
-                    TwoDeadWheelLocalizer dl = (TwoDeadWheelLocalizer) td.localizer;
-                    encoderGroups.add(new LynxQuadratureEncoderGroup(
-                            hardwareMap.getAll(LynxModule.class),
-                            Arrays.asList(dl.par, dl.perp)
-                    ));
-                    parEncs.add(new EncoderRef(0, 0));
-                    perpEncs.add(new EncoderRef(0, 1));
-                }  else if (td.localizer instanceof PinpointLocalizer) {
-                    PinpointView pv = makePinpointView((PinpointLocalizer) td.localizer);
-                    encoderGroups.add(new PinpointEncoderGroup(pv));
-                    parEncs.add(new EncoderRef(0, 0));
-                    perpEncs.add(new EncoderRef(0, 1));
-                    lazyImu = new PinpointIMU(pv);
-                } else if (td.localizer instanceof OTOSLocalizer) {
-                    OTOSLocalizer ol = (OTOSLocalizer) td.localizer;
-                    encoderGroups.add(new OTOSEncoderGroup(ol.otos));
-                    parEncs.add(new EncoderRef(0, 0));
-                    perpEncs.add(new EncoderRef(0, 1));
-                    lazyImu = new OTOSIMU(ol.otos);
-                } else {
-                    throw new RuntimeException("unknown localizer: " + td.localizer.getClass().getName());
-                }
-
-                return new DriveView(
-                        DriveType.TANK,
-                        TankDrive.PARAMS.inPerTick,
-                        TankDrive.PARAMS.maxWheelVel,
-                        TankDrive.PARAMS.minProfileAccel,
-                        TankDrive.PARAMS.maxProfileAccel,
-                        encoderGroups,
-                        td.leftMotors,
-                        td.rightMotors,
-                        leftEncs,
-                        rightEncs,
-                        parEncs,
-                        perpEncs,
-                        lazyImu,
-                        td.voltageSensor,
-                        () -> new MotorFeedforward(TankDrive.PARAMS.kS,
-                                TankDrive.PARAMS.kV / TankDrive.PARAMS.inPerTick,
-                                TankDrive.PARAMS.kA / TankDrive.PARAMS.inPerTick),
                         0
                 );
             };
