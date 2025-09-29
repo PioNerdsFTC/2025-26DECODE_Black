@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.Drawing;
 import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.MecanumDrive;
-import org.pionerds.ftc.teamcode.Pathfinding.RoadRunnerUtils.TankDrive;
 
 public class LocalizationTest extends LinearOpMode {
     @Override
