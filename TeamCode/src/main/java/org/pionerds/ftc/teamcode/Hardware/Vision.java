@@ -1,17 +1,21 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
+import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-import java.util.List;
-
 public class Vision {
-    private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+
+    private static final boolean USE_WEBCAM = true; // true for webcam, false for phone camera
 
     /**
      * The variable to store our instance of the AprilTag processor.
@@ -26,26 +30,24 @@ public class Vision {
     public void init(Hardware hardware) {
         initAprilTag(hardware);
     }
-    public void initAprilTag(Hardware hardware) {
 
+    public void initAprilTag(Hardware hardware) {
         // Create the AprilTag processor.
         aprilTag = new AprilTagProcessor.Builder()
+            // The following default settings are available to un-comment and edit as needed.
+            .setDrawAxes(true)
+            .setDrawCubeProjection(true)
+            .setDrawTagOutline(true)
+            //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+            .setTagLibrary(AprilTagGameDatabase.getDecodeTagLibrary())
+            .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+            // == CAMERA CALIBRATION ==
+            // If you do not manually specify calibration parameters, the SDK will attempt
+            // to load a predefined calibration for your camera.
+            //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
+            // ... these parameters are fx, fy, cx, cy.
 
-                // The following default settings are available to un-comment and edit as needed.
-                .setDrawAxes(true)
-                .setDrawCubeProjection(true)
-                .setDrawTagOutline(true)
-                //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-                .setTagLibrary(AprilTagGameDatabase.getDecodeTagLibrary())
-                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
-
-                // == CAMERA CALIBRATION ==
-                // If you do not manually specify calibration parameters, the SDK will attempt
-                // to load a predefined calibration for your camera.
-                //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
-                // ... these parameters are fx, fy, cx, cy.
-
-                .build();
+            .build();
 
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
         // eg: Some typical detection data using a Logitech C920 WebCam
@@ -90,22 +92,41 @@ public class Vision {
 
         // Disable or re-enable the aprilTag processor at any time.
         //visionPortal.setProcessorEnabled(aprilTag, true);
+    } // end method initAprilTag()
 
-    }   // end method initAprilTag()
+    public ArrayList<AprilTagDetection> currentDetections() {
+        if (aprilTag.getDetections() == null) {
+            return new ArrayList<AprilTagDetection>();
+        }
+        return aprilTag.getDetections();
+    }
 
-    public List<AprilTagDetection> currentDetections(){return aprilTag.getDetections();}
+    public ArrayList<String> currentDetectionsNames() {
+        ArrayList<String> detectionNames = new ArrayList<String>();
+        List<AprilTagDetection> currentDetections = this.currentDetections();
 
-    public void controlVisionPortal(VisionCommands command){
-        if(command==VisionCommands.RESUME){
+        // iterate and get names
+        for (AprilTagDetection detection : this.currentDetections()) {
+            if (detection == null) {
+                detectionNames.add("(String) null");
+            }
+            if ((detection != null) && (detection.metadata != null)) {
+                detectionNames.add(detection.metadata.name);
+            }
+        }
+
+        return detectionNames;
+    }
+
+    public void controlVisionPortal(VisionCommands command) {
+        if (command == VisionCommands.RESUME) {
             visionPortal.resumeStreaming();
-        } else if(command==VisionCommands.CLOSE){
+        } else if (command == VisionCommands.CLOSE) {
             visionPortal.close();
-        } else if(command==VisionCommands.STOP){
+        } else if (command == VisionCommands.STOP) {
             visionPortal.stopLiveView();
-        } else if(command==VisionCommands.PAUSE){
+        } else if (command == VisionCommands.PAUSE) {
             visionPortal.stopStreaming();
         }
     }
-
-
 }

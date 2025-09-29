@@ -2,7 +2,6 @@ package org.pionerds.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.pionerds.ftc.teamcode.Utils.Environment;
 
@@ -10,13 +9,12 @@ import org.pionerds.ftc.teamcode.Utils.Environment;
  * Class for all the hardware functions of the robot.
  * This should include helper classes and direct controllers for the hardware.
  */
-final public class Hardware {
+public final class Hardware {
 
     public Drivetrain drivetrain = new Drivetrain();
     public Mapping mapping = new Mapping();
     public Vision vision = new Vision();
     public Launcher launcher = new Launcher();
-
 
     private Telemetry telemetry = null;
 
@@ -33,7 +31,7 @@ final public class Hardware {
             drivetrain.init(this);
             vision.init(this);
             launcher.init(this);
-        } catch(Exception e) {
+        } catch (Exception e) {
             telemetry.addLine(e.getMessage());
             this.continueRunning = false;
         }
@@ -42,21 +40,25 @@ final public class Hardware {
     /** Runs for each iteration of the OpMode, may or may not be necessary */
     public void tick(Gamepad gamepad1) {
         try {
-          this.launcher.launcherButton(gamepad1);
-          double[] motorSpeed = this.drivetrain.stickDrive(gamepad1);
+            this.launcher.launcherButton(gamepad1);
+            double[] motorSpeed = this.drivetrain.stickDrive(gamepad1);
 
-          if (gamepad1.right_bumper || gamepad1.left_bumper) {
-              motorSpeed = this.drivetrain.bumperTurn(gamepad1);
-          }
+            if (gamepad1.right_bumper || gamepad1.left_bumper) {
+                motorSpeed = this.drivetrain.bumperTurn(gamepad1);
+            }
 
-          this.drivetrain.setDriveMotorsPow(motorSpeed[0], motorSpeed[1], motorSpeed[2], motorSpeed[3]);
-
-        } catch(Exception e) {
+            this.drivetrain.setDriveMotorsPow(
+                motorSpeed[0],
+                motorSpeed[1],
+                motorSpeed[2],
+                motorSpeed[3]
+            );
+        } catch (Exception e) {
             this.telemetry.addLine(e.getMessage());
             if (!Environment.competing) this.continueRunning = false;
         }
     }
-  
+
     public void stop() {
         continueRunning = false;
     }
