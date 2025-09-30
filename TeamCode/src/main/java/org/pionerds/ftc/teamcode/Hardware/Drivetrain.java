@@ -139,6 +139,4 @@ public class Drivetrain {
             motorSpeed[3] = (x - y) / 2 / 0.707;
         }
 */
-        return motorSpeed;
-    }
 }
