@@ -2,6 +2,7 @@ package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
@@ -30,10 +31,10 @@ public class TeleOpMode extends LinearOpMode {
       
 
         // Main loop!
-        while (opModeIsActive() //&& hardware.continueRunning
-         ) {
+        while (opModeIsActive() && hardware.continueRunning) {
             hardware.tick(gamepad1);
 
+          
             // Add AprilTagPoseFtc data to Telemetry
             PioNerdAprilTag blueTargetAprilTag;
             blueTargetAprilTag = hardware.vision.getPioNerdAprilTag(AprilTagNames.BlueTarget);
@@ -52,6 +53,7 @@ public class TeleOpMode extends LinearOpMode {
             telemetry.update();
             sleep(1);
         }
+
 
         hardware.stop();
     }

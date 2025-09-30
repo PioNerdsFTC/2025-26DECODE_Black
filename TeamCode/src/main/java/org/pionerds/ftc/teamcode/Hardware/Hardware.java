@@ -15,6 +15,7 @@ public final class Hardware {
     public Mapping mapping = new Mapping();
     public Vision vision = new Vision();
     public Launcher launcher = new Launcher();
+    public Storage storage = new Storage();
 
     private Telemetry telemetry = null;
 
@@ -32,13 +33,16 @@ public final class Hardware {
             vision.init(this);
             launcher.init(this);
         } catch (Exception e) {
+
+            storage.init(this);
+
             telemetry.addLine(e.getMessage());
             this.continueRunning = false;
         }
     }
 
     /** Runs for each iteration of the OpMode, may or may not be necessary */
-    public void tick(Gamepad gamepad1) {
+    /*public void tick(Gamepad gamepad1) {
         try {
             //   this.launcher.launcherButton(gamepad1);
             //double[] motorSpeed = this.drivetrain.stickDrive(gamepad1);
@@ -53,6 +57,7 @@ public final class Hardware {
         }
     }
 
+  */
     public void stop() {
         continueRunning = false;
     }
