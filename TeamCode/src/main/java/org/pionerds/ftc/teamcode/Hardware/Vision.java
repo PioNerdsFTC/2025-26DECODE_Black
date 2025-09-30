@@ -19,6 +19,8 @@ import java.util.Objects;
 
 public class Vision {
     private final DistanceUnit DISTANCE_UNIT = DistanceUnit.CM;
+    private final double MULTIPLY_TO_DISTANCE = 0.5;
+
     private boolean obeliskIdentified = false;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -102,15 +104,25 @@ public class Vision {
 
     }   // end method initAprilTag()
 
+
+    // Deprecated.
     public AprilTagPoseFtc getTagPosition(AprilTagNames tagName){
         for(AprilTagDetection detection: currentDetections()){
-            if(!(detection==null) && !(detection.metadata == null) && detection.metadata.name.equals(tagName.name())){
+            if(!(detection==null) && !(detection.metadata == null) && detection.metadata.name.equals(tagName.name())) {
                 return detection.ftcPose;
             }
         }
         return null;
     }
 
+    public PioNerdAprilTag getPioNerdAprilTag(AprilTagNames aprilTagName){
+        for(AprilTagDetection detection: currentDetections()){
+            if(!(detection==null) && !(detection.metadata == null) && detection.metadata.name.equals(aprilTagName.name())) {
+                return new PioNerdAprilTag(detection); // Return the PioNerdAprilTag object.
+            }
+        }
+        return null;
+    }
 
 
     public ArrayList<AprilTagDetection> currentDetections(){
