@@ -10,6 +10,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Artifact;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
+import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 import org.pionerds.ftc.teamcode.Hardware.VisionCommands;
 
 @TeleOp(name = "TeleOp")
@@ -31,26 +32,29 @@ public class TeleOpMode extends LinearOpMode {
 
         // Main loop!
         while (opModeIsActive() && hardware.continueRunning) {
-            //hardware.tick(gamepad1);
+            hardware.tick(gamepad1);
+
           
             // Add AprilTagPoseFtc data to Telemetry
-            AprilTagPoseFtc distanceToBlueTarget;
-            distanceToBlueTarget = hardware.vision.getTagPosition(AprilTagNames.BlueTarget);
-            if(distanceToBlueTarget != null){
+            PioNerdAprilTag blueTargetAprilTag;
+            blueTargetAprilTag = hardware.vision.getPioNerdAprilTag(AprilTagNames.BlueTarget);
+            if(blueTargetAprilTag != null){
                 telemetry.addLine("BlueTarget Distances");
-                telemetry.addLine("x: "+Math.round(distanceToBlueTarget.x*100)/100);
-                telemetry.addLine("y: "+Math.round(distanceToBlueTarget.y*100)/100);
-                telemetry.addLine("z: "+Math.round(distanceToBlueTarget.z*100)/100);
-                telemetry.addLine("Range: "+(Math.round(distanceToBlueTarget.range * ((double)61/356) * 100)) / 100);
-                telemetry.addLine("Pythag A,B: "+(Math.sqrt(Math.pow((distanceToBlueTarget.x),2)) + Math.pow((distanceToBlueTarget.y),2)));
-
+                telemetry.addLine("x: "+blueTargetAprilTag.x(2));
+                telemetry.addLine("y: "+blueTargetAprilTag.y(2));
+                telemetry.addLine("z: "+blueTargetAprilTag.z(2));
+                telemetry.addLine("Range: "+blueTargetAprilTag.range(2));
+                telemetry.addLine("Pythag A,B: "+(Math.sqrt(Math.pow((blueTargetAprilTag.x(2)),2)) + Math.pow((blueTargetAprilTag.x(2)),2)));
+                hardware.launcher.launcher0.setVelocity(blueTargetAprilTag.range(2));
+                hardware.launcher.launcher1.setVelocity(blueTargetAprilTag.range(2));
             }
 
 
             telemetry.update();
             sleep(1);
-
         }
+
+
         hardware.stop();
     }
 }
