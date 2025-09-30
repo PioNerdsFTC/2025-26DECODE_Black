@@ -31,24 +31,21 @@ public class TeleOpMode extends LinearOpMode {
       
 
         // Main loop!
-        while (opModeIsActive() && hardware.continueRunning) {
-            hardware.tick(gamepad1);
+        while (opModeIsActive()) {
 
           
             // Add AprilTagPoseFtc data to Telemetry
-            PioNerdAprilTag blueTargetAprilTag;
-            blueTargetAprilTag = hardware.vision.getPioNerdAprilTag(AprilTagNames.BlueTarget);
-            if(blueTargetAprilTag != null){
-                telemetry.addLine("BlueTarget Distances");
-                telemetry.addLine("x: "+blueTargetAprilTag.x(2));
-                telemetry.addLine("y: "+blueTargetAprilTag.y(2));
-                telemetry.addLine("z: "+blueTargetAprilTag.z(2));
-                telemetry.addLine("Range: "+blueTargetAprilTag.range(2));
-                telemetry.addLine("Pythag A,B: "+(Math.sqrt(Math.pow((blueTargetAprilTag.x(2)),2)) + Math.pow((blueTargetAprilTag.x(2)),2)));
-                hardware.launcher.launcher0.setVelocity(blueTargetAprilTag.range(2));
-                hardware.launcher.launcher1.setVelocity(blueTargetAprilTag.range(2));
+            /*PioNerdAprilTag obeliskTagGPP;
+            obeliskTagGPP = hardware.vision.getPioNerdAprilTag(AprilTagNames.Obelisk_GPP);
+            if(obeliskTagGPP != null){
+                telemetry.addLine("Blue Target Range: "+obeliskTagGPP.range(2)+"cm");
+                if (obeliskTagGPP.range()<50){
+                    hardware.storage.feed();
+                } else {
+                    hardware.storage.contract();
+                }
             }
-
+            */
 
             telemetry.update();
             sleep(1);

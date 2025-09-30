@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.SerialNumber;
 
@@ -118,11 +119,11 @@ public class Mapping {
      * @param servoMotorName The name of the servo motor
      * @return The servo motor
      */
-    ServoImplEx getServoMotor(String servoMotorName) {
-        ServoImplEx servoMotor = null;
+    Servo getServoMotor(String servoMotorName) {
+        Servo servoMotor = null;
 
         try {
-            servoMotor = this.map.get(ServoImplEx.class, servoMotorName);
+            servoMotor = this.map.get(Servo.class, servoMotorName);
         } catch (Exception e) {
             Log.e("Error", "Cannot map servo motor with name " + servoMotorName);
 

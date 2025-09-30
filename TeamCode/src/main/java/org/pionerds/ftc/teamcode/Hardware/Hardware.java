@@ -32,9 +32,10 @@ public final class Hardware {
             drivetrain.init(this);
             vision.init(this);
             launcher.init(this);
+            storage.init(this);
         } catch (Exception e) {
 
-            storage.init(this);
+
 
             telemetry.addLine(e.getMessage());
             this.continueRunning = false;
