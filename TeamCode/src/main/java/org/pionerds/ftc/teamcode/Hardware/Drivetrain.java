@@ -89,6 +89,8 @@ public class Drivetrain {
         return motorSpeed;
     }
 
+
+/*
     public double[] bumperTurn(Gamepad driverGamepad){
         double[] motorSpeed = { 0.0, 0.0, 0.0, 0.0 };
 
@@ -136,21 +138,5 @@ public class Drivetrain {
             motorSpeed[2] = (x + y) / 2 / 0.707;
             motorSpeed[3] = (x - y) / 2 / 0.707;
         }
-
-        return motorSpeed;
-    }
-
-    public double[] stickTurn(Gamepad gamepad1, double[] motorSpeed){
-
-        if (Math.abs(gamepad1.right_stick_x)>0.2){
-            double x = gamepad1.right_stick_x/2;
-            for (int i=0; i<4; i++){
-                motorSpeed[i] = motorSpeed[i]/2;
-                motorSpeed[i] = motorSpeed[i]-x;
-
-            }
-        }
-
-        return motorSpeed;
-    }
+*/
 }
