@@ -3,6 +3,7 @@ package org.pionerds.ftc.teamcode.Hardware;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Utils.Environment;
 
 /**
@@ -10,12 +11,15 @@ import org.pionerds.ftc.teamcode.Utils.Environment;
  * This should include helper classes and direct controllers for the hardware.
  */
 public final class Hardware {
+    // Do not make these variables final because they will be updated during TeleOp
 
     public Drivetrain drivetrain = new Drivetrain();
     public Mapping mapping = new Mapping();
     public Vision vision = new Vision();
     public Launcher launcher = new Launcher();
     public Storage storage = new Storage();
+    public DriverControls driverControls1;
+    public DriverControls driverControls2;
 
     private Telemetry telemetry = null;
 
@@ -24,6 +28,12 @@ public final class Hardware {
      */
     public boolean continueRunning = true;
 
+
+    /**
+     * Use in Autonomous
+     * @param hardwareMap
+     * @param telemetry
+     */
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         try {
             this.telemetry = telemetry;
@@ -32,9 +42,43 @@ public final class Hardware {
             drivetrain.init(this);
             vision.init(this);
             launcher.init(this);
+            storage.init(this);
+
         } catch (Exception e) {
 
+
+
+            telemetry.addLine(e.getMessage());
+            this.continueRunning = false;
+        }
+    }
+
+
+
+
+    /**
+     * Use for TeleOp, where you define driver1 and driver2, which will tick gamepads.
+     * @param hardwareMap
+     * @param telemetry
+     * @param driverControls1
+     * @param driverControls2
+     */
+
+    public void init(HardwareMap hardwareMap, Telemetry telemetry, DriverControls driverControls1, DriverControls driverControls2) {
+        try {
+            this.telemetry = telemetry;
+
+            mapping.init(this, hardwareMap);
+            drivetrain.init(this);
+            vision.init(this);
+            launcher.init(this);
             storage.init(this);
+            this.driverControls1 = driverControls1;
+            this.driverControls2 = driverControls2;
+
+        } catch (Exception e) {
+
+
 
             telemetry.addLine(e.getMessage());
             this.continueRunning = false;
@@ -42,22 +86,17 @@ public final class Hardware {
     }
 
     /** Runs for each iteration of the OpMode, may or may not be necessary */
-    /*public void tick(Gamepad gamepad1) {
+    public void tick(Gamepad gamepad1, Gamepad gamepad2) {
         try {
-            //   this.launcher.launcherButton(gamepad1);
-            //double[] motorSpeed = this.drivetrain.stickDrive(gamepad1);
-            //if (gamepad1.right_bumper || gamepad1.left_bumper) {
-            //     motorSpeed = this.drivetrain.bumperTurn(gamepad1);
-            //
-            //}
-            //this.drivetrain.setDriveMotorsPow(motorSpeed[0], motorSpeed[1], motorSpeed[2], motorSpeed[3]);
+            driverControls1.tickControls(gamepad1,this);
+            driverControls2.tickControls(gamepad2,this);
         } catch (Exception e) {
             this.telemetry.addLine(e.getMessage());
             if (!Environment.competing) this.continueRunning = false;
         }
     }
 
-  */
+
     public void stop() {
         continueRunning = false;
     }
