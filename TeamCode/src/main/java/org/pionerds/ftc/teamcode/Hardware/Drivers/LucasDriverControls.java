@@ -29,12 +29,12 @@ public class LucasDriverControls extends DriverControls {
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
         // Resets
-        speedMultiplier = 1.0f;
+        setSpeedMultiplier(1.0f);
 
         // Left Bumper
         if(gamepad.left_bumper){
-            speedMultiplier = 0.5f;
-            maxRotationSpeed = 0.5f;
+            setSpeedMultiplier(0.5f);
+            setMaxRotationSpeed(0.5f);
         }
 
         // A-Button
@@ -54,11 +54,11 @@ public class LucasDriverControls extends DriverControls {
         }
 
         // Set Rotation Speed for Drivetrain
-        rotationSpeed = Math.min(gamepad.right_stick_x,maxRotationSpeed);
+        setRotationSpeed(Math.min(gamepad.right_stick_x,getMaxRotationSpeed()));
 
         // Set Speeds to the value or the capped value for the driver
-        speedX = Math.min(gamepad.left_stick_x,maxSpeed)*speedMultiplier;
-        speedY = Math.min(gamepad.left_stick_y,maxSpeed)*speedMultiplier;
+        setSpeedX(Math.min(gamepad.left_stick_x,getMaxSpeed())*speedMultiplier);
+        setSpeedY(Math.min(gamepad.left_stick_y,getMaxSpeed())*speedMultiplier);
 
     }
 }

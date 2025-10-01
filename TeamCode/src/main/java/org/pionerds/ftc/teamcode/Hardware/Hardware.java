@@ -18,7 +18,7 @@ final public class Hardware {
     public Storage storage = new Storage();
 
 
-    private Telemetry telemetry = null;
+    public Telemetry telemetry = null;
 
 
     /**
