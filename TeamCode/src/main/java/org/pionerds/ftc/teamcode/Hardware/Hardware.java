@@ -1,5 +1,6 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -90,6 +91,8 @@ public final class Hardware {
         try {
             driverControls1.tickControls(gamepad1,this);
             driverControls2.tickControls(gamepad2,this);
+            drivetrain.stickDrive(driverControls1);
+            drivetrain.setDriveMotorsPow();
         } catch (Exception e) {
             this.telemetry.addLine(e.getMessage());
             if (!Environment.competing) this.continueRunning = false;
