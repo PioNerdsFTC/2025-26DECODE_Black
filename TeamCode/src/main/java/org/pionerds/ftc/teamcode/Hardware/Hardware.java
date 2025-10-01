@@ -21,7 +21,7 @@ public final class Hardware {
     public DriverControls driverControls1;
     public DriverControls driverControls2;
 
-    private Telemetry telemetry = null;
+    public Telemetry telemetry = null;
 
     /**
      * Whether the hardware class is able to continue running.

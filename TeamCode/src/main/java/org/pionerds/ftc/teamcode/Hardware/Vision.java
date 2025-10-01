@@ -3,7 +3,6 @@ package org.pionerds.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -11,11 +10,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-import java.io.IOException;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Vision {
     private final DistanceUnit DISTANCE_UNIT = DistanceUnit.CM;
@@ -24,10 +20,12 @@ public class Vision {
     private boolean obeliskIdentified = false;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
+
     /**
      * The variable to store our instance of the AprilTag processor.
      */
     private AprilTagProcessor aprilTag;
+    private Hardware hardware;
 
     /**
      * The variable to store our instance of the vision portal.
@@ -38,6 +36,7 @@ public class Vision {
         initAprilTag(hardware);
     }
     public void initAprilTag(Hardware hardware) {
+        this.hardware = hardware;
 
         // Create the AprilTag processor.
         aprilTag = new AprilTagProcessor.Builder()
@@ -211,5 +210,21 @@ public class Vision {
                 telemetry.addLine("Artifact: " + a.name());
             }
     */
+
+    public void printTagDistanceToTelemetry(AprilTagNames aprilTag){
+        // Add AprilTagPoseFtc data to Telemetry
+        PioNerdAprilTag blueTargetAprilTag;
+        blueTargetAprilTag = getPioNerdAprilTag(AprilTagNames.BlueTarget);
+        if(blueTargetAprilTag != null){
+            hardware.telemetry.addLine("BlueTarget Distances");
+            hardware.telemetry.addLine("x: "+blueTargetAprilTag.x(2));
+            hardware.telemetry.addLine("y: "+blueTargetAprilTag.y(2));
+            hardware.telemetry.addLine("z: "+blueTargetAprilTag.z(2));
+            hardware.telemetry.addLine("Range: "+blueTargetAprilTag.range(2));
+            hardware.telemetry.addLine("Pythag A,B: "+(Math.sqrt(Math.pow((blueTargetAprilTag.x(2)),2)) + Math.pow((blueTargetAprilTag.x(2)),2)));
+            hardware.launcher.launcher0.setVelocity(blueTargetAprilTag.range(2));
+            hardware.launcher.launcher1.setVelocity(blueTargetAprilTag.range(2));
+        }
+    }
 
 }
