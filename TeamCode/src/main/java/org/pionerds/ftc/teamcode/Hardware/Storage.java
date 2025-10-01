@@ -20,22 +20,16 @@ public class Storage {
         servo1 = this.hardware.mapping.getServoMotor("servo1");
     }
 
-    public void feed(double pos) {
+    public void feed() {
+        double pos = 1.0;
         servo0.setPosition(pos);
         servo1.setPosition(pos);
     }
 
-    public void contract(double pos) {
+    public void contract() {
+        double pos = 0.0;
         servo0.setPosition(pos);
         servo1.setPosition(pos);
     }
 
-    public void launcherButton(Gamepad operatorGamepad) {
-        if (operatorGamepad.x) {
-            feed(1);
-        }
-        if (operatorGamepad.y) {
-            contract(0);
-        }
-    }
 }
