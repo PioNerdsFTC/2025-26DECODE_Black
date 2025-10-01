@@ -6,7 +6,6 @@ import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
 public abstract class DriverControls {
     String driverName = "";
-    int driverId = 0;
     float maxSpeed = 1.0f;
     float speedX = 0.0f;
     float speedY = 0.0f;
