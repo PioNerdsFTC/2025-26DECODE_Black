@@ -14,12 +14,6 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
-<<<<<<< HEAD
-public class Vision {
-
-    private static final boolean USE_WEBCAM = true; // true for webcam, false for phone camera
-=======
 import java.io.IOException;
 import java.sql.Array;
 import java.util.ArrayList;
@@ -30,7 +24,6 @@ public class Vision {
     private final DistanceUnit DISTANCE_UNIT = DistanceUnit.CM;
     private boolean obeliskIdentified = false;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
->>>>>>> fb8a2e7 (getArtifactPattern() method that if nothing is detected will return Artifact[] <-- {Artifact.P,Artifact.P,Artifact.P} because PPP is the best combination if undetected due to a 2/3 chance of a an Artifact needing to be purple. Once detected, boolean obeliskIdentified will switch to true, which can be accessed by Hardware.vision.isObeliskIdentified. This boolean is also used by the getArtifactPattern() method, so that once it is identified, it will stop attempting to scan for the Obelisk AprilTags and parse them and what not, just return the list that is store privately in the Vision.java class.)
 
     /**
      * The variable to store our instance of the AprilTag processor.
@@ -62,9 +55,6 @@ public class Vision {
             //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
             // ... these parameters are fx, fy, cx, cy.
 
-<<<<<<< HEAD
-            .build();
-=======
                 // The following default settings are available to un-comment and edit as needed.
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
@@ -80,7 +70,6 @@ public class Vision {
                 // ... these parameters are fx, fy, cx, cy.
 
                 .build();
->>>>>>> 7480db9 (distance now works with ftcPose instead of custom wrapper class of robotPose or rawPose.)
 
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
         // eg: Some typical detection data using a Logitech C920 WebCam
@@ -127,7 +116,7 @@ public class Vision {
         //visionPortal.setProcessorEnabled(aprilTag, true);
     } // end method initAprilTag()
 
-    }   // end method initAprilTag()
+
 
     public AprilTagPoseFtc getTagPosition(AprilTagNames tagName){
         for(AprilTagDetection detection: currentDetections()){
@@ -210,7 +199,7 @@ public class Vision {
         }
 
     }
-
+}
     /*
     telemetry.addLine("obeliskIdentified: "+hardware.vision.isObeliskIdentified());
             for(AprilTagMetadata metadata: hardware.vision.currentDetectionsMetadata()){
@@ -226,4 +215,5 @@ public class Vision {
             }
     */
 
-}
+
+
