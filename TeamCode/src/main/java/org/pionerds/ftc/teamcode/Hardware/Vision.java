@@ -241,4 +241,13 @@ public class Vision {
             );
         }
     }
+
+    public double mockDistance(double prevVal) {
+        if (prevVal==30){
+            prevVal = 9;
+        }
+        return prevVal+1;
+    }
+
+
 }
