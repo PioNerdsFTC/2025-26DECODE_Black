@@ -2,28 +2,22 @@ package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
+import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
+import org.pionerds.ftc.teamcode.Hardware.Artifact;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
-import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
+import org.pionerds.ftc.teamcode.Hardware.VisionCommands;
 
 @TeleOp(name = "TeleOp")
 public class TeleOpMode extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
-    final DriverControls driverControls1 = new LucasDriverControls(
-        "Lucas Schwietz",
-        1.0f
-    );
-    final DriverControls driverControls2 = new LucasDriverControls(
-        "Liam St. Ores",
-        0.7f
-    );
 
     @Override
     public void runOpMode() throws InterruptedException {
-        hardware.init(hardwareMap, telemetry, driverControls1, driverControls2);
+        hardware.init(hardwareMap);
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
@@ -32,14 +26,41 @@ public class TeleOpMode extends LinearOpMode {
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
 
-        // Main loop!
+        // Main Loop!
         while (opModeIsActive() && hardware.continueRunning) {
+            hardware.tick(gamepad1);
 
-            telemetry.addLine("Driver: "+driverControls1.getDriverName());
-            telemetry.addLine("Speed X: "+driverControls1.getSpeedX());
-            telemetry.addLine("Speed Y: "+driverControls1.getSpeedY());
-
-            hardware.tick(gamepad1,gamepad2);
+            // Add AprilTagPoseFtc data to Telemetry
+            AprilTagPoseFtc distanceToBlueTarget;
+            distanceToBlueTarget = hardware.vision.getTagPosition(
+                AprilTagNames.BlueTarget
+            );
+            if (distanceToBlueTarget != null) {
+                telemetry.addLine("BlueTarget Distances");
+                telemetry.addLine(
+                    "x: " + Math.round(distanceToBlueTarget.x * 100) / 100
+                );
+                telemetry.addLine(
+                    "y: " + Math.round(distanceToBlueTarget.y * 100) / 100
+                );
+                telemetry.addLine(
+                    "z: " + Math.round(distanceToBlueTarget.z * 100) / 100
+                );
+                telemetry.addLine(
+                    "Range: " +
+                        (Math.round(
+                                distanceToBlueTarget.range *
+                                    ((double) 61 / 356) *
+                                    100
+                            )) /
+                        100
+                );
+                telemetry.addLine(
+                    "Pythag A,B: " +
+                        (Math.sqrt(Math.pow((distanceToBlueTarget.x), 2)) +
+                            Math.pow((distanceToBlueTarget.y), 2))
+                );
+            }
 
             telemetry.update();
             sleep(1);
