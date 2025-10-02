@@ -22,7 +22,15 @@ public class Gyro {
                 )
         );
         gyro.initialize(params);
-        gyro.getRobotYawPitchRollAngles();
+        gyro.resetYaw();
+
+
+    }
+
+    public void resetYaw(){
+        if (gyro != null){
+            gyro.resetYaw();
+        }
     }
 
     public YawPitchRollAngles getAngles(){

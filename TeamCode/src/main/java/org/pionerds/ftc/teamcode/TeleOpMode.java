@@ -31,11 +31,11 @@ public class TeleOpMode extends LinearOpMode {
         // Main loop!
         while (opModeIsActive() && hardware.continueRunning) {
 
-            telemetry.addLine("Driver: "+driverControls1.getDriverName());
+            hardware.tick(gamepad1,gamepad2);
+
+            telemetry.addLine("\nDriver: "+driverControls1.getDriverName());
             telemetry.addLine("Speed X: "+driverControls1.getSpeedX());
             telemetry.addLine("Speed Y: "+driverControls1.getSpeedY());
-
-            hardware.tick(gamepad1,gamepad2);
 
             telemetry.update();
             sleep(1);
