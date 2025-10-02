@@ -1,8 +1,7 @@
 package org.pionerds.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
@@ -11,13 +10,19 @@ import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
 @TeleOp(name = "TeleOp")
 public class TeleOpMode extends LinearOpMode {
+
     final Hardware hardware = new Hardware();
-    final DriverControls driverControls1 = new LucasDriverControls("Lucas Schwietz",1.0f);
-    final DriverControls driverControls2 = new LucasDriverControls("Liam St. Ores",0.7f);
+    final DriverControls driverControls1 = new LucasDriverControls(
+        "Lucas Schwietz",
+        1.0f
+    );
+    final DriverControls driverControls2 = new LucasDriverControls(
+        "Liam St. Ores",
+        0.7f
+    );
 
     @Override
     public void runOpMode() throws InterruptedException {
-
         hardware.init(hardwareMap, telemetry, driverControls1, driverControls2);
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
@@ -26,16 +31,14 @@ public class TeleOpMode extends LinearOpMode {
 
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
-      
 
         // Main loop!
         while (opModeIsActive() && hardware.continueRunning) {
-            hardware.tick(gamepad1,gamepad2);
+            hardware.tick(gamepad1, gamepad2);
 
             telemetry.update();
             sleep(1);
         }
-
 
         hardware.stop();
     }

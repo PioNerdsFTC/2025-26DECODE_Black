@@ -2,11 +2,11 @@ package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
 @Autonomous(name = "Autonomous")
 public class AutoOpMode extends LinearOpMode {
+
     final Hardware hardware = new Hardware();
 
     @Override
@@ -19,7 +19,6 @@ public class AutoOpMode extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive() && hardware.continueRunning) {
-
             sleep(1);
         }
 
