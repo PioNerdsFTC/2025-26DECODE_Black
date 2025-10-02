@@ -12,6 +12,7 @@ import org.pionerds.ftc.teamcode.Utils.Environment;
  * This should include helper classes and direct controllers for the hardware.
  */
 public final class Hardware {
+
     // Do not make these variables final because they will be updated during TeleOp
 
     public Drivetrain drivetrain = new Drivetrain();
@@ -29,7 +30,6 @@ public final class Hardware {
      */
     public boolean continueRunning = true;
 
-
     /**
      * Use in Autonomous
      * @param hardwareMap
@@ -44,18 +44,11 @@ public final class Hardware {
             vision.init(this);
             launcher.init(this);
             storage.init(this);
-
         } catch (Exception e) {
-
-
-
             telemetry.addLine(e.getMessage());
             this.continueRunning = false;
         }
     }
-
-
-
 
     /**
      * Use for TeleOp, where you define driver1 and driver2, which will tick gamepads.
@@ -65,7 +58,12 @@ public final class Hardware {
      * @param driverControls2
      */
 
-    public void init(HardwareMap hardwareMap, Telemetry telemetry, DriverControls driverControls1, DriverControls driverControls2) {
+    public void init(
+        HardwareMap hardwareMap,
+        Telemetry telemetry,
+        DriverControls driverControls1,
+        DriverControls driverControls2
+    ) {
         try {
             this.telemetry = telemetry;
 
@@ -76,11 +74,7 @@ public final class Hardware {
             storage.init(this);
             this.driverControls1 = driverControls1;
             this.driverControls2 = driverControls2;
-
         } catch (Exception e) {
-
-
-
             telemetry.addLine(e.getMessage());
             this.continueRunning = false;
         }
@@ -98,7 +92,6 @@ public final class Hardware {
             if (!Environment.competing) this.continueRunning = false;
         }
     }
-
 
     public void stop() {
         continueRunning = false;
