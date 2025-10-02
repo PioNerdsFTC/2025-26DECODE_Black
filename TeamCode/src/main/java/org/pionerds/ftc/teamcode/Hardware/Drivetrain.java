@@ -8,9 +8,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
+
 public class Drivetrain {
 
     Hardware hardware = null;
+    double[] motorSpeed = { 0.0, 0.0, 0.0, 0.0 };
 
     public DcMotor[] motors = { null, null, null, null }; //front right, front left, back left, back right
 
@@ -25,16 +28,14 @@ public class Drivetrain {
 
     static private final double maxPow = 0.8;
 
-    public void setDriveMotorsPow(double pow0, double pow1, double pow2, double pow3){
-        motors[0].setPower(pow0);
-        motors[1].setPower(pow1);
-        motors[2].setPower(pow2);
-        motors[3].setPower(pow3);
+    public void setDriveMotorsPow(){
+        motors[0].setPower(motorSpeed[0]);
+        motors[1].setPower(motorSpeed[1]);
+        motors[2].setPower(motorSpeed[2]);
+        motors[3].setPower(motorSpeed[3]);
     }
 
     public double[] driveDPad(Gamepad driverGamepad){
-        double[] motorSpeed = { 0.0, 0.0, 0.0, 0.0 };
-
         if (driverGamepad.dpad_down){
             try {
                 motorSpeed[0] = maxPow;
@@ -89,9 +90,9 @@ public class Drivetrain {
         return motorSpeed;
     }
 
-    public double[] bumperTurn(Gamepad driverGamepad){
-        double[] motorSpeed = { 0.0, 0.0, 0.0, 0.0 };
 
+
+    public double[] bumperTurn(Gamepad driverGamepad){
        if (driverGamepad.right_bumper) {
            try {
                motorSpeed[0] = -maxPow;
@@ -117,40 +118,23 @@ public class Drivetrain {
     }
 
     public void stopMotors(){
-        for (DcMotor motor : motors){
-            motor.setPower(0);
-        }
+        motorSpeed[0] = 0.00;
+        motorSpeed[1] = 0.00;
+        motorSpeed[2] = 0.00;
+        motorSpeed[3] = 0.00;
     }
 
-    public double[] stickDrive(Gamepad gamepad1){
-        double x = gamepad1.left_stick_x;
-        double y = gamepad1.left_stick_y;
+    public void stickDrive(DriverControls driverControls) {
+        double x = driverControls.getSpeedX();
+        double y = driverControls.getSpeedY();
 
-        double[] motorSpeed = { 0.0, 0.0, 0.0, 0.0 };
-
-        if (Math.abs(x) < 0.2 && Math.abs(y) < 0.2){
+        if (Math.abs(x) < 0.2 && Math.abs(y) < 0.2) {
             stopMotors();
         } else {
-            motorSpeed[0] = (-x - y) / 2 / 0.707;
-            motorSpeed[1] = (-x + y) / 2 / 0.707;
-            motorSpeed[2] = (x + y) / 2 / 0.707;
-            motorSpeed[3] = (x - y) / 2 / 0.707;
+            motorSpeed[0] = (-x - y);
+            motorSpeed[1] = (-x + y);
+            motorSpeed[2] = (x + y);
+            motorSpeed[3] = (x - y);
         }
-
-        return motorSpeed;
-    }
-
-    public double[] stickTurn(Gamepad gamepad1, double[] motorSpeed){
-
-        if (Math.abs(gamepad1.right_stick_x)>0.2){
-            double x = gamepad1.right_stick_x/2;
-            for (int i=0; i<4; i++){
-                motorSpeed[i] = motorSpeed[i]/2;
-                motorSpeed[i] = motorSpeed[i]-x;
-
-            }
-        }
-
-        return motorSpeed;
     }
 }
