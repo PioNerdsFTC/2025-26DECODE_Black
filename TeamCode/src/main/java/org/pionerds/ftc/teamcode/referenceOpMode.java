@@ -6,7 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "Reference OpMode implementation")
 @Disabled
-public class referenceOpMode extends LinearOpMode{
+public class referenceOpMode extends LinearOpMode {
+
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();

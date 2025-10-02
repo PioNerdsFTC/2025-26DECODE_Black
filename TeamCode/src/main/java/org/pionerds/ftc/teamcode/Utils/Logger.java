@@ -1,6 +1,5 @@
 package org.pionerds.ftc.teamcode.Utils;
 
-
 import java.util.ArrayList;
 
 /**
@@ -9,21 +8,22 @@ import java.util.ArrayList;
  * Eventually we should be able to configure different levels of reporting (and maybe some way to export logs?)
  */
 public class Logger {
+
     public enum LogType {
         ERROR,
         INFO,
-        DEBUG
+        DEBUG,
     }
 
     // java 8 doesn't have tuples... We'll have to figure something out.
     public static ArrayList<String> logs = new ArrayList<String>();
 
     /** Log an error */
-    public void error() { }
+    public void error() {}
 
     /** Log a simple log message */
     public void info() {}
 
     /** Log a debug log message */
-    public void debug() { }
+    public void debug() {}
 }
