@@ -26,6 +26,7 @@ public class LucasDriverControls extends DriverControls {
      * Right_Stick.x - Sends Rotational Request to Drivetrain
      *
      **/
+    boolean dpad_up_pressed_already = false;
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
         // Resets
@@ -59,6 +60,19 @@ public class LucasDriverControls extends DriverControls {
         // Set Speeds to the value or the capped value for the driver
         setSpeedX(Math.min(gamepad.left_stick_x,getMaxSpeed())*speedMultiplier);
         setSpeedY(Math.min(gamepad.left_stick_y,getMaxSpeed())*speedMultiplier);
+
+        // Reset Gyro on D-PAD up
+        if (gamepad.dpad_up && !dpad_up_pressed_already) {
+
+            hardware.gyro.resetYaw();
+            dpad_up_pressed_already = true;
+        } else {
+            dpad_up_pressed_already = false;
+        }
+
+
+        // Tick the driving
+        hardware.drivetrain.driveWithControls(this);
 
     }
 }
