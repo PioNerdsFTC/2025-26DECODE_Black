@@ -1,7 +1,7 @@
 {
-    "files.autoSave": "afterDelay",
-    "editor.tabSize": 4,
-    "files.autoSaveDelay": 1000,
-    "prettier.tabWidth": 4,
-    "java.configuration.updateBuildConfiguration": "interactive"
+  "files.autoSave": "afterDelay",
+  "editor.tabSize": 4,
+  "files.autoSaveDelay": 1000,
+  "prettier.tabWidth": 4,
+  "java.configuration.updateBuildConfiguration": "interactive"
 }

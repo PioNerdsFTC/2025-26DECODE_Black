@@ -4,14 +4,13 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Storage {
+
     Hardware hardware = null;
 
     public Servo servo0;
     public Servo servo1;
 
-    Storage() {
-
-    }
+    Storage() {}
 
     public void init(Hardware hardware) {
         this.hardware = hardware;
@@ -31,5 +30,4 @@ public class Storage {
         servo0.setPosition(pos);
         servo1.setPosition(pos);
     }
-
 }

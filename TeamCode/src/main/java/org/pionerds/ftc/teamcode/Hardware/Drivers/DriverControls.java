@@ -1,10 +1,10 @@
 package org.pionerds.ftc.teamcode.Hardware.Drivers;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
 public abstract class DriverControls {
+
     private String driverName = "";
     private boolean isDriver = false;
     private float maxSpeed = 1.0f;
@@ -12,12 +12,11 @@ public abstract class DriverControls {
     private float speedY = 0.0f;
     private float rotationMultiplier = 1.0f;
 
-
     float rotationSpeed = 0.0f;
 
     float speedMultiplier = 1;
 
-    public DriverControls(String driverName, boolean isDriver, float maxSpeed){
+    public DriverControls(String driverName, float maxSpeed) {
         this.driverName = driverName;
         this.isDriver = isDriver;
         this.maxSpeed = maxSpeed;

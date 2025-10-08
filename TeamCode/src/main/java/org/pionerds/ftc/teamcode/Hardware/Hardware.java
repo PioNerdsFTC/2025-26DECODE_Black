@@ -14,7 +14,9 @@ import org.pionerds.ftc.teamcode.Utils.Environment;
  * Class for all the hardware functions of the robot.
  * This should include helper classes and direct controllers for the hardware.
  */
-final public class Hardware {
+public final class Hardware {
+
+    // Do not make these variables final because they will be updated during TeleOp
 
     public Drivetrain drivetrain = new Drivetrain();
     public Mapping mapping = new Mapping();
@@ -64,10 +66,10 @@ final public class Hardware {
      */
 
     public void init(
-            HardwareMap hardwareMap,
-            Telemetry telemetry,
-            DriverControls driverControls1,
-            DriverControls driverControls2
+        HardwareMap hardwareMap,
+        Telemetry telemetry,
+        DriverControls driverControls1,
+        DriverControls driverControls2
     ) {
         try {
             this.telemetry = telemetry;
@@ -105,7 +107,7 @@ final public class Hardware {
             if (!Environment.competing) this.continueRunning = false;
         }
     }
-  
+
     public void stop() {
         continueRunning = false;
     }

@@ -3,7 +3,6 @@ package org.pionerds.ftc.teamcode.Hardware;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.*;
 
 import android.util.Log;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -24,13 +23,33 @@ public class Drivetrain {
         this.hardware = hardware;
         this.telemetry = telemetry;
 
-        motors[0] = this.hardware.mapping.getMotor("motor0", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
-        motors[1] = this.hardware.mapping.getMotor("motor1", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
-        motors[2] = this.hardware.mapping.getMotor("motor2", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
-        motors[3] = this.hardware.mapping.getMotor("motor3", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
+        motors[0] = this.hardware.mapping.getMotor(
+            "motor0",
+            40.0,
+            Direction.FORWARD,
+            DcMotor.ZeroPowerBehavior.BRAKE
+        );
+        motors[1] = this.hardware.mapping.getMotor(
+            "motor1",
+            40.0,
+            Direction.FORWARD,
+            DcMotor.ZeroPowerBehavior.BRAKE
+        );
+        motors[2] = this.hardware.mapping.getMotor(
+            "motor2",
+            40.0,
+            Direction.FORWARD,
+            DcMotor.ZeroPowerBehavior.BRAKE
+        );
+        motors[3] = this.hardware.mapping.getMotor(
+            "motor3",
+            40.0,
+            Direction.FORWARD,
+            DcMotor.ZeroPowerBehavior.BRAKE
+        );
     }
 
-    static private final double maxPow = 0.8;
+    private static final double maxPow = 0.8;
 
     public void setDriveMotorsPow(){
         motors[0].setPower(motorSpeed[0]);
@@ -51,36 +70,33 @@ public class Drivetrain {
                 motorSpeed[2] = maxPow;
                 motorSpeed[3] = -maxPow;
             } catch (Exception e) {
-                Log.e("Error","Cannot power motors dpad_down");
+                Log.e("Error", "Cannot power motors dpad_down");
             }
-        }
-        else if (driverGamepad.dpad_up){ try {
+        } else if (driverGamepad.dpad_up) {
+            try {
                 motorSpeed[0] = -maxPow;
                 motorSpeed[1] = maxPow;
                 motorSpeed[2] = -maxPow;
                 motorSpeed[3] = maxPow;
-
             } catch (Exception e) {
                 Log.e("Error", "Cannot power motors dpad_up");
             }
-        } else if (driverGamepad.dpad_left){
+        } else if (driverGamepad.dpad_left) {
             try {
                 motorSpeed[0] = maxPow;
                 motorSpeed[1] = maxPow;
                 motorSpeed[2] = -maxPow;
                 motorSpeed[3] = -maxPow;
-
             } catch (Exception e) {
                 Log.e("Error", "Cannot power motors dpad_left");
             }
-        } else if (driverGamepad.dpad_right){
+        } else if (driverGamepad.dpad_right) {
             try {
                 motorSpeed[0] = -maxPow;
                 motorSpeed[1] = -maxPow;
                 motorSpeed[2] = maxPow;
                 motorSpeed[3] = maxPow;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Log.e("Error", "Cannot power motors dpad_right");
             }
         } else {
@@ -89,9 +105,8 @@ public class Drivetrain {
                 motorSpeed[1] = -maxPow;
                 motorSpeed[2] = maxPow;
                 motorSpeed[3] = maxPow;
-            }
-            catch (Exception e){
-                Log.e("Error","Unable to power down motors");
+            } catch (Exception e) {
+                Log.e("Error", "Unable to power down motors");
             }
         }
 
