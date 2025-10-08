@@ -25,6 +25,17 @@ public class Constants {
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
 
+    public static XDriveConstants driveConstants1 = new XDriveConstants()
+            .maxPower(0.8)
+            .rightFrontMotorName("motor0")
+            .rightRearMotorName("motor3")
+            .leftRearMotorName("motor2")
+            .leftFrontMotorName("motor1")
+            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
+
     public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
             .robotWidth(11.5)
             .robotLength(10.5)
