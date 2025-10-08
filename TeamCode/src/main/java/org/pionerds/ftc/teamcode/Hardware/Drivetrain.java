@@ -30,7 +30,6 @@ public class Drivetrain {
         }
     }
 
-
     public void setDriveMotorsPow(){
 
         for (int i=4; i==0 ? false: true; i--) {
@@ -38,6 +37,7 @@ public class Drivetrain {
             telemetry.addLine("Motor "+Integer.toString(4-i)+" Pow: "+(Math.round(motorSpeed[4-i]*100)/100.0));
         }
     }
+
 
 
     public void scaleMotorsToFit(){
