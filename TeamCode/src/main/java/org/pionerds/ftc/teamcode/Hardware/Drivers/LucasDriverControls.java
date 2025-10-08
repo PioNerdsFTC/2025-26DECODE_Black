@@ -7,8 +7,8 @@ import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
 public class LucasDriverControls extends DriverControls {
-    public LucasDriverControls(String driverName, float maxSpeed){
-        super(driverName,maxSpeed);
+    public LucasDriverControls(String driverName, boolean isDriver, float maxSpeed){
+        super(driverName,isDriver,maxSpeed);
     }
 
     /**
@@ -26,7 +26,7 @@ public class LucasDriverControls extends DriverControls {
      * Right_Stick.x - Sends Rotational Request to Drivetrain
      *
      **/
-    boolean dpad_up_pressed_already = false;
+    boolean start_pressed_already = false;
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
         // Resets
@@ -35,7 +35,7 @@ public class LucasDriverControls extends DriverControls {
         // Left Bumper
         if(gamepad.left_bumper){
             setSpeedMultiplier(0.5f);
-            setMaxRotationSpeed(0.5f);
+            setRotationMultiplier(0.5f);
         }
 
         // A-Button
@@ -55,24 +55,25 @@ public class LucasDriverControls extends DriverControls {
         }
 
         // Set Rotation Speed for Drivetrain
-        setRotationSpeed(Math.min(gamepad.right_stick_x,getMaxRotationSpeed()));
+        setRotationSpeed(gamepad.right_stick_x * getRotationMultiplier());
 
         // Set Speeds to the value or the capped value for the driver
-        setSpeedX(Math.min(gamepad.left_stick_x,getMaxSpeed())*speedMultiplier);
-        setSpeedY(Math.min(gamepad.left_stick_y,getMaxSpeed())*speedMultiplier);
+        setSpeedX(Math.min(gamepad.left_stick_x,getMaxSpeed())*getSpeedMultiplier());
+        setSpeedY(Math.min(gamepad.left_stick_y,getMaxSpeed())*getSpeedMultiplier());
 
         // Reset Gyro on D-PAD up
-        if (gamepad.dpad_up && !dpad_up_pressed_already) {
+        if (gamepad.start && !start_pressed_already) {
 
             hardware.gyro.resetYaw();
-            dpad_up_pressed_already = true;
+            start_pressed_already = true;
         } else {
-            dpad_up_pressed_already = false;
+            start_pressed_already = false;
         }
 
 
         // Tick the driving
-        hardware.drivetrain.driveWithControls(this);
-
+        if(getIsDriver()) {
+            hardware.drivetrain.driveWithControls(this);
+        }
     }
 }
