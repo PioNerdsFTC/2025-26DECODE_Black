@@ -50,4 +50,9 @@ public class Launcher {
             setLauncherPower(0);
         }
     }
+
+    public void stopLaunchers(){
+        launcher0.setPower(0);
+        launcher1.setPower(0);
+    }
 }
