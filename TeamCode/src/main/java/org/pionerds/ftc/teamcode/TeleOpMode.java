@@ -12,8 +12,8 @@ import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 @TeleOp(name = "TeleOp")
 public class TeleOpMode extends LinearOpMode {
     final Hardware hardware = new Hardware();
-    final DriverControls driverControls1 = new LucasDriverControls("Lucas Schwietz",1.0f);
-    final DriverControls driverControls2 = new LucasDriverControls("Liam St. Ores",0.7f);
+    final DriverControls driverControls1 = new LucasDriverControls("Lucas Schwietz",true,1.0f);
+    final DriverControls driverControls2 = new LucasDriverControls("Liam St. Ores",false,0.7f);
 
     @Override
     public void runOpMode() throws InterruptedException {

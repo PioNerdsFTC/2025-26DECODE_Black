@@ -77,6 +77,7 @@ final public class Hardware {
             vision.init(this);
             launcher.init(this);
             storage.init(this);
+            gyro.init(this); //REMOVE WHEN AT COMPETITION I THINK
             this.driverControls1 = driverControls1;
             this.driverControls2 = driverControls2;
         } catch (Exception e) {
@@ -98,8 +99,6 @@ final public class Hardware {
          // this.launcher.launcherButton(gamepad1);
 
 
-
-          telemetry.update();
 
         } catch(Exception e) {
             this.telemetry.addLine(e.getMessage());
