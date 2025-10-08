@@ -26,11 +26,10 @@ public class Drivetrain {
         this.telemetry = telemetry;
 
         for (int i=3;i==-1 ? false: true; i--) {
-            motors[i] = this.hardware.mapping.getMotor(motorNames[i], 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
+            motors[i] = this.hardware.mapping.g[etMotor(motorNames[i], 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
         }
     }
 
-    static private final double maxPow = 0.8;
 
     public void setDriveMotorsPow(){
 
