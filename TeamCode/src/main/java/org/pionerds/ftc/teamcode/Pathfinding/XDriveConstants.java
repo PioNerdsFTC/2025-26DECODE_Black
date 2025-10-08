@@ -5,20 +5,9 @@ import com.pedropathing.math.Vector;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class XDriveConstants {
-    /** The Forward Velocity of the Robot - Different for each robot
-     * Default Value: 81.34056 */
     public  double xVelocity = 81.34056;
-
-    /** The Lateral Velocity of the Robot - Different for each robot
-     * Default Value: 65.43028 */
     public  double yVelocity = 65.43028;
-
     private  double[] convertToPolar = Pose.cartesianToPolar(xVelocity, -yVelocity);
-
-    /** The actual drive vector for the front left wheel, if the robot is facing a heading of 0 radians with the wheel centered at (0,0)
-     * Default Value: new Vector(convertToPolar[0], convertToPolar[1])
-     * @implNote This vector should not be changed, but only accessed.
-     */
     public  Vector frontLeftVector = new Vector(convertToPolar[0], convertToPolar[1]).normalize();
     public  double maxPower = 1;
     public  String leftFrontMotorName = "leftFront";
@@ -231,10 +220,6 @@ public class XDriveConstants {
         this.useBrakeModeInTeleOp = useBrakeModeInTeleOp;
     }
 
-    /**
-     * This method sets the default values for the XDriveConstants class.
-     * It is called in the constructor of the XDriveConstants class.
-     */
     public void defaults() {
         xVelocity = 81.34056;
         yVelocity = 65.43028;

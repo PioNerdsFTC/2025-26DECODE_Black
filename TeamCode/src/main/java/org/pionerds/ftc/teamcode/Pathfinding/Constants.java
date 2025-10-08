@@ -51,9 +51,9 @@ public class Constants {
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
-        return new FollowerBuilder(followerConstants, hardwareMap)
+        return new ExtendedFollowerBuilder(followerConstants, hardwareMap)
+                .xDrivetrain(driveConstants1)
                 .pathConstraints(pathConstraints)
-                .mecanumDrivetrain(driveConstants)
                 .driveEncoderLocalizer(localizerConstants)
                 .build();
     }
