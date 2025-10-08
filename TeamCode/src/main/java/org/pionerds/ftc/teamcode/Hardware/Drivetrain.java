@@ -26,7 +26,7 @@ public class Drivetrain {
         this.telemetry = telemetry;
 
         for (int i=3;i==-1 ? false: true; i--) {
-            motors[i] = this.hardware.mapping.g[etMotor(motorNames[i], 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
+            motors[i] = this.hardware.mapping.getMotor(motorNames[i], 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
         }
     }
 
@@ -38,7 +38,6 @@ public class Drivetrain {
             telemetry.addLine("Motor "+Integer.toString(4-i)+" Pow: "+(Math.round(motorSpeed[4-i]*100)/100.0));
         }
     }
-
 
 
     public void scaleMotorsToFit(){
