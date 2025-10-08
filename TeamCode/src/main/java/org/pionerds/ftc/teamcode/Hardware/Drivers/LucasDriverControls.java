@@ -26,6 +26,7 @@ public class LucasDriverControls extends DriverControls {
      * Right_Stick.x - Sends Rotational Request to Drivetrain
      *
      **/
+    boolean start_pressed_already = false;
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
         // Resets
@@ -34,7 +35,7 @@ public class LucasDriverControls extends DriverControls {
         // Left Bumper
         if (gamepad.left_bumper) {
             setSpeedMultiplier(0.5f);
-            setMaxRotationSpeed(0.5f);
+            setRotationMultiplier(0.5f);
         }
 
         // A-Button

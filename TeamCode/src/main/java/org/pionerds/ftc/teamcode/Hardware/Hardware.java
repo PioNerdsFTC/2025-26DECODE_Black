@@ -1,9 +1,12 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Utils.Environment;
 
@@ -23,6 +26,9 @@ public final class Hardware {
     public DriverControls driverControls1;
     public DriverControls driverControls2;
 
+    public Gyro gyro = new Gyro();
+
+
     public Telemetry telemetry = null;
 
     /**
@@ -40,10 +46,11 @@ public final class Hardware {
             this.telemetry = telemetry;
 
             mapping.init(this, hardwareMap);
-            drivetrain.init(this);
+            drivetrain.init(this, telemetry);
             vision.init(this);
             launcher.init(this);
             storage.init(this);
+            gyro.init(this);
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());
             this.continueRunning = false;
@@ -68,10 +75,11 @@ public final class Hardware {
             this.telemetry = telemetry;
 
             mapping.init(this, hardwareMap);
-            drivetrain.init(this);
+            drivetrain.init(this,telemetry);
             vision.init(this);
             launcher.init(this);
             storage.init(this);
+            gyro.init(this); //REMOVE WHEN AT COMPETITION I THINK
             this.driverControls1 = driverControls1;
             this.driverControls2 = driverControls2;
         } catch (Exception e) {
@@ -81,13 +89,20 @@ public final class Hardware {
     }
 
     /** Runs for each iteration of the OpMode, may or may not be necessary */
-    public void tick(Gamepad gamepad1, Gamepad gamepad2) {
+    public void tick(Gamepad gamepad1,Gamepad gamepad2) {
         try {
+
             driverControls1.tickControls(gamepad1,this);
             driverControls2.tickControls(gamepad2,this);
-            drivetrain.stickDrive(driverControls1);
-            drivetrain.setDriveMotorsPow();
-        } catch (Exception e) {
+
+            YawPitchRollAngles angles = this.gyro.getAngles();
+            telemetry.addLine("Gyro:");
+            telemetry.addLine("Yaw: "+angles.getYaw());
+         // this.launcher.launcherButton(gamepad1);
+
+
+
+        } catch(Exception e) {
             this.telemetry.addLine(e.getMessage());
             if (!Environment.competing) this.continueRunning = false;
         }
