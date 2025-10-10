@@ -5,6 +5,7 @@ package org.pionerds.ftc.teamcode.Utils;
  * There might be a better data structure.
  */
 public class Environment {
+
     /** Whether the robot is competing, manages how errors are handled */
-    public final static boolean competing = false;
+    public static final boolean competing = false;
 }

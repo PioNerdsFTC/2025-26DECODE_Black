@@ -1,9 +1,10 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -11,21 +12,19 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-import java.io.IOException;
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 public class Vision {
+
     private final DistanceUnit DISTANCE_UNIT = DistanceUnit.CM;
+    private final double MULTIPLY_TO_DISTANCE = 0.5;
+
     private boolean obeliskIdentified = false;
-    private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+    private static final boolean USE_WEBCAM = true; // true for webcam, false for phone camera
 
     /**
      * The variable to store our instance of the AprilTag processor.
      */
     private AprilTagProcessor aprilTag;
+    private Hardware hardware;
 
     /**
      * The variable to store our instance of the vision portal.
@@ -35,26 +34,26 @@ public class Vision {
     public void init(Hardware hardware) {
         initAprilTag(hardware);
     }
+
     public void initAprilTag(Hardware hardware) {
+        this.hardware = hardware;
 
         // Create the AprilTag processor.
         aprilTag = new AprilTagProcessor.Builder()
+            // The following default settings are available to un-comment and edit as needed.
+            .setDrawAxes(true)
+            .setDrawCubeProjection(true)
+            .setDrawTagOutline(true)
+            //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+            .setTagLibrary(AprilTagGameDatabase.getDecodeTagLibrary())
+            .setOutputUnits(DISTANCE_UNIT, AngleUnit.DEGREES)
+            // == CAMERA CALIBRATION ==
+            // If you do not manually specify calibration parameters, the SDK will attempt
+            // to load a predefined calibration for your camera.
+            //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
+            // ... these parameters are fx, fy, cx, cy.
 
-                // The following default settings are available to un-comment and edit as needed.
-                .setDrawAxes(true)
-                .setDrawCubeProjection(true)
-                .setDrawTagOutline(true)
-                //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-                .setTagLibrary(AprilTagGameDatabase.getDecodeTagLibrary())
-                .setOutputUnits(DISTANCE_UNIT, AngleUnit.DEGREES)
-
-                // == CAMERA CALIBRATION ==
-                // If you do not manually specify calibration parameters, the SDK will attempt
-                // to load a predefined calibration for your camera.
-                //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
-                // ... these parameters are fx, fy, cx, cy.
-
-                .build();
+            .build();
 
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
         // eg: Some typical detection data using a Logitech C920 WebCam
@@ -99,44 +98,64 @@ public class Vision {
 
         // Disable or re-enable the aprilTag processor at any time.
         //visionPortal.setProcessorEnabled(aprilTag, true);
+    } // end method initAprilTag()
 
-    }   // end method initAprilTag()
-
-    public AprilTagPoseFtc getTagPosition(AprilTagNames tagName){
-        for(AprilTagDetection detection: currentDetections()){
-            if(!(detection==null) && !(detection.metadata == null) && detection.metadata.name.equals(tagName.name())){
+    // Deprecated.
+    public AprilTagPoseFtc getTagPosition(AprilTagNames tagName) {
+        for (AprilTagDetection detection : currentDetections()) {
+            if (
+                !(detection == null) &&
+                !(detection.metadata == null) &&
+                detection.metadata.name.equals(tagName.name())
+            ) {
                 return detection.ftcPose;
             }
         }
         return null;
     }
 
+    public PioNerdAprilTag getPioNerdAprilTag(AprilTagNames aprilTagName) {
+        for (AprilTagDetection detection : currentDetections()) {
+            if (
+                !(detection == null) &&
+                !(detection.metadata == null) &&
+                detection.metadata.name.equals(aprilTagName.name())
+            ) {
+                return new PioNerdAprilTag(detection); // Return the PioNerdAprilTag object.
+            }
+        }
+        return null;
+    }
 
-
-    public ArrayList<AprilTagDetection> currentDetections(){
-        if(aprilTag.getDetections()==null){return new ArrayList<AprilTagDetection>();}
+    public ArrayList<AprilTagDetection> currentDetections() {
+        if (aprilTag.getDetections() == null) {
+            return new ArrayList<AprilTagDetection>();
+        }
         return aprilTag.getDetections();
     }
 
     public ArrayList<AprilTagMetadata> currentDetectionsMetadata() {
-        ArrayList<AprilTagMetadata> detectionNames = new ArrayList<AprilTagMetadata>();
+        ArrayList<AprilTagMetadata> detectionNames = new ArrayList<
+            AprilTagMetadata
+        >();
         List<AprilTagDetection> currentDetections = this.currentDetections();
 
         // iterate and get names
-        for(AprilTagDetection detection: this.currentDetections()){
-            if((detection!=null)&&(detection.metadata!=null)){
+        for (AprilTagDetection detection : this.currentDetections()) {
+            if ((detection != null) && (detection.metadata != null)) {
                 detectionNames.add(detection.metadata);
             }
-
         }
 
         return detectionNames;
     }
 
     Artifact[] artifactAlgorithm = new Artifact[3];
+
     public Artifact[] getArtifactPattern() {
-        if(!obeliskIdentified){
-            ArrayList<AprilTagMetadata> currentDetectionMetadata = currentDetectionsMetadata();
+        if (!obeliskIdentified) {
+            ArrayList<AprilTagMetadata> currentDetectionMetadata =
+                currentDetectionsMetadata();
             for (AprilTagMetadata metadata : currentDetectionMetadata) {
                 if (metadata.name.equals("Obelisk_GPP")) {
                     artifactAlgorithm[0] = Artifact.GREEN;
@@ -168,21 +187,20 @@ public class Vision {
         return artifactAlgorithm;
     }
 
-    public boolean isObeliskIdentified(){
+    public boolean isObeliskIdentified() {
         return obeliskIdentified;
     }
 
-    public void controlVisionPortal(VisionCommands command){
-        if(command==VisionCommands.RESUME){
+    public void controlVisionPortal(VisionCommands command) {
+        if (command == VisionCommands.RESUME) {
             visionPortal.resumeStreaming();
-        } else if(command==VisionCommands.CLOSE){
+        } else if (command == VisionCommands.CLOSE) {
             visionPortal.close();
-        } else if(command==VisionCommands.STOP){
+        } else if (command == VisionCommands.STOP) {
             visionPortal.stopLiveView();
-        } else if(command==VisionCommands.PAUSE){
+        } else if (command == VisionCommands.PAUSE) {
             visionPortal.stopStreaming();
         }
-
     }
 
     /*
@@ -199,5 +217,37 @@ public class Vision {
                 telemetry.addLine("Artifact: " + a.name());
             }
     */
+
+    public void printTagDistanceToTelemetry(AprilTagNames aprilTag) {
+        // Add AprilTagPoseFtc data to Telemetry
+        PioNerdAprilTag blueTargetAprilTag;
+        blueTargetAprilTag = getPioNerdAprilTag(AprilTagNames.BlueTarget);
+        if (blueTargetAprilTag != null) {
+            hardware.telemetry.addLine("BlueTarget Distances");
+            hardware.telemetry.addLine("x: " + blueTargetAprilTag.x(2));
+            hardware.telemetry.addLine("y: " + blueTargetAprilTag.y(2));
+            hardware.telemetry.addLine("z: " + blueTargetAprilTag.z(2));
+            hardware.telemetry.addLine("Range: " + blueTargetAprilTag.range(2));
+            hardware.telemetry.addLine(
+                "Pythag A,B: " +
+                    (Math.sqrt(Math.pow((blueTargetAprilTag.x(2)), 2)) +
+                        Math.pow((blueTargetAprilTag.x(2)), 2))
+            );
+            hardware.launcher.launcher0.setVelocity(
+                blueTargetAprilTag.range(2)
+            );
+            hardware.launcher.launcher1.setVelocity(
+                blueTargetAprilTag.range(2)
+            );
+        }
+    }
+
+    public double mockDistance(double prevVal) {
+        if (prevVal==30){
+            prevVal = 9;
+        }
+        return prevVal+1;
+    }
+
 
 }

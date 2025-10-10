@@ -1,7 +1,6 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
 import android.util.Log;
-
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.CRServoImplEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,10 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.SerialNumber;
-
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.pionerds.ftc.teamcode.Utils.Environment;
@@ -37,7 +34,6 @@ public class Mapping {
     public void init(Hardware hardware, HardwareMap map) {
         this.map = map;
         this.hardware = hardware;
-
     }
 
     /**
@@ -48,10 +44,10 @@ public class Mapping {
      * @return The motor object.
      */
     DcMotorImplEx getMotor(
-            String motorName,
-            Double gearRatio,
-            DcMotorSimple.Direction motorDirection,
-            DcMotor.ZeroPowerBehavior motorZeroPowerBehavior
+        String motorName,
+        Double gearRatio,
+        DcMotorSimple.Direction motorDirection,
+        DcMotor.ZeroPowerBehavior motorZeroPowerBehavior
     ) {
         DcMotorImplEx motor = null;
 
@@ -77,13 +73,13 @@ public class Mapping {
      * @return The servo
      */
     CRServo getContinuousServo(
-            String servoName,
-            CRServoImplEx.Direction servoDirection
+        String servoName,
+        CRServoImplEx.Direction servoDirection
     ) {
         CRServoImplEx continuousServo = null;
         try {
-           continuousServo = this.map.get(CRServoImplEx.class, servoName);
-           continuousServo.setDirection(servoDirection);
+            continuousServo = this.map.get(CRServoImplEx.class, servoName);
+            continuousServo.setDirection(servoDirection);
         } catch (Exception e) {
             Log.e("Error", "Cannot map continuous servo: " + servoName);
 
@@ -98,7 +94,6 @@ public class Mapping {
      * @return the IMU
      */
     IMU getIMU() {
-
         IMU imu = null;
 
         try {
@@ -124,7 +119,10 @@ public class Mapping {
         try {
             servoMotor = this.map.get(ServoImplEx.class, servoMotorName);
         } catch (Exception e) {
-            Log.e("Error", "Cannot map servo motor with name " + servoMotorName);
+            Log.e(
+                "Error",
+                "Cannot map servo motor with name " + servoMotorName
+            );
 
             if (!Environment.competing) hardware.continueRunning = false;
         }

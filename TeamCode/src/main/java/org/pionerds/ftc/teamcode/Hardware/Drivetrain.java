@@ -8,134 +8,126 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
+
 public class Drivetrain {
 
     Hardware hardware = null;
 
-    public DcMotor[] motors = { null, null, null, null }; //front right, front left, back left, back right
+    private Telemetry telemetry = null;
 
-    public void init(Hardware hardware) {
+    private DcMotor[] motors = { null, null, null, null }; //front right, front left, back left, back right
+    private double[] motorSpeed = { 0.0, 0.0, 0.0, 0.0 };
+    private String[] motorNames = {"motor0","motor1","motor2","motor3"};
+
+    public void init(Hardware hardware, Telemetry telemetry) {
         this.hardware = hardware;
+        this.telemetry = telemetry;
 
-        motors[0] = this.hardware.mapping.getMotor("motor0", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
-        motors[1] = this.hardware.mapping.getMotor("motor1", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
-        motors[2] = this.hardware.mapping.getMotor("motor2", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
-        motors[3] = this.hardware.mapping.getMotor("motor3", 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
+        for (int i=3;i==-1 ? false: true; i--) {
+            motors[i] = this.hardware.mapping.getMotor(motorNames[i], 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
+        }
     }
 
-    static private final double maxPow = 0.8;
+    public void setDriveMotorsPow(){
 
-    public void setDriveMotorsPow(double pow0, double pow1, double pow2, double pow3){
-        motors[0].setPower(pow0);
-        motors[1].setPower(pow1);
-        motors[2].setPower(pow2);
-        motors[3].setPower(pow3);
+        for (int i=4; i==0 ? false: true; i--) {
+            motors[4-i].setPower(motorSpeed[4-i]);
+            telemetry.addLine("Motor "+Integer.toString(4-i)+" Pow: "+(Math.round(motorSpeed[4-i]*100)/100.0));
+        }
     }
 
-    public double[] driveDPad(Gamepad driverGamepad){
-        double[] motorSpeed = { 0.0, 0.0, 0.0, 0.0 };
 
-        if (driverGamepad.dpad_down){
-            try {
-                motorSpeed[0] = maxPow;
-                motorSpeed[1] = -maxPow;
-                motorSpeed[2] = maxPow;
-                motorSpeed[3] = -maxPow;
-            } catch (Exception e) {
-                Log.e("Error","Cannot power motors dpad_down");
+
+    public void scaleMotorsToFit(){
+        boolean flag = false;
+        for (double speed : motorSpeed) {
+            if (Math.abs(speed)>1) {
+                flag = true;
+                break;
             }
         }
-        else if (driverGamepad.dpad_up){ try {
-                motorSpeed[0] = -maxPow;
-                motorSpeed[1] = maxPow;
-                motorSpeed[2] = -maxPow;
-                motorSpeed[3] = maxPow;
+        if(flag) {
+            double maxMotorPow = Math.max(Math.max(motorSpeed[0],motorSpeed[1]),Math.max(motorSpeed[2],motorSpeed[3]));
+            double minMotorPow = Math.min(Math.min(motorSpeed[0],motorSpeed[1]),Math.min(motorSpeed[2],motorSpeed[3]));
 
-            } catch (Exception e) {
-                Log.e("Error", "Cannot power motors dpad_up");
-            }
-        } else if (driverGamepad.dpad_left){
-            try {
-                motorSpeed[0] = maxPow;
-                motorSpeed[1] = maxPow;
-                motorSpeed[2] = -maxPow;
-                motorSpeed[3] = -maxPow;
+            double finalMotorDivisor = Math.max(maxMotorPow,Math.abs(minMotorPow));
 
-            } catch (Exception e) {
-                Log.e("Error", "Cannot power motors dpad_left");
+            for(int i = 0; i<4; i++){
+                motorSpeed[i] /= finalMotorDivisor;
             }
-        } else if (driverGamepad.dpad_right){
-            try {
-                motorSpeed[0] = -maxPow;
-                motorSpeed[1] = -maxPow;
-                motorSpeed[2] = maxPow;
-                motorSpeed[3] = maxPow;
-            }
-            catch (Exception e) {
-                Log.e("Error", "Cannot power motors dpad_right");
-            }
-        } else {
-            try {
-                motorSpeed[0] = -maxPow;
-                motorSpeed[1] = -maxPow;
-                motorSpeed[2] = maxPow;
-                motorSpeed[3] = maxPow;
-            }
-            catch (Exception e){
-                Log.e("Error","Unable to power down motors");
-            }
+            telemetry.addLine("MotorSpeedDivisor: "+finalMotorDivisor);
         }
-
-
-
-    public double[] bumperTurn(Gamepad driverGamepad){
-        double[] motorSpeed = { 0.0, 0.0, 0.0, 0.0 };
-
-       if (driverGamepad.right_bumper) {
-           try {
-               motorSpeed[0] = -maxPow;
-               motorSpeed[1] = -maxPow;
-               motorSpeed[2] = -maxPow;
-               motorSpeed[3] = -maxPow;
-           } catch (Exception e) {
-               Log.e("Error", "Cannot power motors right_bumper");
-           }
-       }
-       if (driverGamepad.left_bumper){
-            try {
-                motorSpeed[0] = maxPow;
-                motorSpeed[1] = maxPow;
-                motorSpeed[2] = maxPow;
-                motorSpeed[3] = maxPow;
-            } catch (Exception e) {
-                Log.e("Error","Cannot power motors left_bumper");
-            }
-        }
-
-       return motorSpeed;
     }
 
     public void stopMotors(){
-        for (DcMotor motor : motors){
-            motor.setPower(0);
-        }
+        motorSpeed[0] = 0.00;
+        motorSpeed[1] = 0.00;
+        motorSpeed[2] = 0.00;
+        motorSpeed[3] = 0.00;
     }
 
-    public double[] stickDrive(Gamepad gamepad1){
-        double x = gamepad1.left_stick_x;
-        double y = gamepad1.left_stick_y;
+    public void driveWithControls(DriverControls driverControls){
+        // for laying flat, use Roll. for vertical, use YAW (test robot rn)
+        stickDrive(driverControls, hardware.gyro.getAngles().getYaw());
+        stickTurn(driverControls);
+        scaleMotorsToFit();
+        setDriveMotorsPow();
+    }
 
-        double[] motorSpeed = { 0.0, 0.0, 0.0, 0.0 };
+    public void stickDrive(DriverControls driverControls, double orientation) {
+        double x = driverControls.getSpeedX();
+        double y = driverControls.getSpeedY();
 
-        if (Math.abs(x) < 0.2 && Math.abs(y) < 0.2){
+
+        double[] convertedAngle = convertOrientation(x, y, orientation);
+
+
+        x = convertedAngle[0];
+        y = convertedAngle[1];
+        telemetry.addLine("\nDrivetrain:");
+        telemetry.addLine("X: " + x + "\nY: " + y);
+
+        if (Math.abs(x) < 0.2 && Math.abs(y) < 0.2) {
             stopMotors();
         } else {
-            motorSpeed[0] = (-x - y) / 2 / 0.707;
-            motorSpeed[1] = (-x + y) / 2 / 0.707;
-            motorSpeed[2] = (x + y) / 2 / 0.707;
-            motorSpeed[3] = (x - y) / 2 / 0.707;
+            double mag = convertedAngle[2];
+            double matchMagnitude = mag;
+            motorSpeed[0] = ((-x - y)) * matchMagnitude;
+            motorSpeed[1] = ((-x + y)) * matchMagnitude;
+            motorSpeed[2] = ((x + y)) * matchMagnitude;
+            motorSpeed[3] = ((x - y)) * matchMagnitude;
         }
 
-        return motorSpeed;
+    }
+
+    public void stickTurn(DriverControls driverControls) {
+
+        if (Math.abs(driverControls.getRotationSpeed()) > 0.2) {
+            telemetry.addLine("Rotation Speed: "+driverControls.getRotationSpeed());
+            double x = -driverControls.getRotationSpeed();
+            for (int i = 0; i < 4; i++) {
+                motorSpeed[i] += x;
+            }
+        }
+
+    }
+
+    public double[] convertOrientation(double x, double y, double orientation){
+        x = -x;
+        y = -y;
+        double mag = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+
+        orientation = Math.toRadians(orientation);
+        double stickAngle = Math.atan2(y, x);
+        double finalAngle = stickAngle + orientation;
+
+        double return_x = Math.cos(finalAngle);
+        double return_y = Math.sin(finalAngle);
+
+        return new double[]{-return_x, -return_y, mag};
+
+        //return new double[] {0,0};
     }
 }
