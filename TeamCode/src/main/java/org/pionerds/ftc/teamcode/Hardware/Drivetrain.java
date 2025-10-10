@@ -30,8 +30,6 @@ public class Drivetrain {
         }
     }
 
-    static private final double maxPow = 0.8;
-
     public void setDriveMotorsPow(){
 
         for (int i=4; i==0 ? false: true; i--) {
