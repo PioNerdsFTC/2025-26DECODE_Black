@@ -1,6 +1,9 @@
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.PosePathSeqBuilder;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
@@ -22,10 +25,20 @@ public class MeepMeepTesting {
                 .lineToX(0)
                 .turn(Math.toRadians(90))
                 .lineToY(0)
-                .turn(Math.toRadians(90))
+                        .setTangent(Math.toRadians(60))
+                        .lineToX(-30)
+                .setReversed(true)  // Reversed trajectory has no hooks on the start and end, and is smooth
+                .splineTo(new Vector2d(-48.0, -24.0), -Math.PI / 2)
+                .setReversed(false)
+                .splineTo(new Vector2d(-48.0, 0.0), Math.PI)
+                .strafeTo(new Vector2d(48, -48))
+                .strafeToConstantHeading(new Vector2d(48, -48))
+                .setTangent(0)
+                .splineTo(new Vector2d(48, 48), Math.PI / 2)
+                        .splineTo(new Vector2d(0,0),0)
                 .build());
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
+        meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)
