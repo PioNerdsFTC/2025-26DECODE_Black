@@ -18,7 +18,7 @@ public class AutoOpMode extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
 
-    private final Pose startPose = new Pose(28.5, 128, Math.toRadians(180)); // Start Pose of our robot.
+    private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot.
 
     private int pathState;
     private Path scorePreload;
