@@ -32,27 +32,30 @@ public class Constants {
             .leftRearMotorName("motor2")
             .leftFrontMotorName("motor1")
             .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
 
     public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
             .robotWidth(11.5)
             .robotLength(10.5)
+            .forwardTicksToInches(0.01285)
+            .strafeTicksToInches(0.01285)
+            .turnTicksToInches(0.01285)
             .rightFrontMotorName("motor0")
             .rightRearMotorName("motor3")
             .leftRearMotorName("motor2")
             .leftFrontMotorName("motor1")
             .leftFrontEncoderDirection(Encoder.REVERSE)
-            .leftRearEncoderDirection(Encoder.REVERSE)
-            .rightFrontEncoderDirection(Encoder.FORWARD)
+            .leftRearEncoderDirection(Encoder.FORWARD)
+            .rightFrontEncoderDirection(Encoder.REVERSE)
             .rightRearEncoderDirection(Encoder.FORWARD);
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new ExtendedFollowerBuilder(followerConstants, hardwareMap)
-                .xDrivetrain(driveConstants1)
+                .mecanumDrivetrain(driveConstants)
                 .pathConstraints(pathConstraints)
                 .driveEncoderLocalizer(localizerConstants)
                 .build();
