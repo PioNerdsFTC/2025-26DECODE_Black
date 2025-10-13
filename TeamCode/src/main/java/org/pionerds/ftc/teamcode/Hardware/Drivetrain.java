@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 
+import java.sql.Driver;
+
 public class Drivetrain {
 
     Hardware hardware = null;
@@ -40,7 +42,14 @@ public class Drivetrain {
 
 
 
-    public void scaleMotorsToFit(){
+    public void scaleMotorsToFit(boolean bumperTurning,DriverControls driverControls){
+
+        if (bumperTurning) {
+            for (int i=0;i<4;i++){
+                motorSpeed[i]+= driverControls.getRotationSpeed();
+            }
+        }
+
         boolean flag = false;
         for (double speed : motorSpeed) {
             if (Math.abs(speed)>1) {
@@ -68,11 +77,30 @@ public class Drivetrain {
         motorSpeed[3] = 0.00;
     }
 
-    public void driveWithControls(DriverControls driverControls){
+    public void robotCentricDrive(DriverControls driverControls) {
+        double x = driverControls.getSpeedX();
+        double y = driverControls.getSpeedY();
+        if (Math.abs(x) < 0.2 && Math.abs(y) < 0.2) {
+            stopMotors();
+        } else {
+            motorSpeed[0] = x + y;
+            motorSpeed[1] = x - y;
+            motorSpeed[2] = -x - y;
+            motorSpeed[3] = -x + y;
+        }
+    }
+
+
+    public void driveWithControls(DriverControls driverControls, boolean hasDumbDrivePreference, boolean bumperTurnPreferred){
         // for laying flat, use Roll. for vertical, use YAW (test robot rn)
-        stickDrive(driverControls, hardware.gyro.getAngles().getYaw());
-        stickTurn(driverControls);
-        scaleMotorsToFit();
+        if (hasDumbDrivePreference) {
+            robotCentricDrive(driverControls);
+        }
+        else {
+            stickDrive(driverControls, hardware.gyro.getAngles().getYaw());
+            stickTurn(driverControls);
+        }
+        scaleMotorsToFit(bumperTurnPreferred, driverControls);
         setDriveMotorsPow();
     }
 
