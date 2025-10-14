@@ -43,6 +43,9 @@ public class TeleOpModeGabe extends LinearOpMode {
             telemetry.addLine("\nDriver: "+driverControls1.getDriverName());
             telemetry.addLine("Speed X: "+driverControls1.getSpeedX());
             telemetry.addLine("Speed Y: "+driverControls1.getSpeedY());
+            if (gamepad1.left_bumper){telemetry.addLine("LEFTBUMPER");}
+            if (gamepad1.right_bumper){telemetry.addLine("RIGHTBUMPER");}
+
 
             telemetry.update();
             sleep(1);

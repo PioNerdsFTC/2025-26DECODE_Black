@@ -36,12 +36,12 @@ public class GabeDriverControls extends DriverControls {
         // Left Bumper
         if(gamepad.left_bumper){
           //  setSpeedMultiplier(0.5f);
-            setRotationSpeed(-0.5f);
-        }
-        else if (gamepad.right_bumper){
             setRotationSpeed(0.5f);
         }
-        else {
+        else if (gamepad.right_bumper){
+            setRotationSpeed(-0.5f);
+        }
+        else if (!gamepad.right_bumper && !gamepad.left_bumper) {
             setRotationSpeed(0);
         }
 
@@ -64,8 +64,6 @@ public class GabeDriverControls extends DriverControls {
             hardware.launcher.setLauncherVelocity(gamepad.right_trigger*400);
         }
 
-        // Set Rotation Speed for Drivetrain
-        setRotationSpeed(Math.min(gamepad.right_stick_x,getMaxRotationSpeed()));
 
         // Set Speeds to the value or the capped value for the driver
         if (gamepad.left_stick_x<0){

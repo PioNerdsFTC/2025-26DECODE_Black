@@ -83,10 +83,10 @@ public class Drivetrain {
         if (Math.abs(x) < 0.2 && Math.abs(y) < 0.2) {
             stopMotors();
         } else {
-            motorSpeed[0] = x + y;
-            motorSpeed[1] = x - y;
-            motorSpeed[2] = -x - y;
-            motorSpeed[3] = -x + y;
+            motorSpeed[0] = -x - y;
+            motorSpeed[1] = -x + y;
+            motorSpeed[2] = x + y;
+            motorSpeed[3] = x - y;
         }
     }
 
