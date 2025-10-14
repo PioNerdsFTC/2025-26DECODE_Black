@@ -11,10 +11,11 @@ public class Storage {
 
     private Servo servo0;
     private Servo servo1;
-    private DcMotorEx susanMotorEx;
+    public DcMotorEx susanMotorEx;
     private int susanTargetTicks = 0;
     private final int susanVelocityRequest = 300;
-    private final int TPR = 288; // ticks-per-revolution
+    private final int gearRatio = 6; // equals (90/15)
+    private final int TPR = 288 * gearRatio; // ticks-per-revolution
     Storage() {
 
     }
@@ -25,8 +26,9 @@ public class Storage {
         servo0 = this.hardware.mapping.getServoMotor("servo0");
         servo1 = this.hardware.mapping.getServoMotor("servo1");
         susanMotorEx = this.hardware.mapping.getMotor("susanMotor",40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
-
+        susanMotorEx.setTargetPositionTolerance(1);
     }
+
 
     public void feed() {
         double pos = 1;
@@ -59,6 +61,7 @@ public class Storage {
             addTick = 240; // (((180 + (1/3) * 360))*(TPR/360)) = 240
         }
 
+        addTick *= gearRatio;
 
         int currentRevolutionTick = revolutions * TPR + addTick;
         int lessRevolutionTick = currentRevolutionTick - TPR;
@@ -77,6 +80,14 @@ public class Storage {
             susanTargetTicks = moreRevolutionTick;
         }
 
+
+        hardware.telemetry.addLine("\n\n");
+        hardware.telemetry.addLine("susanPosition: "+susanMotorEx.getCurrentPosition());
+        hardware.telemetry.addLine("susanTarget: "+susanTargetTicks);
+        hardware.telemetry.addLine("susanRunMode: "+susanMotorEx.getMode());
+
+
+
         updateSusan();
 
     }
@@ -85,12 +96,18 @@ public class Storage {
     public void updateSusan(){
         susanMotorEx.setTargetPosition(susanTargetTicks);
         susanMotorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        susanMotorEx.setVelocity(susanVelocityRequest);
+        susanMotorEx.setPower(1);
     }
 
 
+    public void testRotateSusan(double power){
+        susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        susanMotorEx.setPower(power);
+    }
+
     public void stopSusan(){
         susanMotorEx.setVelocity(0);
+        susanMotorEx.setPower(0);
         susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 

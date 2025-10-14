@@ -29,6 +29,7 @@ public class LucasSusanControls extends DriverControls {
      **/
 
     boolean reset_Gyro_Pressed = false;
+    boolean movingSusan = false;
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
 
@@ -39,24 +40,23 @@ public class LucasSusanControls extends DriverControls {
             hardware.storage.contract();
         }
 
-
-        if(gamepad.dpadUpWasPressed()){
-            hardware.storage.moveSusanTo(LazySusanPositions.INTAKE2);
-        }
-        if(gamepad.dpadLeftWasPressed()){
-            hardware.storage.moveSusanTo(LazySusanPositions.INTAKE1);
-        }
-        if(gamepad.dpadRightWasPressed()){
-            hardware.storage.moveSusanTo(LazySusanPositions.INTAKE3);
-        }
-        if(gamepad.yWasPressed()){
-            hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT2);
-        }
-        if(gamepad.xWasPressed()){
-            hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT1);
-        }
-        if(gamepad.bWasPressed()){
-            hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT3);
+        if(!movingSusan) {
+            if (gamepad.dpad_down) {
+                hardware.storage.moveSusanTo(LazySusanPositions.INTAKE2);
+            } else if (gamepad.dpad_left) {
+                hardware.storage.moveSusanTo(LazySusanPositions.INTAKE1);
+            } else if (gamepad.dpad_right) {
+                hardware.storage.moveSusanTo(LazySusanPositions.INTAKE3);
+            } else if (gamepad.y) {
+                hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT2);
+            } else if (gamepad.x) {
+                hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT1);
+            } else if (gamepad.b) {
+                hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT3);
+            }
+            movingSusan = true;
+        } else {
+            movingSusan = false;
         }
 
     }
