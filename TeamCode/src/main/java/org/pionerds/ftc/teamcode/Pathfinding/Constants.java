@@ -12,10 +12,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(4.0);
+            .forwardZeroPowerAcceleration(-58.206219180121224)
+            .lateralZeroPowerAcceleration(-55.64415956334193)
+            .mass(4.2);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(0.8)
+            .xVelocity(31.66627410386635)
+            .yVelocity(32.07176731087411)
             .rightFrontMotorName("motor0")
             .rightRearMotorName("motor3")
             .leftRearMotorName("motor2")
@@ -28,16 +32,17 @@ public class Constants {
     public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
             .robotWidth(11.5)
             .robotLength(10.5)
-            .forwardTicksToInches(0.01285)
-            .strafeTicksToInches(0.01285)
-            .turnTicksToInches(0.808)
+            .forwardTicksToInches(0.006425/2)
+            .strafeTicksToInches(0.0066/2)
+            .turnTicksToInches(0.006617362092869509)
+            //.turnTicksToInches(0.00808)
             .rightFrontMotorName("motor0")
             .rightRearMotorName("motor3")
             .leftRearMotorName("motor2")
             .leftFrontMotorName("motor1")
             .leftFrontEncoderDirection(Encoder.REVERSE)
-            .leftRearEncoderDirection(Encoder.FORWARD)
-            .rightFrontEncoderDirection(Encoder.REVERSE)
+            .leftRearEncoderDirection(Encoder.REVERSE)
+            .rightFrontEncoderDirection(Encoder.FORWARD)
             .rightRearEncoderDirection(Encoder.FORWARD);
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
