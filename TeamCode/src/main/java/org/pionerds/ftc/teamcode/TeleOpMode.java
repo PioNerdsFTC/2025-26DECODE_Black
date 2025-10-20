@@ -14,12 +14,10 @@ public class TeleOpMode extends LinearOpMode {
     final Hardware hardware = new Hardware();
     final DriverControls driverControls1 = new LucasDriverControls(
         "Lucas Schwietz",
-        true,
         1.0f
     );
     final DriverControls driverControls2 = new LucasDriverControls(
         "Liam St. Ores",
-        false,
         0.7f
     );
 
