@@ -2,6 +2,8 @@ package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasSusanControls;
@@ -30,13 +32,13 @@ public class TeleOpMode extends LinearOpMode {
 
         waitForStart(); // Wait for start!
 
-        hardware.storage.resetEncoderSusan();
+        //hardware.storage.resetEncoderSusan();
 
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
 
         // Main loop!
-        while (opModeIsActive() && hardware.continueRunning) {
+        while (opModeIsActive()) {
 
 
             hardware.tick(gamepad1,gamepad2);
@@ -46,7 +48,10 @@ public class TeleOpMode extends LinearOpMode {
             telemetry.addLine("Speed X: "+driverControls1.getSpeedX());
             telemetry.addLine("Speed Y: "+driverControls1.getSpeedY());
 
-            telemetry.addLine("susanPosition: "+hardware.storage.susanMotorEx.getCurrentPosition());
+            //telemetry.addLine("susanPosition: "+hardware.storage.susanMotorEx.getCurrentPosition());
+
+            hardware.vision.printTagDistanceToTelemetry(AprilTagNames.BlueTarget);
+
 
             telemetry.update();
             sleep(1);

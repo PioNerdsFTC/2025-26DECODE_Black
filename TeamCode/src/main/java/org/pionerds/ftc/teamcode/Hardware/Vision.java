@@ -223,7 +223,7 @@ public class Vision {
         PioNerdAprilTag blueTargetAprilTag;
         blueTargetAprilTag = getPioNerdAprilTag(AprilTagNames.BlueTarget);
         if (blueTargetAprilTag != null) {
-            hardware.telemetry.addLine("BlueTarget Distances");
+            hardware.telemetry.addLine("\nBlueTarget Distances");
             hardware.telemetry.addLine("x: " + blueTargetAprilTag.x(2));
             hardware.telemetry.addLine("y: " + blueTargetAprilTag.y(2));
             hardware.telemetry.addLine("z: " + blueTargetAprilTag.z(2));
