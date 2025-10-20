@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
+import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasSusanControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
 @TeleOp(name = "TeleOp")
@@ -15,8 +16,8 @@ public class TeleOpMode extends LinearOpMode {
         true,
         1.0f
     );
-    final DriverControls driverControls2 = new LucasDriverControls(
-        "Liam St. Ores",
+    final DriverControls driverControls2 = new LucasSusanControls(
+        "Lucas S",
         false,
         0.7f
     );
@@ -29,17 +30,23 @@ public class TeleOpMode extends LinearOpMode {
 
         waitForStart(); // Wait for start!
 
+        hardware.storage.resetEncoderSusan();
+
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
 
         // Main loop!
         while (opModeIsActive() && hardware.continueRunning) {
 
+
             hardware.tick(gamepad1,gamepad2);
+            //hardware.storage.testRotateSusan(1);
 
             telemetry.addLine("\nDriver: "+driverControls1.getDriverName());
             telemetry.addLine("Speed X: "+driverControls1.getSpeedX());
             telemetry.addLine("Speed Y: "+driverControls1.getSpeedY());
+
+            telemetry.addLine("susanPosition: "+hardware.storage.susanMotorEx.getCurrentPosition());
 
             telemetry.update();
             sleep(1);
