@@ -1,6 +1,7 @@
 package org.pionerds.ftc.teamcode;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
@@ -8,7 +9,7 @@ import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.pionerds.ftc.teamcode.Pathfinding.Constants;
 
@@ -25,7 +26,10 @@ public class AutoOpMode extends OpMode {
 
     public PathBuilder pathBuilder;
 
-    public static PathChain paths;
+    public static PathChain path1;
+    public static PathChain path2;
+    public static PathChain path3;
+
 
     /**
      * These change the states of the paths and actions. It will also reset the timers of the individual switches
@@ -66,19 +70,38 @@ public class AutoOpMode extends OpMode {
         pathBuilder = new PathBuilder(follower);
         follower.setStartingPose(startPose);
 
-        paths = pathBuilder
-                .addPath(
-                        // Path 1
-                        new BezierLine(new Pose(56.000, 8.000), new Pose(56.000, 80.000))
+        path1 = pathBuilder
+            .addPath(
+                new BezierCurve(
+                    new Pose(56.000, 8.000),
+                    new Pose(43.880, 18.129),
+                    new Pose(53.150, 29.047)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
-                .addPath(
-                        // Path 2
-                        new BezierLine(new Pose(56.000, 80.000), new Pose(56.000, 100.000))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(135))
-                .build();
+            )
+            .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(180))
+            .build();
 
+        path2 = pathBuilder
+            .addPath(
+                new BezierCurve(
+                    new Pose(53.150, 29.047),
+                    new Pose(84.258, 29.253),
+                    new Pose(80.549, 56.034)
+                )
+            )
+            .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(0))
+            .build();
+
+        path3 = pathBuilder
+            .addPath(
+                new BezierCurve(
+                    new Pose(80.549, 56.034),
+                    new Pose(52.326, 65.099),
+                    new Pose(55.828, 96.412)
+                )
+            )
+            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
+            .build();
     }
 
     /**
@@ -86,7 +109,7 @@ public class AutoOpMode extends OpMode {
      **/
     @Override
     public void init_loop() {
-        follower.followPath(paths);
+        follower.followPath(path1);
     }
 
     /**
