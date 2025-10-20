@@ -187,7 +187,7 @@ public class Vision {
         return artifactAlgorithm;
     }
 
-    public boolean isObeliskIdentified() {
+    public boolean getObeliskIdentified() {
         return obeliskIdentified;
     }
 
@@ -233,20 +233,7 @@ public class Vision {
                     (Math.sqrt(Math.pow((blueTargetAprilTag.x(2)), 2)) +
                         Math.pow((blueTargetAprilTag.x(2)), 2))
             );
-            hardware.launcher.launcher0.setVelocity(
-                blueTargetAprilTag.range(2)
-            );
-            hardware.launcher.launcher1.setVelocity(
-                blueTargetAprilTag.range(2)
-            );
         }
-    }
-
-    public double mockDistance(double prevVal) {
-        if (prevVal==30){
-            prevVal = 9;
-        }
-        return prevVal+1;
     }
 
 
