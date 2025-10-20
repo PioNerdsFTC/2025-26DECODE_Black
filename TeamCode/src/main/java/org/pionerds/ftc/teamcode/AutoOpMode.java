@@ -72,11 +72,7 @@ public class AutoOpMode extends OpMode {
 
         path1 = pathBuilder
             .addPath(
-                new BezierCurve(
-                    new Pose(56.000, 8.000),
-                    new Pose(43.880, 18.129),
-                    new Pose(53.150, 29.047)
-                )
+                new BezierLine(new Pose(56.000, 8.000), new Pose(53.150, 29.047))
             )
             .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(180))
             .build();
@@ -89,7 +85,7 @@ public class AutoOpMode extends OpMode {
                     new Pose(80.549, 56.034)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(0))
+            .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(270))
             .build();
 
         path3 = pathBuilder
@@ -100,7 +96,7 @@ public class AutoOpMode extends OpMode {
                     new Pose(55.828, 96.412)
                 )
             )
-            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
+            .setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(0))
             .build();
     }
 

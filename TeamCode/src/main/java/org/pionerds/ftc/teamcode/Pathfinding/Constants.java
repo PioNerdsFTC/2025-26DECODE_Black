@@ -17,7 +17,7 @@ public class Constants {
             .mass(4.2);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
-            .maxPower(0.8)
+            .maxPower(1)
             .xVelocity(31.66627410386635)
             .yVelocity(32.07176731087411)
             .rightFrontMotorName("motor0")
@@ -35,7 +35,6 @@ public class Constants {
             .forwardTicksToInches(0.006425/2)
             .strafeTicksToInches(0.0066/2)
             .turnTicksToInches(0.006617362092869509)
-            //.turnTicksToInches(0.00808)
             .rightFrontMotorName("motor0")
             .rightRearMotorName("motor3")
             .leftRearMotorName("motor2")
