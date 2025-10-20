@@ -6,8 +6,8 @@ import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
-public class LucasDriverControls extends DriverControls {
-    public LucasDriverControls(String driverName, boolean isDriver, float maxSpeed){
+public class GabeDriverControls extends DriverControls {
+    public GabeDriverControls(String driverName, boolean isDriver, float maxSpeed){
         super(driverName, isDriver ,maxSpeed);
     }
 
@@ -35,9 +35,18 @@ public class LucasDriverControls extends DriverControls {
 
         // Left Bumper
         if(gamepad.left_bumper){
-            setSpeedMultiplier(0.5f);
-            setMaxRotationSpeed(0.5f);
+          //  setSpeedMultiplier(0.5f);
+            setRotationSpeed(0.5f);
         }
+        else if (gamepad.right_bumper){
+            setRotationSpeed(-0.5f);
+        }
+        else if (!gamepad.right_bumper && !gamepad.left_bumper) {
+            setRotationSpeed(0);
+        }
+
+
+
 
         // A-Button
         if(gamepad.a){
@@ -55,8 +64,6 @@ public class LucasDriverControls extends DriverControls {
             hardware.launcher.setLauncherVelocity(gamepad.right_trigger*400);
         }
 
-        // Set Rotation Speed for Drivetrain
-        setRotationSpeed(Math.min(gamepad.right_stick_x,getMaxRotationSpeed()));
 
         // Set Speeds to the value or the capped value for the driver
         if (gamepad.left_stick_x<0){
@@ -79,7 +86,7 @@ public class LucasDriverControls extends DriverControls {
         }
 
         if(getIsDriver()){
-            hardware.drivetrain.driveWithControls(this,false,false);
+            hardware.drivetrain.driveWithControls(this,true,true);
         }
     }
 }

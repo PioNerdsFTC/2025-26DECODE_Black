@@ -1,0 +1,56 @@
+package org.pionerds.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
+import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
+import org.pionerds.ftc.teamcode.Hardware.Drivers.GabeDriverControls;
+import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
+import org.pionerds.ftc.teamcode.Hardware.Hardware;
+import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
+
+@TeleOp(name = "TeleOpGabe")
+public class TeleOpModeGabe extends LinearOpMode {
+
+    final Hardware hardware = new Hardware();
+    final DriverControls driverControls1 = new GabeDriverControls(
+            "Gabe Arneberg",
+            true,
+            1.0f
+    );
+    final DriverControls driverControls2 = new GabeDriverControls(
+            "Liam St. Ores",
+            false,
+            0.7f
+    );
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        hardware.init(hardwareMap, telemetry, driverControls1, driverControls2);
+        telemetry.addLine("Robot initialized! (TeleOp)");
+        telemetry.update();
+
+        waitForStart(); // Wait for start!
+
+        telemetry.addLine("Robot runtime started! (TeleOp)");
+        telemetry.update();
+
+        // Main loop!
+        while (opModeIsActive() && hardware.continueRunning) {
+
+            hardware.tick(gamepad1,gamepad2);
+
+            telemetry.addLine("\nDriver: "+driverControls1.getDriverName());
+            telemetry.addLine("Speed X: "+driverControls1.getSpeedX());
+            telemetry.addLine("Speed Y: "+driverControls1.getSpeedY());
+            if (gamepad1.left_bumper){telemetry.addLine("LEFTBUMPER");}
+            if (gamepad1.right_bumper){telemetry.addLine("RIGHTBUMPER");}
+
+
+            telemetry.update();
+            sleep(1);
+        }
+
+        hardware.stop();
+    }
+}
