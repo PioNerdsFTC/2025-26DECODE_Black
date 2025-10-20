@@ -62,7 +62,6 @@ public class LucasDriverControls extends DriverControls {
         );
 
         // Set Speeds to the value or the capped value for the driver
-<<<<<<< HEAD
         if (gamepad.left_stick_x<0){
             setSpeedX(Math.max(gamepad.left_stick_x,-getMaxSpeed())*speedMultiplier);
         } else {
@@ -85,13 +84,5 @@ public class LucasDriverControls extends DriverControls {
         if(getIsDriver()){
             hardware.drivetrain.driveWithControls(this,false,false);
         }
-=======
-        setSpeedX(
-            Math.min(gamepad.left_stick_x, getMaxSpeed()) * speedMultiplier
-        );
-        setSpeedY(
-            Math.min(gamepad.left_stick_y, getMaxSpeed()) * speedMultiplier
-        );
->>>>>>> parent of 9c827b7 (FINALLY SAVED AND FIXED THE DRIVING FINALLY! It can do what it should now, and it is saved.)
     }
 }
