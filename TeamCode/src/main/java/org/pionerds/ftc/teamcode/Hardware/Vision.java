@@ -221,9 +221,9 @@ public class Vision {
     public void printTagDistanceToTelemetry(AprilTagNames aprilTag) {
         // Add AprilTagPoseFtc data to Telemetry
         PioNerdAprilTag blueTargetAprilTag;
-        blueTargetAprilTag = getPioNerdAprilTag(AprilTagNames.BlueTarget);
+        blueTargetAprilTag = getPioNerdAprilTag(aprilTag);
         if (blueTargetAprilTag != null) {
-            hardware.telemetry.addLine("\nBlueTarget Distances");
+            hardware.telemetry.addLine("\nRedTarget Distances");
             hardware.telemetry.addLine("x: " + blueTargetAprilTag.x(2));
             hardware.telemetry.addLine("y: " + blueTargetAprilTag.y(2));
             hardware.telemetry.addLine("z: " + blueTargetAprilTag.z(2));

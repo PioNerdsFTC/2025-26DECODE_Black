@@ -50,7 +50,7 @@ public class TeleOpMode extends LinearOpMode {
 
             //telemetry.addLine("susanPosition: "+hardware.storage.susanMotorEx.getCurrentPosition());
 
-            hardware.vision.printTagDistanceToTelemetry(AprilTagNames.BlueTarget);
+            hardware.vision.printTagDistanceToTelemetry(AprilTagNames.RedTarget);
 
 
             telemetry.update();
