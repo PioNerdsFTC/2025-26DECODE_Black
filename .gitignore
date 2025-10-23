@@ -9,7 +9,7 @@
 **/org.eclipse.*
 **/.project
 **/.classpath
-.settings
+**/.settings
 
 # Files for the ART/Dalvik VM
 *.dex
