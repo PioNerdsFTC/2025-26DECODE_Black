@@ -59,7 +59,14 @@ public class LucasSusanControls extends DriverControls {
                 hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT3);
             }
             movingSusan = true;
-        } else {
+        } else if (
+            !(gamepad.dpad_down ||
+                gamepad.dpad_left ||
+                gamepad.dpad_right ||
+                gamepad.y ||
+                gamepad.x ||
+                gamepad.b)
+        ) {
             movingSusan = false;
         }
     }
