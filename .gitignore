@@ -11,6 +11,8 @@
 **/.classpath
 **/.settings
 
+.vscode
+
 # Files for the ART/Dalvik VM
 *.dex
 
