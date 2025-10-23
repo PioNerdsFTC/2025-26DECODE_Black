@@ -65,7 +65,8 @@ public class LucasSusanControls extends DriverControls {
                 gamepad.dpad_right ||
                 gamepad.y ||
                 gamepad.x ||
-                gamepad.b)
+                gamepad.b ||
+                gamepad.a)
         ) {
             movingSusan = false;
         }
