@@ -114,6 +114,8 @@ public class AutoOpMode extends OpMode {
     @Override
     public void init_loop() {
         follower.followPath(path1);
+        follower.followPath(path2);
+        follower.followPath(path3);
     }
 
     /**
