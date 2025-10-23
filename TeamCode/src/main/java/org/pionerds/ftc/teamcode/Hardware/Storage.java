@@ -16,6 +16,9 @@ public class Storage {
     private final int susanVelocityRequest = 300;
     private final int gearRatio = 6; // equals (90/15)
     private final int TPR = 288 * gearRatio; // ticks-per-revolution
+
+    boolean isInitialized = false;
+
     Storage() {
 
     }
@@ -23,26 +26,35 @@ public class Storage {
     public void init(Hardware hardware) {
         this.hardware = hardware;
 
-        servo0 = this.hardware.mapping.getServoMotor("servo0");
-        servo1 = this.hardware.mapping.getServoMotor("servo1");
-        susanMotorEx = this.hardware.mapping.getMotor("susanMotor",40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
-        susanMotorEx.setTargetPositionTolerance(1);
+        if(this.hardware.mapping.getServoMotor("servo0") != null && this.hardware.mapping.getServoMotor("servo1") != null && this.hardware.mapping.getMotor("susanMotor",40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE) != null){
+            servo0 = this.hardware.mapping.getServoMotor("servo0");
+            servo1 = this.hardware.mapping.getServoMotor("servo1");
+            susanMotorEx = this.hardware.mapping.getMotor("susanMotor",40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
+            susanMotorEx.setTargetPositionTolerance(1);
+            isInitialized = true;
+        } else {
+            hardware.telemetry.clearAll();
+            hardware.telemetry.addLine("STORAGE IS NOT INITIALIZED!");
+        }
     }
 
 
     public void feed() {
+        if(!isInitialized) return;
         double pos = 1;
         servo0.setPosition(pos);
         servo1.setPosition(pos);
     }
 
     public void contract() {
+        if(!isInitialized) return;
         double pos = 0;
         servo0.setPosition(pos);
         servo1.setPosition(pos);
     }
 
     public void moveSusanTo(LazySusanPositions susanPosition){
+        if(!isInitialized) return;
         int addTick = 0;
         int currentPos = susanMotorEx.getCurrentPosition();
         int revolutions = currentPos/TPR ; // ((int)/(int)) auto truncates YAY! lol
@@ -94,6 +106,7 @@ public class Storage {
 
 
     public void updateSusan(){
+        if(!isInitialized) return;
         susanMotorEx.setTargetPosition(susanTargetTicks);
         susanMotorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         susanMotorEx.setPower(1);
@@ -101,17 +114,20 @@ public class Storage {
 
 
     public void testRotateSusan(double power){
+        if(!isInitialized) return;
         susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         susanMotorEx.setPower(power);
     }
 
     public void stopSusan(){
+        if(!isInitialized) return;
         susanMotorEx.setVelocity(0);
         susanMotorEx.setPower(0);
         susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void resetEncoderSusan(){
+        if(!isInitialized) return;
         susanMotorEx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }

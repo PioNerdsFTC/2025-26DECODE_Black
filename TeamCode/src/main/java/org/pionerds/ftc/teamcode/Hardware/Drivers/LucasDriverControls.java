@@ -46,13 +46,16 @@ public class LucasDriverControls extends DriverControls {
             hardware.storage.contract();
         }
 
-        PioNerdAprilTag blueTarget = hardware.vision.getPioNerdAprilTag(AprilTagNames.BlueTarget);
-        if (gamepad.x && !(blueTarget == null) && gamepad.right_trigger > 0) {
-            // Send the distance to the aimbot class
-            hardware.launcher.setLauncherVelocity(blueTarget.range(2));
+        PioNerdAprilTag blueTarget = hardware.vision.getPioNerdAprilTag(AprilTagNames.RedTarget);
+        if (gamepad.right_trigger < 0.1) {
+            hardware.launcher.setLauncherPower(0);
         }
-        if (gamepad.right_trigger > 0) {
-            hardware.launcher.setLauncherVelocity(gamepad.right_trigger*400);
+        if (gamepad.x && !(blueTarget == null) && gamepad.right_trigger < 0.1) {
+            // Send the distance to the aimbot class
+            hardware.launcher.setLauncherPower(blueTarget.range(2)/250);
+        }
+        if (gamepad.right_trigger >= 0.1) {
+            hardware.launcher.setLauncherPower(gamepad.right_trigger*1);
         }
 
         // Set Rotation Speed for Drivetrain
