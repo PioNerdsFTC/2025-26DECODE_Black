@@ -34,7 +34,7 @@ public class Constants {
             .robotLength(10.5)
             .forwardTicksToInches(0.006425/2)
             .strafeTicksToInches(0.0066/2)
-            .turnTicksToInches(0.006467362092869509)
+            .turnTicksToInches(0.006507362092869509)
             .rightFrontMotorName("motor0")
             .rightRearMotorName("motor3")
             .leftRearMotorName("motor2")
