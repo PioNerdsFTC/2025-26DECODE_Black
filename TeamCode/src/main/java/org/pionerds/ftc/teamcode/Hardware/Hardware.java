@@ -51,7 +51,6 @@ public final class Hardware {
             gyro.init(this);
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());
-            this.continueRunning = false;
         }
     }
 
@@ -82,7 +81,6 @@ public final class Hardware {
             this.driverControls2 = driverControls2;
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());
-            this.continueRunning = false;
         }
     }
 
