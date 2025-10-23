@@ -2,7 +2,6 @@ package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
@@ -30,30 +29,24 @@ public class TeleOpMode extends LinearOpMode {
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
-        waitForStart(); // Wait for start!
-
-        //hardware.storage.resetEncoderSusan();
+        waitForStart();
 
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
 
-        // Main loop!
-        while (opModeIsActive()) {
+        while (opModeIsActive() && hardware.continueRunning) {
+            hardware.tick(gamepad1, gamepad2);
 
+            telemetry.addLine("\nDriver: " + driverControls1.getDriverName());
+            telemetry.addLine("Speed X: " + driverControls1.getSpeedX());
+            telemetry.addLine("Speed Y: " + driverControls1.getSpeedY());
 
-            hardware.tick(gamepad1,gamepad2);
-            //hardware.storage.testRotateSusan(1);
-
-            telemetry.addLine("\nDriver: "+driverControls1.getDriverName());
-            telemetry.addLine("Speed X: "+driverControls1.getSpeedX());
-            telemetry.addLine("Speed Y: "+driverControls1.getSpeedY());
-
-            //telemetry.addLine("susanPosition: "+hardware.storage.susanMotorEx.getCurrentPosition());
-
-            hardware.vision.printTagDistanceToTelemetry(AprilTagNames.RedTarget);
-
+            hardware.vision.printTagDistanceToTelemetry(
+                AprilTagNames.RedTarget
+            );
 
             telemetry.update();
+
             sleep(1);
         }
 
