@@ -19,9 +19,7 @@ public class Storage {
 
     boolean isInitialized = false;
 
-    Storage() {
-
-    }
+    Storage() { }
 
     public void init(Hardware hardware) {
         this.hardware = hardware;
@@ -42,6 +40,7 @@ public class Storage {
     public void feed() {
         if(!isInitialized) return;
         double pos = 1;
+
         servo0.setPosition(pos);
         servo1.setPosition(pos);
     }
@@ -49,28 +48,34 @@ public class Storage {
     public void contract() {
         if(!isInitialized) return;
         double pos = 0;
+
         servo0.setPosition(pos);
         servo1.setPosition(pos);
     }
 
     public void moveSusanTo(LazySusanPositions susanPosition){
         if(!isInitialized) return;
-        int addTick = 0;
+
+        int addTick = 0;  // default: ((0 * 360)*(TPR/360)) = 0
         int currentPos = susanMotorEx.getCurrentPosition();
         int revolutions = currentPos/TPR ; // ((int)/(int)) auto truncates YAY! lol
 
-        if(susanPosition == LazySusanPositions.INTAKE1){
-            addTick = 0; // ((0 * 360)*(TPR/360)) = 0
-        } else if (susanPosition == LazySusanPositions.INTAKE2) {
-            addTick = 96; // ((1/3 * 360)*(TPR/360)) = 96
-        } else if (susanPosition == LazySusanPositions.INTAKE3) {
-            addTick = 192; // ((2/3 * 360)*(TPR/360)) = 192
-        } else if (susanPosition == LazySusanPositions.OUTPUT1) {
-            addTick = 48; // (((180 - (1/3) * 360))*(TPR/360)) = 48
-        } else if (susanPosition == LazySusanPositions.OUTPUT2) {
-            addTick = 144; // (((180 - (0) * 360))*(TPR/360)) = 180
-        } else if (susanPosition == LazySusanPositions.OUTPUT3) {
-            addTick = 240; // (((180 + (1/3) * 360))*(TPR/360)) = 240
+        switch (susanPosition) {
+            case INTAKE2:
+                addTick = 96; // ((1/3 * 360)*(TPR/360)) = 96
+                break;
+            case INTAKE3:
+                addTick = 192; // ((2/3 * 360)*(TPR/360)) = 192
+                break;
+            case OUTPUT1:
+                addTick = 48; // (((180 - (1/3) * 360))*(TPR/360)) = 48
+                break;
+            case OUTPUT2:
+                addTick = 144; // (((180 - (0) * 360))*(TPR/360)) = 180
+                break;
+            case OUTPUT3:
+                addTick = 240; // (((180 + (1/3) * 360))*(tpr/360)) = 240
+                break;
         }
 
         addTick *= gearRatio;
@@ -92,16 +97,12 @@ public class Storage {
             susanTargetTicks = moreRevolutionTick;
         }
 
-
         hardware.telemetry.addLine("\n\n");
         hardware.telemetry.addLine("susanPosition: "+susanMotorEx.getCurrentPosition());
         hardware.telemetry.addLine("susanTarget: "+susanTargetTicks);
         hardware.telemetry.addLine("susanRunMode: "+susanMotorEx.getMode());
 
-
-
         updateSusan();
-
     }
 
 
@@ -131,5 +132,4 @@ public class Storage {
         susanMotorEx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-
 }

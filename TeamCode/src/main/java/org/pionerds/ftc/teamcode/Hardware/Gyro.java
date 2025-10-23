@@ -23,8 +23,6 @@ public class Gyro {
         );
         gyro.initialize(params);
         gyro.resetYaw();
-
-
     }
 
     public void resetYaw(){

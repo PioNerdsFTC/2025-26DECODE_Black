@@ -142,7 +142,7 @@ public class Vision {
 
         // iterate and get names
         for (AprilTagDetection detection : this.currentDetections()) {
-            if ((detection != null) && (detection.metadata != null)) {
+            if (detection != null && detection.metadata != null) {
                 detectionNames.add(detection.metadata);
             }
         }
@@ -153,37 +153,45 @@ public class Vision {
     Artifact[] artifactAlgorithm = new Artifact[3];
 
     public Artifact[] getArtifactPattern() {
-        if (!obeliskIdentified) {
-            ArrayList<AprilTagMetadata> currentDetectionMetadata =
-                currentDetectionsMetadata();
-            for (AprilTagMetadata metadata : currentDetectionMetadata) {
-                if (metadata.name.equals("Obelisk_GPP")) {
+        if (obeliskIdentified) return artifactAlgorithm;
+
+        ArrayList<AprilTagMetadata> currentDetectionMetadata =
+            currentDetectionsMetadata();
+
+        obeliskIdentified = true;
+
+        for (AprilTagMetadata metadata : currentDetectionMetadata) {
+            switch (metadata.name) {
+                case "Obelisk_GPP":
                     artifactAlgorithm[0] = Artifact.GREEN;
                     artifactAlgorithm[1] = Artifact.PURPLE;
                     artifactAlgorithm[2] = Artifact.PURPLE;
-                    obeliskIdentified = true;
+
                     return artifactAlgorithm;
-                } else if (metadata.name.equals("Obelisk_PGP")) {
+                case "Obelisk_PGP":
                     artifactAlgorithm[0] = Artifact.PURPLE;
                     artifactAlgorithm[1] = Artifact.GREEN;
                     artifactAlgorithm[2] = Artifact.PURPLE;
-                    obeliskIdentified = true;
+
                     return artifactAlgorithm;
-                } else if (metadata.name.equals("Obelisk_PPG")) {
+                case "Obelisk_PPG":
                     artifactAlgorithm[0] = Artifact.PURPLE;
                     artifactAlgorithm[1] = Artifact.PURPLE;
                     artifactAlgorithm[2] = Artifact.GREEN;
-                    obeliskIdentified = true;
+
                     return artifactAlgorithm;
-                }
+                default:
+                    obeliskIdentified = false;
+                    break;
             }
-            // Set default (MOST PROBABLE POINTS!)
-            artifactAlgorithm[0] = Artifact.PURPLE;
-            artifactAlgorithm[1] = Artifact.PURPLE;
-            artifactAlgorithm[2] = Artifact.PURPLE;
-            // DO NOT UPDATE OBELISK IDENTIFIED
-            return artifactAlgorithm;
         }
+
+        // Set default (MOST PROBABLE POINTS!)
+        artifactAlgorithm[0] = Artifact.PURPLE;
+        artifactAlgorithm[1] = Artifact.PURPLE;
+        artifactAlgorithm[2] = Artifact.PURPLE;
+
+        // DO NOT UPDATE OBELISK IDENTIFIED
         return artifactAlgorithm;
     }
 
@@ -219,9 +227,10 @@ public class Vision {
     */
 
     public void printTagDistanceToTelemetry(AprilTagNames aprilTag) {
-        // Add AprilTagPoseFtc data to Telemetry
         PioNerdAprilTag blueTargetAprilTag;
+
         blueTargetAprilTag = getPioNerdAprilTag(aprilTag);
+
         if (blueTargetAprilTag != null) {
             hardware.telemetry.addLine("\nRedTarget Distances");
             hardware.telemetry.addLine("x: " + blueTargetAprilTag.x(2));
@@ -235,6 +244,4 @@ public class Vision {
             );
         }
     }
-
-
 }
