@@ -304,7 +304,7 @@ public class Vision {
         blueTargetAprilTag = getPioNerdAprilTag(aprilTag);
 
         if (blueTargetAprilTag != null) {
-            hardware.telemetry.addLine("\nRedTarget Distances");
+            hardware.telemetry.addLine("\n" + aprilTag.name() + " Distances");
             hardware.telemetry.addLine("x: " + blueTargetAprilTag.x(2));
             hardware.telemetry.addLine("y: " + blueTargetAprilTag.y(2));
             hardware.telemetry.addLine("z: " + blueTargetAprilTag.z(2));
