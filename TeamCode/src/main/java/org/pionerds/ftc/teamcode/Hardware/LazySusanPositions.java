@@ -6,5 +6,5 @@ public enum LazySusanPositions {
     INTAKE3,
     OUTPUT1,
     OUTPUT2,
-    OUTPUT3
+    OUTPUT3,
 }

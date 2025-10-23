@@ -3,15 +3,12 @@ package org.pionerds.ftc.teamcode.Hardware;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.*;
 
 import android.util.Log;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
-
+import java.sql.Driver;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
-
-import java.sql.Driver;
 
 public class Drivetrain {
 
@@ -21,34 +18,50 @@ public class Drivetrain {
 
     private DcMotor[] motors = { null, null, null, null }; //front right, front left, back left, back right
     private double[] motorSpeed = { 0.0, 0.0, 0.0, 0.0 };
-    private String[] motorNames = {"motor0","motor1","motor2","motor3"};
+    private String[] motorNames = { "motor0", "motor1", "motor2", "motor3" };
 
     public void init(Hardware hardware, Telemetry telemetry) {
         this.hardware = hardware;
         this.telemetry = telemetry;
 
         for (int i = 0; i < 4; i++) {
-            motors[i] = this.hardware.mapping.getMotor(motorNames[i], 40.0, Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
+            motors[i] = this.hardware.mapping.getMotor(
+                motorNames[i],
+                40.0,
+                Direction.FORWARD,
+                DcMotor.ZeroPowerBehavior.BRAKE
+            );
         }
     }
 
-    public void setDriveMotorsPow(){
+    /**
+     * Sets the motor power to the current motorSpeed array values.
+     */
+    public void setDriveMotorsPow() {
         for (int i = 0; i < 4; i++) {
             motors[i].setPower(motorSpeed[i]);
             telemetry.addLine(
-                    "Motor " +
+                "Motor " +
                     Integer.toString(i) +
                     " Pow: " +
-                    (Math.round(motorSpeed[i] * 100) / 100.0));
+                    (Math.round(motorSpeed[i] * 100) / 100.0)
+            );
         }
     }
 
-
-
-    public void scaleMotorsToFit(boolean bumperTurning,DriverControls driverControls){
+    /**
+     * Scales the motor speeds to fit within the maximum power limit.
+     *
+     * @param bumperTurning Whether the robot is turning with the bumper.
+     * @param driverControls The driver controls.
+     */
+    public void scaleMotorsToFit(
+        boolean bumperTurning,
+        DriverControls driverControls
+    ) {
         if (bumperTurning) {
-            for (int i = 0; i < 4; i++){
-                motorSpeed[i]+= driverControls.getRotationSpeed();
+            for (int i = 0; i < 4; i++) {
+                motorSpeed[i] += driverControls.getRotationSpeed();
             }
         }
 
@@ -63,25 +76,40 @@ public class Drivetrain {
 
         if (!flag) return;
 
-        double maxMotorPow = Math.max(Math.max(motorSpeed[0],motorSpeed[1]),Math.max(motorSpeed[2],motorSpeed[3]));
-        double minMotorPow = Math.min(Math.min(motorSpeed[0],motorSpeed[1]),Math.min(motorSpeed[2],motorSpeed[3]));
+        double maxMotorPow = Math.max(
+            Math.max(motorSpeed[0], motorSpeed[1]),
+            Math.max(motorSpeed[2], motorSpeed[3])
+        );
+        double minMotorPow = Math.min(
+            Math.min(motorSpeed[0], motorSpeed[1]),
+            Math.min(motorSpeed[2], motorSpeed[3])
+        );
 
-        double finalMotorDivisor = Math.max(maxMotorPow,Math.abs(minMotorPow));
+        double finalMotorDivisor = Math.max(maxMotorPow, Math.abs(minMotorPow));
 
-        for (int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             motorSpeed[i] /= finalMotorDivisor;
         }
 
-        telemetry.addLine("MotorSpeedDivisor: "+finalMotorDivisor);
+        telemetry.addLine("MotorSpeedDivisor: " + finalMotorDivisor);
     }
 
-    public void stopMotors(){
+    /**
+     * Stops all motors.
+     */
+    public void stopMotors() {
         motorSpeed[0] = 0.00;
         motorSpeed[1] = 0.00;
         motorSpeed[2] = 0.00;
         motorSpeed[3] = 0.00;
     }
 
+    /**
+     * Drives the robot with controls.
+     * @param driverControls The driver controls object.
+     * @param hasDumbDrivePreference Whether to use dumb drive preference.
+     * @param bumperTurnPreferred Whether to prefer bumper turn.
+     */
     public void robotCentricDrive(DriverControls driverControls) {
         double x = driverControls.getSpeedX();
         double y = driverControls.getSpeedY();
@@ -96,8 +124,17 @@ public class Drivetrain {
         motorSpeed[3] = x - y;
     }
 
-
-    public void driveWithControls(DriverControls driverControls, boolean hasDumbDrivePreference, boolean bumperTurnPreferred){
+    /**
+     * Drives the robot with controls.
+     * @param driverControls The driver controls object.
+     * @param hasDumbDrivePreference Whether to use dumb drive preference.
+     * @param bumperTurnPreferred Whether to prefer bumper turn.
+     */
+    public void driveWithControls(
+        DriverControls driverControls,
+        boolean hasDumbDrivePreference,
+        boolean bumperTurnPreferred
+    ) {
         // for laying flat, use Roll. for vertical, use YAW (test robot rn)
         if (hasDumbDrivePreference) {
             robotCentricDrive(driverControls);
@@ -110,6 +147,11 @@ public class Drivetrain {
         setDriveMotorsPow();
     }
 
+    /**
+     * Applies a drive to the drivetrain based on the speed and orientation.
+     * @param driverControls The driver controls object.
+     * @param orientation The orientation of the robot.
+     */
     public void stickDrive(DriverControls driverControls, double orientation) {
         double x = driverControls.getSpeedX();
         double y = driverControls.getSpeedY();
@@ -134,9 +176,15 @@ public class Drivetrain {
         motorSpeed[3] = ((x - y)) * mag;
     }
 
+    /**
+     * Applies a turn to the drivetrain based on the rotation speed.
+     * @param driverControls The driver controls object.
+     */
     public void stickTurn(DriverControls driverControls) {
         if (Math.abs(driverControls.getRotationSpeed()) > 0.2) {
-            telemetry.addLine("Rotation Speed: "+driverControls.getRotationSpeed());
+            telemetry.addLine(
+                "Rotation Speed: " + driverControls.getRotationSpeed()
+            );
 
             double x = -driverControls.getRotationSpeed();
 
@@ -146,7 +194,15 @@ public class Drivetrain {
         }
     }
 
-    public double[] convertOrientation(double x, double y, double orientation){
+    /**
+     * Converts the orientation of the stick to the robot's orientation.
+     * @param x The x-coordinate of the stick.
+     * @param y The y-coordinate of the stick.
+     * @param orientation The orientation of the robot.
+     * @return An array containing the converted x and y coordinates and the magnitude.
+     */
+
+    public double[] convertOrientation(double x, double y, double orientation) {
         x = -x;
         y = -y;
 

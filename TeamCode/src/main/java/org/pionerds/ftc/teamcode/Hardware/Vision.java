@@ -35,6 +35,11 @@ public class Vision {
         initAprilTag(hardware);
     }
 
+    /**
+     * Initializes the AprilTag processor.
+     * @param hardware The hardware instance to use.
+     */
+
     public void initAprilTag(Hardware hardware) {
         this.hardware = hardware;
 
@@ -114,6 +119,10 @@ public class Vision {
         return null;
     }
 
+    /**
+     * Initializes the AprilTag processor.
+     * @param aprilTagName The name of the AprilTag to initialize.
+     */
     public PioNerdAprilTag getPioNerdAprilTag(AprilTagNames aprilTagName) {
         for (AprilTagDetection detection : currentDetections()) {
             if (
@@ -127,6 +136,11 @@ public class Vision {
         return null;
     }
 
+    /**
+     * Get current April Tag detections.
+     * @return ArrayList of AprilTagDetection objects.
+     */
+
     public ArrayList<AprilTagDetection> currentDetections() {
         if (aprilTag.getDetections() == null) {
             return new ArrayList<AprilTagDetection>();
@@ -134,6 +148,10 @@ public class Vision {
         return aprilTag.getDetections();
     }
 
+    /**
+     * Get current April Tag metadata.
+     * @return ArrayList of AprilTagMetadata objects.
+     */
     public ArrayList<AprilTagMetadata> currentDetectionsMetadata() {
         ArrayList<AprilTagMetadata> detectionNames = new ArrayList<
             AprilTagMetadata
@@ -151,6 +169,11 @@ public class Vision {
     }
 
     Artifact[] artifactAlgorithm = new Artifact[3];
+
+    /**
+     * Get current artifact pattern.
+     * @return Artifact[] array of artifact pattern.
+     */
 
     public Artifact[] getArtifactPattern() {
         if (obeliskIdentified) return artifactAlgorithm;
@@ -195,10 +218,19 @@ public class Vision {
         return artifactAlgorithm;
     }
 
+    /**
+     * Check if the obelisk is identified.
+     * @return true if the obelisk is identified, false otherwise.
+     */
+
     public boolean getObeliskIdentified() {
         return obeliskIdentified;
     }
 
+    /**
+     * Control the vision portal.
+     * @param command the command to execute.
+     */
     public void controlVisionPortal(VisionCommands command) {
         if (command == VisionCommands.RESUME) {
             visionPortal.resumeStreaming();
@@ -226,6 +258,10 @@ public class Vision {
             }
     */
 
+    /**
+     * Print the distance of the AprilTag to the telemetry.
+     * @param aprilTag the AprilTag to print the distance of.
+     */
     public void printTagDistanceToTelemetry(AprilTagNames aprilTag) {
         PioNerdAprilTag blueTargetAprilTag;
 

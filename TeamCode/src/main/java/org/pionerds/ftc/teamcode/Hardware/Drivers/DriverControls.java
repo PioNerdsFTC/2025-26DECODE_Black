@@ -28,9 +28,10 @@ public abstract class DriverControls {
         return driverName;
     }
 
-    public boolean getIsDriver(){
+    public boolean getIsDriver() {
         return isDriver;
     }
+
     public float getRotationSpeed() {
         return rotationSpeed;
     }
@@ -62,7 +63,8 @@ public abstract class DriverControls {
     public void setMaxRotationSpeed(float maxRotationSpeed) {
         this.maxRotationSpeed = maxRotationSpeed;
     }
-    public void setIsDriver(boolean isDriver){
+
+    public void setIsDriver(boolean isDriver) {
         this.isDriver = isDriver;
     }
 

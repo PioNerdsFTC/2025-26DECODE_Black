@@ -33,16 +33,29 @@ public class Launcher {
         launcher1.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    /**
+     * Set launcher power to
+     * @param power power to set launcher to
+     */
+
     public void setLauncherPower(double power) {
         launcher0.setPower(power);
         launcher1.setPower(power);
     }
 
+    /**
+     * Set launcher velocity to
+     * @param velocity velocity to set launcher to
+     */
     public void setLauncherVelocity(double velocity) {
         launcher0.setVelocity(velocity);
         launcher1.setVelocity(velocity);
     }
 
+    /**
+     * Launches the ball
+     * @param operatorGamepad gamepad to get button input from
+     */
     public void launcherButton(Gamepad operatorGamepad) {
         if (operatorGamepad.y) {
             setLauncherPower(1);
@@ -51,7 +64,10 @@ public class Launcher {
         }
     }
 
-    public void stopLaunchers(){
+    /**
+     * Stops the launchers
+     */
+    public void stopLaunchers() {
         launcher0.setPower(0);
         launcher1.setPower(0);
     }

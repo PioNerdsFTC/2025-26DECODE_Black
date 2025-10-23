@@ -1,15 +1,19 @@
 package org.pionerds.ftc.teamcode.Hardware.Drivers;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
 public class LucasSusanControls extends DriverControls {
-    public LucasSusanControls(String driverName, boolean isDriver, float maxSpeed){
-        super(driverName, isDriver ,maxSpeed);
+
+    public LucasSusanControls(
+        String driverName,
+        boolean isDriver,
+        float maxSpeed
+    ) {
+        super(driverName, isDriver, maxSpeed);
     }
 
     /**
@@ -30,17 +34,17 @@ public class LucasSusanControls extends DriverControls {
 
     boolean reset_Gyro_Pressed = false;
     boolean movingSusan = false;
+
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
-
         // A-Button
-        if(gamepad.dpad_down){
+        if (gamepad.dpad_down) {
             hardware.storage.feed();
         } else {
             hardware.storage.contract();
         }
 
-        if(!movingSusan) {
+        if (!movingSusan) {
             if (gamepad.dpad_down) {
                 hardware.storage.moveSusanTo(LazySusanPositions.INTAKE2);
             } else if (gamepad.dpad_left) {
@@ -58,6 +62,5 @@ public class LucasSusanControls extends DriverControls {
         } else {
             movingSusan = false;
         }
-
     }
 }

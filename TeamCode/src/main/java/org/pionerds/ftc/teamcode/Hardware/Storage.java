@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Storage {
+
     Hardware hardware = null;
 
     private Servo servo0;
@@ -19,15 +20,30 @@ public class Storage {
 
     boolean isInitialized = false;
 
-    Storage() { }
+    Storage() {}
 
     public void init(Hardware hardware) {
         this.hardware = hardware;
 
-        if(this.hardware.mapping.getServoMotor("servo0") != null && this.hardware.mapping.getServoMotor("servo1") != null && this.hardware.mapping.getMotor("susanMotor",40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE) != null){
+        if (
+            this.hardware.mapping.getServoMotor("servo0") != null &&
+            this.hardware.mapping.getServoMotor("servo1") != null &&
+            this.hardware.mapping.getMotor(
+                "susanMotor",
+                40.0,
+                DcMotorSimple.Direction.FORWARD,
+                DcMotor.ZeroPowerBehavior.BRAKE
+            ) !=
+            null
+        ) {
             servo0 = this.hardware.mapping.getServoMotor("servo0");
             servo1 = this.hardware.mapping.getServoMotor("servo1");
-            susanMotorEx = this.hardware.mapping.getMotor("susanMotor",40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
+            susanMotorEx = this.hardware.mapping.getMotor(
+                "susanMotor",
+                40.0,
+                DcMotorSimple.Direction.FORWARD,
+                DcMotor.ZeroPowerBehavior.BRAKE
+            );
             susanMotorEx.setTargetPositionTolerance(1);
             isInitialized = true;
         } else {
@@ -36,9 +52,8 @@ public class Storage {
         }
     }
 
-
     public void feed() {
-        if(!isInitialized) return;
+        if (!isInitialized) return;
         double pos = 1;
 
         servo0.setPosition(pos);
@@ -46,19 +61,19 @@ public class Storage {
     }
 
     public void contract() {
-        if(!isInitialized) return;
+        if (!isInitialized) return;
         double pos = 0;
 
         servo0.setPosition(pos);
         servo1.setPosition(pos);
     }
 
-    public void moveSusanTo(LazySusanPositions susanPosition){
-        if(!isInitialized) return;
+    public void moveSusanTo(LazySusanPositions susanPosition) {
+        if (!isInitialized) return;
 
-        int addTick = 0;  // default: ((0 * 360)*(TPR/360)) = 0
+        int addTick = 0; // default: ((0 * 360)*(TPR/360)) = 0
         int currentPos = susanMotorEx.getCurrentPosition();
-        int revolutions = currentPos/TPR ; // ((int)/(int)) auto truncates YAY! lol
+        int revolutions = currentPos / TPR; // ((int)/(int)) auto truncates YAY! lol
 
         switch (susanPosition) {
             case INTAKE2:
@@ -84,51 +99,63 @@ public class Storage {
         int lessRevolutionTick = currentRevolutionTick - TPR;
         int moreRevolutionTick = currentRevolutionTick + TPR;
 
-        int distanceBetweenNowAndCurrent = Math.abs(currentRevolutionTick - currentPos);
-        int distanceBetweenNowAndPrevious = Math.abs(lessRevolutionTick - currentPos);
-        int distanceBetweenNowAndNext = Math.abs(moreRevolutionTick - currentPos);
+        int distanceBetweenNowAndCurrent = Math.abs(
+            currentRevolutionTick - currentPos
+        );
+        int distanceBetweenNowAndPrevious = Math.abs(
+            lessRevolutionTick - currentPos
+        );
+        int distanceBetweenNowAndNext = Math.abs(
+            moreRevolutionTick - currentPos
+        );
 
         // find closest revolution with the tick
-        if(distanceBetweenNowAndPrevious <= distanceBetweenNowAndCurrent && distanceBetweenNowAndPrevious <= distanceBetweenNowAndNext){
+        if (
+            distanceBetweenNowAndPrevious <= distanceBetweenNowAndCurrent &&
+            distanceBetweenNowAndPrevious <= distanceBetweenNowAndNext
+        ) {
             susanTargetTicks = lessRevolutionTick;
-        } else if(distanceBetweenNowAndCurrent <= distanceBetweenNowAndPrevious && distanceBetweenNowAndCurrent <= distanceBetweenNowAndNext){
+        } else if (
+            distanceBetweenNowAndCurrent <= distanceBetweenNowAndPrevious &&
+            distanceBetweenNowAndCurrent <= distanceBetweenNowAndNext
+        ) {
             susanTargetTicks = currentRevolutionTick;
         } else {
             susanTargetTicks = moreRevolutionTick;
         }
 
         hardware.telemetry.addLine("\n\n");
-        hardware.telemetry.addLine("susanPosition: "+susanMotorEx.getCurrentPosition());
-        hardware.telemetry.addLine("susanTarget: "+susanTargetTicks);
-        hardware.telemetry.addLine("susanRunMode: "+susanMotorEx.getMode());
+        hardware.telemetry.addLine(
+            "susanPosition: " + susanMotorEx.getCurrentPosition()
+        );
+        hardware.telemetry.addLine("susanTarget: " + susanTargetTicks);
+        hardware.telemetry.addLine("susanRunMode: " + susanMotorEx.getMode());
 
         updateSusan();
     }
 
-
-    public void updateSusan(){
-        if(!isInitialized) return;
+    public void updateSusan() {
+        if (!isInitialized) return;
         susanMotorEx.setTargetPosition(susanTargetTicks);
         susanMotorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         susanMotorEx.setPower(1);
     }
 
-
-    public void testRotateSusan(double power){
-        if(!isInitialized) return;
+    public void testRotateSusan(double power) {
+        if (!isInitialized) return;
         susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         susanMotorEx.setPower(power);
     }
 
-    public void stopSusan(){
-        if(!isInitialized) return;
+    public void stopSusan() {
+        if (!isInitialized) return;
         susanMotorEx.setVelocity(0);
         susanMotorEx.setPower(0);
         susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void resetEncoderSusan(){
-        if(!isInitialized) return;
+    public void resetEncoderSusan() {
+        if (!isInitialized) return;
         susanMotorEx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
