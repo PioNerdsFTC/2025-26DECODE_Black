@@ -14,14 +14,14 @@ public class TeleOpModeGabe extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
     final DriverControls driverControls1 = new GabeDriverControls(
-            "Gabe Arneberg",
-            true,
-            1.0f
+        "Gabe Arneberg",
+        true,
+        1.0f
     );
     final DriverControls driverControls2 = new GabeDriverControls(
-            "Liam St. Ores",
-            false,
-            0.7f
+        "Liam St. Ores",
+        false,
+        0.7f
     );
 
     @Override
@@ -37,15 +37,17 @@ public class TeleOpModeGabe extends LinearOpMode {
 
         // Main loop!
         while (opModeIsActive() && hardware.continueRunning) {
+            hardware.tick(gamepad1, gamepad2);
 
-            hardware.tick(gamepad1,gamepad2);
-
-            telemetry.addLine("\nDriver: "+driverControls1.getDriverName());
-            telemetry.addLine("Speed X: "+driverControls1.getSpeedX());
-            telemetry.addLine("Speed Y: "+driverControls1.getSpeedY());
-            if (gamepad1.left_bumper){telemetry.addLine("LEFTBUMPER");}
-            if (gamepad1.right_bumper){telemetry.addLine("RIGHTBUMPER");}
-
+            telemetry.addLine("\nDriver: " + driverControls1.getDriverName());
+            telemetry.addLine("Speed X: " + driverControls1.getSpeedX());
+            telemetry.addLine("Speed Y: " + driverControls1.getSpeedY());
+            if (gamepad1.left_bumper) {
+                telemetry.addLine("LEFTBUMPER");
+            }
+            if (gamepad1.right_bumper) {
+                telemetry.addLine("RIGHTBUMPER");
+            }
 
             telemetry.update();
             sleep(1);

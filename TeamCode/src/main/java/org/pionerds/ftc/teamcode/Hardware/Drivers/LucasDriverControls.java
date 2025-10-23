@@ -27,6 +27,7 @@ public class LucasDriverControls extends DriverControls {
      *
      **/
     boolean start_pressed_already = false;
+
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
         // Resets
@@ -62,27 +63,35 @@ public class LucasDriverControls extends DriverControls {
         );
 
         // Set Speeds to the value or the capped value for the driver
-        if (gamepad.left_stick_x<0){
-            setSpeedX(Math.max(gamepad.left_stick_x,-getMaxSpeed())*speedMultiplier);
+        if (gamepad.left_stick_x < 0) {
+            setSpeedX(
+                Math.max(gamepad.left_stick_x, -getMaxSpeed()) * speedMultiplier
+            );
         } else {
-            setSpeedX(Math.min(gamepad.left_stick_x,getMaxSpeed())*speedMultiplier);
+            setSpeedX(
+                Math.min(gamepad.left_stick_x, getMaxSpeed()) * speedMultiplier
+            );
         }
 
-        if (gamepad.left_stick_y<0){
-            setSpeedY(Math.max(gamepad.left_stick_y,-getMaxSpeed())*speedMultiplier);
+        if (gamepad.left_stick_y < 0) {
+            setSpeedY(
+                Math.max(gamepad.left_stick_y, -getMaxSpeed()) * speedMultiplier
+            );
         } else {
-            setSpeedY(Math.min(gamepad.left_stick_y,getMaxSpeed())*speedMultiplier);
+            setSpeedY(
+                Math.min(gamepad.left_stick_y, getMaxSpeed()) * speedMultiplier
+            );
         }
 
-        if(!reset_Gyro_Pressed && gamepad.dpad_up && gamepad.dpad_right){
+        if (!reset_Gyro_Pressed && gamepad.dpad_up && gamepad.dpad_right) {
             reset_Gyro_Pressed = true;
             hardware.gyro.resetYaw();
         } else {
             reset_Gyro_Pressed = false;
         }
 
-        if(getIsDriver()){
-            hardware.drivetrain.driveWithControls(this,false,false);
+        if (getIsDriver()) {
+            hardware.drivetrain.driveWithControls(this, false, false);
         }
     }
 }

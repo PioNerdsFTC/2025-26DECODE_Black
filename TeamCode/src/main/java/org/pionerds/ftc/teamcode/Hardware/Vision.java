@@ -35,6 +35,11 @@ public class Vision {
         initAprilTag(hardware);
     }
 
+    /**
+     * Initializes the AprilTag processor.
+     * @param hardware The hardware instance to use.
+     */
+
     public void initAprilTag(Hardware hardware) {
         this.hardware = hardware;
 
@@ -114,6 +119,10 @@ public class Vision {
         return null;
     }
 
+    /**
+     * Initializes the AprilTag processor.
+     * @param aprilTagName The name of the AprilTag to initialize.
+     */
     public PioNerdAprilTag getPioNerdAprilTag(AprilTagNames aprilTagName) {
         for (AprilTagDetection detection : currentDetections()) {
             if (
@@ -127,6 +136,11 @@ public class Vision {
         return null;
     }
 
+    /**
+     * Get current April Tag detections.
+     * @return ArrayList of AprilTagDetection objects.
+     */
+
     public ArrayList<AprilTagDetection> currentDetections() {
         if (aprilTag.getDetections() == null) {
             return new ArrayList<AprilTagDetection>();
@@ -134,6 +148,10 @@ public class Vision {
         return aprilTag.getDetections();
     }
 
+    /**
+     * Get current April Tag metadata.
+     * @return ArrayList of AprilTagMetadata objects.
+     */
     public ArrayList<AprilTagMetadata> currentDetectionsMetadata() {
         ArrayList<AprilTagMetadata> detectionNames = new ArrayList<
             AprilTagMetadata
@@ -142,7 +160,7 @@ public class Vision {
 
         // iterate and get names
         for (AprilTagDetection detection : this.currentDetections()) {
-            if ((detection != null) && (detection.metadata != null)) {
+            if (detection != null && detection.metadata != null) {
                 detectionNames.add(detection.metadata);
             }
         }
@@ -152,45 +170,67 @@ public class Vision {
 
     Artifact[] artifactAlgorithm = new Artifact[3];
 
+    /**
+     * Get current artifact pattern.
+     * @return Artifact[] array of artifact pattern.
+     */
+
     public Artifact[] getArtifactPattern() {
         if (!obeliskIdentified) {
             ArrayList<AprilTagMetadata> currentDetectionMetadata =
                 currentDetectionsMetadata();
+
+            obeliskIdentified = true;
+
             for (AprilTagMetadata metadata : currentDetectionMetadata) {
-                if (metadata.name.equals("Obelisk_GPP")) {
-                    artifactAlgorithm[0] = Artifact.GREEN;
-                    artifactAlgorithm[1] = Artifact.PURPLE;
-                    artifactAlgorithm[2] = Artifact.PURPLE;
-                    obeliskIdentified = true;
-                    return artifactAlgorithm;
-                } else if (metadata.name.equals("Obelisk_PGP")) {
-                    artifactAlgorithm[0] = Artifact.PURPLE;
-                    artifactAlgorithm[1] = Artifact.GREEN;
-                    artifactAlgorithm[2] = Artifact.PURPLE;
-                    obeliskIdentified = true;
-                    return artifactAlgorithm;
-                } else if (metadata.name.equals("Obelisk_PPG")) {
-                    artifactAlgorithm[0] = Artifact.PURPLE;
-                    artifactAlgorithm[1] = Artifact.PURPLE;
-                    artifactAlgorithm[2] = Artifact.GREEN;
-                    obeliskIdentified = true;
-                    return artifactAlgorithm;
+                switch (metadata.name) {
+                    case "Obelisk_GPP":
+                        artifactAlgorithm[0] = Artifact.GREEN;
+                        artifactAlgorithm[1] = Artifact.PURPLE;
+                        artifactAlgorithm[2] = Artifact.PURPLE;
+
+                        return artifactAlgorithm;
+                    case "Obelisk_PGP":
+                        artifactAlgorithm[0] = Artifact.PURPLE;
+                        artifactAlgorithm[1] = Artifact.GREEN;
+                        artifactAlgorithm[2] = Artifact.PURPLE;
+
+                        return artifactAlgorithm;
+                    case "Obelisk_PPG":
+                        artifactAlgorithm[0] = Artifact.PURPLE;
+                        artifactAlgorithm[1] = Artifact.PURPLE;
+                        artifactAlgorithm[2] = Artifact.GREEN;
+
+                        return artifactAlgorithm;
+                    default:
+                        obeliskIdentified = false;
+                        break;
                 }
             }
+
             // Set default (MOST PROBABLE POINTS!)
             artifactAlgorithm[0] = Artifact.PURPLE;
             artifactAlgorithm[1] = Artifact.PURPLE;
             artifactAlgorithm[2] = Artifact.PURPLE;
+
             // DO NOT UPDATE OBELISK IDENTIFIED
-            return artifactAlgorithm;
         }
         return artifactAlgorithm;
     }
 
-    public boolean isObeliskIdentified() {
+    /**
+     * Check if the obelisk is identified.
+     * @return true if the obelisk is identified, false otherwise.
+     */
+
+    public boolean getObeliskIdentified() {
         return obeliskIdentified;
     }
 
+    /**
+     * Control the vision portal.
+     * @param command the command to execute.
+     */
     public void controlVisionPortal(VisionCommands command) {
         if (command == VisionCommands.RESUME) {
             visionPortal.resumeStreaming();
@@ -218,12 +258,17 @@ public class Vision {
             }
     */
 
+    /**
+     * Print the distance of the AprilTag to the telemetry.
+     * @param aprilTag the AprilTag to print the distance of.
+     */
     public void printTagDistanceToTelemetry(AprilTagNames aprilTag) {
-        // Add AprilTagPoseFtc data to Telemetry
         PioNerdAprilTag blueTargetAprilTag;
-        blueTargetAprilTag = getPioNerdAprilTag(AprilTagNames.BlueTarget);
+
+        blueTargetAprilTag = getPioNerdAprilTag(aprilTag);
+
         if (blueTargetAprilTag != null) {
-            hardware.telemetry.addLine("BlueTarget Distances");
+            hardware.telemetry.addLine("\n" + aprilTag.name() + " Distances");
             hardware.telemetry.addLine("x: " + blueTargetAprilTag.x(2));
             hardware.telemetry.addLine("y: " + blueTargetAprilTag.y(2));
             hardware.telemetry.addLine("z: " + blueTargetAprilTag.z(2));
@@ -233,21 +278,6 @@ public class Vision {
                     (Math.sqrt(Math.pow((blueTargetAprilTag.x(2)), 2)) +
                         Math.pow((blueTargetAprilTag.x(2)), 2))
             );
-            hardware.launcher.launcher0.setVelocity(
-                blueTargetAprilTag.range(2)
-            );
-            hardware.launcher.launcher1.setVelocity(
-                blueTargetAprilTag.range(2)
-            );
         }
     }
-
-    public double mockDistance(double prevVal) {
-        if (prevVal==30){
-            prevVal = 9;
-        }
-        return prevVal+1;
-    }
-
-
 }
