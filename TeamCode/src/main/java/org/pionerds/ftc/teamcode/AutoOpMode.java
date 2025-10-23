@@ -98,17 +98,17 @@ public class AutoOpMode extends OpMode {
             )
             .setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(0))
             .build();
+
+        follower.followPath(path1);
+        follower.followPath(path2);
+        follower.followPath(path3);
     }
 
     /**
      * This method is called continuously after Init while waiting for "play".
      **/
     @Override
-    public void init_loop() {
-        follower.followPath(path1);
-        follower.followPath(path2);
-        follower.followPath(path3);
-    }
+    public void init_loop() {}
 
     /**
      * This method is called once at the start of the OpMode.
