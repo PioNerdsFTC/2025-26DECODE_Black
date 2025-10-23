@@ -6,10 +6,10 @@
 
 !libs/*.aar
 
-# **/org.eclipse.*
-# **/.project
-# **/.classpath
-# .settings
+**/org.eclipse.*
+**/.project
+**/.classpath
+.settings
 
 # Files for the ART/Dalvik VM
 *.dex
