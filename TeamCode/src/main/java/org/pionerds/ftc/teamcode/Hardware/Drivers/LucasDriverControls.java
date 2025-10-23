@@ -7,12 +7,8 @@ import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
 public class LucasDriverControls extends DriverControls {
 
-    public LucasDriverControls(
-        String driverName,
-        boolean isDriver,
-        float maxSpeed
-    ) {
-        super(driverName, isDriver, maxSpeed);
+    public LucasDriverControls(String driverName, float maxSpeed) {
+        super(driverName, maxSpeed);
     }
 
     /**
@@ -30,8 +26,7 @@ public class LucasDriverControls extends DriverControls {
      * Right_Stick.x - Sends Rotational Request to Drivetrain
      *
      **/
-
-    boolean reset_Gyro_Pressed = false;
+    boolean start_pressed_already = false;
 
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
@@ -41,7 +36,7 @@ public class LucasDriverControls extends DriverControls {
         // Left Bumper
         if (gamepad.left_bumper) {
             setSpeedMultiplier(0.5f);
-            setMaxRotationSpeed(0.5f);
+            setRotationMultiplier(0.5f);
         }
 
         // A-Button
@@ -52,17 +47,14 @@ public class LucasDriverControls extends DriverControls {
         }
 
         PioNerdAprilTag blueTarget = hardware.vision.getPioNerdAprilTag(
-            AprilTagNames.RedTarget
+            AprilTagNames.BlueTarget
         );
-        if (gamepad.right_trigger < 0.1) {
-            hardware.launcher.setLauncherPower(0);
-        }
-        if (gamepad.x && !(blueTarget == null) && gamepad.right_trigger < 0.1) {
+        if (gamepad.x && !(blueTarget == null) && gamepad.right_trigger > 0) {
             // Send the distance to the aimbot class
-            hardware.launcher.setLauncherPower(blueTarget.range(2) / 250);
+            hardware.launcher.setLauncherVelocity(blueTarget.range(2));
         }
-        if (gamepad.right_trigger >= 0.1) {
-            hardware.launcher.setLauncherPower(gamepad.right_trigger * 1);
+        if (gamepad.right_trigger > 0) {
+            hardware.launcher.setLauncherVelocity(gamepad.right_trigger * 400);
         }
 
         // Set Rotation Speed for Drivetrain

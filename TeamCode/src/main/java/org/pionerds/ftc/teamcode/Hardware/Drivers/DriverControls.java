@@ -10,13 +10,13 @@ public abstract class DriverControls {
     private float maxSpeed = 1.0f;
     private float speedX = 0.0f;
     private float speedY = 0.0f;
-    private float maxRotationSpeed = 1.0f;
+    private float rotationMultiplier = 1.0f;
 
     float rotationSpeed = 0.0f;
 
     float speedMultiplier = 1;
 
-    public DriverControls(String driverName, boolean isDriver, float maxSpeed) {
+    public DriverControls(String driverName, float maxSpeed) {
         this.driverName = driverName;
         this.isDriver = isDriver;
         this.maxSpeed = maxSpeed;
@@ -36,8 +36,8 @@ public abstract class DriverControls {
         return rotationSpeed;
     }
 
-    public float getMaxRotationSpeed() {
-        return maxRotationSpeed;
+    public float getRotationMultiplier() {
+        return rotationMultiplier;
     }
 
     public float getMaxSpeed() {
@@ -60,8 +60,8 @@ public abstract class DriverControls {
         this.driverName = driverName;
     }
 
-    public void setMaxRotationSpeed(float maxRotationSpeed) {
-        this.maxRotationSpeed = maxRotationSpeed;
+    public void setRotationMultiplier(float rotationMultiplier) {
+        this.rotationMultiplier = rotationMultiplier;
     }
 
     public void setIsDriver(boolean isDriver) {
