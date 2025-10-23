@@ -107,8 +107,6 @@ public class Drivetrain {
     /**
      * Drives the robot with controls.
      * @param driverControls The driver controls object.
-     * @param hasDumbDrivePreference Whether to use dumb drive preference.
-     * @param bumperTurnPreferred Whether to prefer bumper turn.
      */
     public void robotCentricDrive(DriverControls driverControls) {
         double x = driverControls.getSpeedX();
