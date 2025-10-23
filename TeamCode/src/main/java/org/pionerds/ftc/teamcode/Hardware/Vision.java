@@ -217,42 +217,6 @@ public class Vision {
         }
         return artifactAlgorithm;
     }
-        obeliskIdentified = true;
-
-        for (AprilTagMetadata metadata : currentDetectionMetadata) {
-            switch (metadata.name) {
-                case "Obelisk_GPP":
-                    artifactAlgorithm[0] = Artifact.GREEN;
-                    artifactAlgorithm[1] = Artifact.PURPLE;
-                    artifactAlgorithm[2] = Artifact.PURPLE;
-
-                    return artifactAlgorithm;
-                case "Obelisk_PGP":
-                    artifactAlgorithm[0] = Artifact.PURPLE;
-                    artifactAlgorithm[1] = Artifact.GREEN;
-                    artifactAlgorithm[2] = Artifact.PURPLE;
-
-                    return artifactAlgorithm;
-                case "Obelisk_PPG":
-                    artifactAlgorithm[0] = Artifact.PURPLE;
-                    artifactAlgorithm[1] = Artifact.PURPLE;
-                    artifactAlgorithm[2] = Artifact.GREEN;
-
-                    return artifactAlgorithm;
-                default:
-                    obeliskIdentified = false;
-                    break;
-            }
-        }
-
-        // Set default (MOST PROBABLE POINTS!)
-        artifactAlgorithm[0] = Artifact.PURPLE;
-        artifactAlgorithm[1] = Artifact.PURPLE;
-        artifactAlgorithm[2] = Artifact.PURPLE;
-
-        // DO NOT UPDATE OBELISK IDENTIFIED
-        return artifactAlgorithm;
-    }
 
     /**
      * Check if the obelisk is identified.
