@@ -71,31 +71,31 @@ public class Storage {
     public void moveSusanTo(LazySusanPositions susanPosition) {
         if (!isInitialized) return;
 
-        int addTick = 0; // default: ((0 * 360)*(TPR/360)) = 0
+        int tickOffset = 0; // default: ((0 * 360)*(TPR/360)) = 0
         int currentPos = susanMotorEx.getCurrentPosition();
         int revolutions = currentPos / TPR; // ((int)/(int)) auto truncates YAY! lol
 
         switch (susanPosition) {
             case INTAKE2:
-                addTick = 96; // ((1/3 * 360)*(TPR/360)) = 96
+                tickOffset = 96; // ((1/3 * 360)*(TPR/360)) = 96
                 break;
             case INTAKE3:
-                addTick = 192; // ((2/3 * 360)*(TPR/360)) = 192
+                tickOffset = 192; // ((2/3 * 360)*(TPR/360)) = 192
                 break;
             case OUTPUT1:
-                addTick = 48; // (((180 - (1/3) * 360))*(TPR/360)) = 48
+                tickOffset = 48; // (((180 - (1/3) * 360))*(TPR/360)) = 48
                 break;
             case OUTPUT2:
-                addTick = 144; // (((180 - (0) * 360))*(TPR/360)) = 180
+                tickOffset = 144; // (((180 - (0) * 360))*(TPR/360)) = 180
                 break;
             case OUTPUT3:
-                addTick = 240; // (((180 + (1/3) * 360))*(tpr/360)) = 240
+                tickOffset = 240; // (((180 + (1/3) * 360))*(tpr/360)) = 240
                 break;
         }
 
-        addTick *= gearRatio;
+        tickOffset *= gearRatio;
 
-        int currentRevolutionTick = revolutions * TPR + addTick;
+        int currentRevolutionTick = revolutions * TPR + tickOffset;
         int lessRevolutionTick = currentRevolutionTick - TPR;
         int moreRevolutionTick = currentRevolutionTick + TPR;
 
