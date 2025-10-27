@@ -2,6 +2,8 @@ package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
@@ -16,32 +18,43 @@ public class TeleOpMode extends LinearOpMode {
         "Lucas Schwietz",
         1.0f
     );
-    final DriverControls driverControls2 = new LucasDriverControls(
-        "Liam St. Ores",
-        0.7f
+    final DriverControls driverControls2 = new LucasSusanControls(
+        "Lucas S",
+        false,
+        0.7f,
+            hardware
     );
 
     @Override
     public void runOpMode() throws InterruptedException {
-        hardware.init(hardwareMap, telemetry, driverControls1, driverControls2);
+        hardware.init(hardwareMap, telemetry, driverControls1, driverControls2,400.00);
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
-        waitForStart();
+        waitForStart(); // Wait for start!
+        ElapsedTime elapsedTime = new ElapsedTime();
+        hardware.addElapsedTime(elapsedTime);
+
+        //hardware.storage.resetEncoderSusan();
 
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
 
-        while (opModeIsActive() && hardware.continueRunning) {
-            hardware.tick(gamepad1, gamepad2);
+        // Main loop!
+        while (opModeIsActive()) {
+
+
+            hardware.tick(gamepad1,gamepad2);
+            //hardware.storage.testRotateSusan(1);
 
             telemetry.addLine("\nDriver: " + driverControls1.getDriverName());
             telemetry.addLine("Speed X: " + driverControls1.getSpeedX());
             telemetry.addLine("Speed Y: " + driverControls1.getSpeedY());
 
-            hardware.vision.printTagDistanceToTelemetry(
-                AprilTagNames.RedTarget
-            );
+            //telemetry.addLine("susanPosition: "+hardware.storage.susanMotorEx.getCurrentPosition());
+
+            hardware.vision.printTagDistanceToTelemetry(AprilTagNames.RedTarget);
+
 
             telemetry.update();
 
