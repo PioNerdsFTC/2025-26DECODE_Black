@@ -10,6 +10,7 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Pathfinding.Constants;
 
 @Autonomous(name = "AutoOpMode", group = "Examples")
@@ -21,9 +22,9 @@ public class AutoOpMode extends OpMode {
     private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot.
     private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
     private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
+    final Hardware hardware = new Hardware();
 
     private int pathState;
-    private Path scorePreload;
 
     public PathBuilder pathBuilder;
     public static PathChain pathChain;
@@ -119,14 +120,14 @@ public class AutoOpMode extends OpMode {
             case 1:
                 if(!follower.isBusy()) {
                     follower.followPath(pathChain,true);
-                    scanObelisk();
+                    hardware.vision.getArtifactPattern();
                     setPathState(2);
                 }
 
             case 2:
-                if(!follower.isBusy()) {
+                if(!follower.isBusy() && ) {
                     follower.followPath(pathChain2, true);
-                    launchBall();
+                    hardware.aimbot.tick();
                     setPathState(3);
                 }
             case 3:
