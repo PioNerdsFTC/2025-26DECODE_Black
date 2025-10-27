@@ -7,22 +7,26 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Storage {
-
-    Hardware hardware = null;
+    private Hardware hardware;
 
     private Servo servo0;
     private Servo servo1;
-    public DcMotorEx susanMotorEx;
+    private DcMotorEx susanMotorEx;
     private int susanTargetTicks = 0;
     private final int susanVelocityRequest = 300;
     private final int gearRatio = 6; // equals (90/15)
     private final int TPR = 288 * gearRatio; // ticks-per-revolution
 
-    boolean isInitialized = false;
+    private boolean isInitialized = false;
+    private Artifact[] inventory = new Artifact[3];
+    private LazySusanPositions currentSusanPositionEnum = LazySusanPositions.INTAKE1;
+    private int artifactsScored = 0;
 
     Storage() {}
 
-    public void init(Hardware hardware) {
+    public void init(Hardware hardware, boolean resetArtifactsScored) {
+        if (resetArtifactsScored) artifactsScored = 0;
+
         this.hardware = hardware;
 
         if (
@@ -51,6 +55,7 @@ public class Storage {
             hardware.telemetry.addLine("STORAGE IS NOT INITIALIZED!");
         }
     }
+
 
     public void feed() {
         if (!isInitialized) return;
@@ -92,7 +97,7 @@ public class Storage {
                 tickOffset = 240; // (((180 + (1/3) * 360))*(tpr/360)) = 240
                 break;
         }
-
+        currentSusanPositionEnum = susanPosition;
         tickOffset *= gearRatio;
 
         int currentRevolutionTick = revolutions * TPR + tickOffset;
@@ -134,6 +139,34 @@ public class Storage {
         updateSusan();
     }
 
+    public void algorithmSusan(){
+        Artifact[] artifactPattern = hardware.vision.getArtifactPattern();
+
+        moveSusanTo(selectArtifactPosition(artifactPattern));
+
+    }
+
+
+    private LazySusanPositions selectArtifactPosition(Artifact[] artifactPattern){
+        // For efficiency, check if the target ball is in the current slot, so don't rotate
+        if(currentSusanPositionEnum == LazySusanPositions.OUTPUT1 && inventory[0] == artifactPattern[0]
+        || currentSusanPositionEnum == LazySusanPositions.OUTPUT2 && inventory[1] == artifactPattern[1]
+        || currentSusanPositionEnum == LazySusanPositions.OUTPUT3 && inventory[2] == artifactPattern[2]){
+            return currentSusanPositionEnum;
+        }
+
+        // run a return loop for the slots
+        for(int i=0; i<3; i++){
+            for(int j=0; i<3; i++){
+                if(inventory[i]==artifactPattern[j]){
+
+                }
+            }
+        }
+        return LazySusanPositions.OUTPUT1;
+    }
+
+
     public void updateSusan() {
         if (!isInitialized) return;
         susanMotorEx.setTargetPosition(susanTargetTicks);
@@ -159,4 +192,9 @@ public class Storage {
         susanMotorEx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
+    public int getSusanCurrentTicks(){
+        return susanMotorEx.getCurrentPosition();
+    }
+
 }

@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
@@ -16,18 +18,20 @@ import org.pionerds.ftc.teamcode.Utils.Environment;
 public final class Hardware {
 
     // Do not make these variables final because they will be updated during TeleOp
-
+    public ElapsedTime elapsedTime;
     public Drivetrain drivetrain = new Drivetrain();
     public Mapping mapping = new Mapping();
     public Vision vision = new Vision();
     public Launcher launcher = new Launcher();
     public Storage storage = new Storage();
+    public Aimbot aimbot = new Aimbot();
     public DriverControls driverControls1;
     public DriverControls driverControls2;
 
     public Gyro gyro = new Gyro();
 
     public Telemetry telemetry = null;
+    private double maxDistanceLaunch;
 
     /**
      * Whether the hardware class is able to continue running.
@@ -47,7 +51,7 @@ public final class Hardware {
             drivetrain.init(this, telemetry);
             vision.init(this);
             launcher.init(this);
-            storage.init(this);
+            storage.init(this,true);
             gyro.init(this);
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());
@@ -66,17 +70,19 @@ public final class Hardware {
         HardwareMap hardwareMap,
         Telemetry telemetry,
         DriverControls driverControls1,
-        DriverControls driverControls2
+        DriverControls driverControls2,
+        double maxDistanceLaunch
     ) {
         try {
             this.telemetry = telemetry;
 
             mapping.init(this, hardwareMap);
-            drivetrain.init(this, telemetry);
+            drivetrain.init(this,telemetry);
             vision.init(this);
             launcher.init(this);
-            storage.init(this);
+            storage.init(this,true);
             gyro.init(this); //REMOVE WHEN AT COMPETITION I THINK
+
             this.driverControls1 = driverControls1;
             this.driverControls2 = driverControls2;
         } catch (Exception e) {
@@ -98,6 +104,10 @@ public final class Hardware {
             this.telemetry.addLine(e.getMessage());
             if (!Environment.competing) this.continueRunning = false;
         }
+    }
+
+    public void addElapsedTime(ElapsedTime elapsedTime){
+        this.elapsedTime = elapsedTime;
     }
 
     public void stop() {
