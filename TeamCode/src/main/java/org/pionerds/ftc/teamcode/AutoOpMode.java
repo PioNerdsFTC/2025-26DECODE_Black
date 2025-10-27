@@ -113,24 +113,19 @@ public class AutoOpMode extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                follower.followPath(scorePreload);
-                setPathState(1);
-                break;
-
-            case 1:
                 if(!follower.isBusy()) {
                     follower.followPath(pathChain,true);
                     hardware.vision.getArtifactPattern();
-                    setPathState(2);
+                    setPathState(1);
                 }
 
-            case 2:
+            case 1:
                 if(!follower.isBusy() && ) {
                     follower.followPath(pathChain2, true);
                     hardware.aimbot.tick();
-                    setPathState(3);
+                    setPathState(2);
                 }
-            case 3:
+            case 2:
                 if(!follower.isBusy()) {
                     /* Set the state to a Case we won't use or define, so it just stops running an new paths */
                     setPathState(-1);
