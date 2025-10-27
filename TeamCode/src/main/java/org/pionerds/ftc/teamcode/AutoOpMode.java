@@ -19,15 +19,15 @@ public class AutoOpMode extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
 
     private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot.
+    private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
+    private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
 
     private int pathState;
     private Path scorePreload;
 
     public PathBuilder pathBuilder;
-
-    public static PathChain path1;
-    public static PathChain path2;
-    public static PathChain path3;
+    public static PathChain pathChain;
+    public static PathChain pathChain2;
 
     /**
      * These change the states of the paths and actions. It will also reset the timers of the individual switches
@@ -66,50 +66,25 @@ public class AutoOpMode extends OpMode {
         pathBuilder = new PathBuilder(follower);
         follower.setStartingPose(startPose);
 
-        path1 = pathBuilder
+        pathChain = pathBuilder
             .addPath(
-                new BezierLine(
-                    new Pose(56.000, 8.000),
-                    new Pose(53.150, 29.047)
-                )
+                new BezierLine(startPose, scanPose)
+            )
+            .setConstantHeadingInterpolation(Math.toRadians(90))
+            .build();
+
+        pathChain2 = pathBuilder
+            .addPath(
+                new BezierCurve(scanPose, scorePose)
             )
             .setLinearHeadingInterpolation(
                 Math.toRadians(90),
-                Math.toRadians(180)
+                Math.toRadians(144.046)
             )
             .build();
 
-        path2 = pathBuilder
-            .addPath(
-                new BezierCurve(
-                    new Pose(53.150, 29.047),
-                    new Pose(84.258, 29.253),
-                    new Pose(80.549, 56.034)
-                )
-            )
-            .setLinearHeadingInterpolation(
-                Math.toRadians(180),
-                Math.toRadians(270)
-            )
-            .build();
-
-        path3 = pathBuilder
-            .addPath(
-                new BezierCurve(
-                    new Pose(80.549, 56.034),
-                    new Pose(52.326, 65.099),
-                    new Pose(55.828, 96.412)
-                )
-            )
-            .setLinearHeadingInterpolation(
-                Math.toRadians(270),
-                Math.toRadians(0)
-            )
-            .build();
-
-        follower.followPath(path1);
-        follower.followPath(path2);
-        follower.followPath(path3);
+        follower.followPath(pathChain);
+        follower.followPath(pathChain2);
     }
 
     /**
@@ -133,4 +108,33 @@ public class AutoOpMode extends OpMode {
      **/
     @Override
     public void stop() {}
+
+    public void autonomousPathUpdate() {
+        switch (pathState) {
+            case 0:
+                follower.followPath(scorePreload);
+                setPathState(1);
+                break;
+
+            case 1:
+                if(!follower.isBusy()) {
+                    follower.followPath(pathChain,true);
+                    scanObelisk();
+                    setPathState(2);
+                }
+
+            case 2:
+                if(!follower.isBusy()) {
+                    follower.followPath(pathChain2, true);
+                    launchBall();
+                    setPathState(3);
+                }
+            case 3:
+                if(!follower.isBusy()) {
+                    /* Set the state to a Case we won't use or define, so it just stops running an new paths */
+                    setPathState(-1);
+                }
+                break;
+        }
+    }
 }

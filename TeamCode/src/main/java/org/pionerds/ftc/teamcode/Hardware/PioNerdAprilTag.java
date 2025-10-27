@@ -5,7 +5,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 public class PioNerdAprilTag {
 
     private final AprilTagDetection aprilTagDetection;
-    private final double MULTIPLY_TO_DISTANCE = 1; // not 0.5
+    private final double MULTIPLY_TO_DISTANCE = 1; // what is this bruh
 
     public PioNerdAprilTag(AprilTagDetection aprilTagDetectionInput) {
         this.aprilTagDetection = aprilTagDetectionInput;
