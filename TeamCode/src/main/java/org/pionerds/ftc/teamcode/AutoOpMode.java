@@ -10,6 +10,9 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
+import org.pionerds.ftc.teamcode.Hardware.AimbotMotorMovement;
+import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Pathfinding.Constants;
 
@@ -120,9 +123,9 @@ public class AutoOpMode extends OpMode {
                 }
 
             case 1:
-                if(!follower.isBusy() && ) {
+                if(!follower.isBusy()) {
                     follower.followPath(pathChain2, true);
-                    hardware.aimbot.tick();
+                    hardware.aimbot.tick(AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY);
                     setPathState(2);
                 }
             case 2:
