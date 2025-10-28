@@ -48,8 +48,7 @@ public class LaunchTestOpMode extends LinearOpMode {
 
             hardware.vision.printTagDistanceToTelemetry(AprilTagNames.BlueTarget);
 
-            //hardware.tick(gamepad1,gamepad2);
-            driverControls1.tickControls(gamepad1,hardware);
+            //driverControls1.tickControls(gamepad1,hardware);
 
             if(!changingVelocity){
                 if(gamepad1.dpad_up){
@@ -64,7 +63,11 @@ public class LaunchTestOpMode extends LinearOpMode {
             }
 
             telemetry.addLine("\nVelocity: "+currentVelocity);
-            hardware.launcher.setLauncherVelocity(currentVelocity);
+            telemetry.addLine("encoderReading0: "+hardware.launcher.launcher0.getVelocity());
+            telemetry.addLine("encoderReading1: "+hardware.launcher.launcher1.getVelocity());
+            hardware.launcher.launcher0.setVelocity(currentVelocity);
+            hardware.launcher.launcher1.setVelocity(currentVelocity);
+            //hardware.launcher.setLauncherVelocity(currentVelocity);
 
 
             telemetry.update();
