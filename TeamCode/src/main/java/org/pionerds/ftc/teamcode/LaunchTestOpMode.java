@@ -10,24 +10,19 @@ import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasSusanControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
-@TeleOp(name = "TeleOp")
-public class TeleOpMode extends LinearOpMode {
+@TeleOp(name = "LaunchTest")
+public class LaunchTestOpMode extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
     final DriverControls driverControls1 = new LucasDriverControls(
-        "Lucas Schwietz",
-        true,
-        1.0f
-    );
-    final DriverControls driverControls2 = new LucasSusanControls(
-            "Lucas Susan",
-            false,
+            "Lucas Schwietz",
+            true,
             1.0f
     );
 
     @Override
     public void runOpMode() throws InterruptedException {
-        hardware.init(hardwareMap, telemetry,driverControls1,driverControls2,400);
+        hardware.init(hardwareMap, telemetry);
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
@@ -39,20 +34,37 @@ public class TeleOpMode extends LinearOpMode {
 
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
+        boolean changingVelocity = false;
+        double currentVelocity = 0.00;
 
         // Main loop!
         while (opModeIsActive()) {
 
-            hardware.tick(gamepad1,gamepad2);
-            //hardware.storage.testRotateSusan(1);
 
-            telemetry.addLine("\nDriver: " + driverControls1.getDriverName());
-            telemetry.addLine("Speed X: " + driverControls1.getSpeedX());
-            telemetry.addLine("Speed Y: " + driverControls1.getSpeedY());
+            //hardware.tick(gamepad1,gamepad2);
+            //hardware.storage.testRotateSusan(1);
 
             //telemetry.addLine("susanPosition: "+hardware.storage.susanMotorEx.getCurrentPosition());
 
             hardware.vision.printTagDistanceToTelemetry(AprilTagNames.BlueTarget);
+
+            //hardware.tick(gamepad1,gamepad2);
+            driverControls1.tickControls(gamepad1,hardware);
+
+            if(!changingVelocity){
+                if(gamepad1.dpad_up){
+                    currentVelocity += 5.00;
+                    changingVelocity = true;
+                } else if (gamepad1.dpad_down) {
+                    currentVelocity -= 5.00;
+                    changingVelocity = true;
+                }
+            } else if (!(gamepad1.dpad_up || gamepad1.dpad_down)) {
+                changingVelocity = false;
+            }
+
+            telemetry.addLine("\nVelocity: "+currentVelocity);
+            hardware.launcher.setLauncherVelocity(currentVelocity);
 
 
             telemetry.update();

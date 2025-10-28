@@ -7,8 +7,9 @@ import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
 public class LucasDriverControls extends DriverControls {
 
-    public LucasDriverControls(String driverName, float maxSpeed) {
+    public LucasDriverControls(String driverName, boolean isDriver, float maxSpeed) {
         super(driverName, maxSpeed);
+        this.setIsDriver(isDriver);
     }
 
     /**
@@ -27,6 +28,7 @@ public class LucasDriverControls extends DriverControls {
      *
      **/
     boolean start_pressed_already = false;
+    boolean reset_Gyro_Pressed = false;
 
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
