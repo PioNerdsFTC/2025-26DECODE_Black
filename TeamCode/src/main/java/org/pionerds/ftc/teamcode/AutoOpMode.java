@@ -46,6 +46,7 @@ public class AutoOpMode extends OpMode {
      **/
     @Override
     public void loop() {
+        autonomousPathUpdate();
         // These loop the movements of the robot, these must be called continuously in order to work
         follower.update();
 
@@ -86,9 +87,6 @@ public class AutoOpMode extends OpMode {
                 Math.toRadians(144.046)
             )
             .build();
-
-        follower.followPath(pathChain);
-        follower.followPath(pathChain2);
     }
 
     /**

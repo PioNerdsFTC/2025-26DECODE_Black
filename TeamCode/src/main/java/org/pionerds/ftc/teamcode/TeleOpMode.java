@@ -21,8 +21,7 @@ public class TeleOpMode extends LinearOpMode {
     final DriverControls driverControls2 = new LucasSusanControls(
         "Lucas S",
         false,
-        0.7f,
-            hardware
+        0.7f
     );
 
     @Override
