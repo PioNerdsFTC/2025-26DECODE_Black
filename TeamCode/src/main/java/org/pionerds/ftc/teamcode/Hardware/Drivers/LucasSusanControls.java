@@ -13,7 +13,7 @@ public class LucasSusanControls extends DriverControls {
         boolean isDriver,
         float maxSpeed
     ) {
-        super(driverName, isDriver, maxSpeed);
+        super(driverName, maxSpeed);
     }
 
     /**
@@ -34,6 +34,7 @@ public class LucasSusanControls extends DriverControls {
 
     boolean reset_Gyro_Pressed = false;
     boolean movingSusan = false;
+
 
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {

@@ -1,5 +1,6 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -29,8 +30,8 @@ public class Launcher {
             DcMotorEx.ZeroPowerBehavior.FLOAT
         );
 
-        launcher0.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        launcher1.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        launcher0.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        launcher1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
 
     /**
@@ -52,10 +53,8 @@ public class Launcher {
         launcher1.setVelocity(velocity);
     }
 
-    /**
-     * Launches the ball
-     * @param operatorGamepad gamepad to get button input from
-     */
+
+    // deprecated
     public void launcherButton(Gamepad operatorGamepad) {
         if (operatorGamepad.y) {
             setLauncherPower(1);

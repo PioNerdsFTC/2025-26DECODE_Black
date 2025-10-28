@@ -11,6 +11,9 @@ public class LucasDriverControls extends DriverControls {
         super(driverName, maxSpeed);
     }
 
+    boolean resetGyroPressed = false;
+    boolean start_pressed_already = false;
+
     /**
      * Ticked every loop in the TeleOp.
      * @param gamepad
@@ -26,8 +29,6 @@ public class LucasDriverControls extends DriverControls {
      * Right_Stick.x - Sends Rotational Request to Drivetrain
      *
      **/
-    boolean start_pressed_already = false;
-
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
         // Resets
@@ -59,7 +60,7 @@ public class LucasDriverControls extends DriverControls {
 
         // Set Rotation Speed for Drivetrain
         setRotationSpeed(
-            Math.min(gamepad.right_stick_x, getMaxRotationSpeed())
+            gamepad.right_stick_x
         );
 
         // Set Speeds to the value or the capped value for the driver
@@ -83,11 +84,12 @@ public class LucasDriverControls extends DriverControls {
             );
         }
 
-        if (!reset_Gyro_Pressed && gamepad.dpad_up && gamepad.dpad_right) {
-            reset_Gyro_Pressed = true;
+        if (!resetGyroPressed && gamepad.dpad_up && gamepad.dpad_right) {
+            resetGyroPressed = true;
             hardware.gyro.resetYaw();
+
         } else {
-            reset_Gyro_Pressed = false;
+            resetGyroPressed = false;
         }
 
         if (getIsDriver()) {

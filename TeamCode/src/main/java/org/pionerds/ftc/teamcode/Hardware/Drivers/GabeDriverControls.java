@@ -12,7 +12,7 @@ public class GabeDriverControls extends DriverControls {
         boolean isDriver,
         float maxSpeed
     ) {
-        super(driverName, isDriver, maxSpeed);
+        super(driverName, maxSpeed);
     }
 
     /**
