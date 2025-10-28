@@ -2,6 +2,8 @@ package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
@@ -13,7 +15,7 @@ public class LaunchOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        hardware.init(hardwareMap, telemetry);
+        hardware.init(hardwareMap, telemetry, new ElapsedTime());
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 

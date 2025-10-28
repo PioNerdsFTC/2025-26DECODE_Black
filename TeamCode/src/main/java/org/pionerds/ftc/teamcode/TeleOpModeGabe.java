@@ -2,6 +2,8 @@ package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.GabeDriverControls;
@@ -26,7 +28,7 @@ public class TeleOpModeGabe extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        hardware.init(hardwareMap, telemetry, driverControls1, driverControls2, 9000.9);
+        hardware.init(hardwareMap, telemetry, driverControls1, driverControls2, 9000.9,new ElapsedTime());
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 

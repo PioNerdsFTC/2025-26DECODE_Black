@@ -26,7 +26,7 @@ public class TeleOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        hardware.init(hardwareMap, telemetry, driverControls1, driverControls2,400.00);
+        hardware.init(hardwareMap, telemetry, driverControls1, driverControls2,400.00,new ElapsedTime());
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 

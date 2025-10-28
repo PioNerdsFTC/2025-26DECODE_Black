@@ -10,6 +10,7 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.pionerds.ftc.teamcode.Hardware.AimbotMotorMovement;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
@@ -71,7 +72,7 @@ public class AutoOpMode extends OpMode {
         pathBuilder = new PathBuilder(follower);
         follower.setStartingPose(startPose);
 
-        hardware.init(hardwareMap, telemetry);
+        hardware.init(hardwareMap, telemetry, new ElapsedTime());
         pathChain = pathBuilder
             .addPath(
                 new BezierLine(startPose, scanPose)
