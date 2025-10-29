@@ -54,15 +54,6 @@ public class Launcher {
     }
 
 
-    // deprecated
-    public void launcherButton(Gamepad operatorGamepad) {
-        if (operatorGamepad.y) {
-            setLauncherPower(1);
-        } else {
-            setLauncherPower(0);
-        }
-    }
-
     /**
      * Stops the launchers
      */

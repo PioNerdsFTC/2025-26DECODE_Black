@@ -64,9 +64,9 @@ public class Aimbot {
             if (range < maxLaunchDistanceCM) {
                 telemetry.addLine("\nLauncher Motor:");
                 if (movementType == AimbotMotorMovement.VELOCITY) {
-                    hardware.launcher.setLauncherVelocity(calculateMotorVelocity(range));
+                    //hardware.launcher.setLauncherVelocity(calculateMotorVelocity(range));
                 } else { // USE POWER FOR THIS ONE!
-                    hardware.launcher.setLauncherPower(calculateMotorPower(range));
+                    //hardware.launcher.setLauncherPower(calculateMotorPower(range));
                 }
             } else {
                 telemetry.clearAll();

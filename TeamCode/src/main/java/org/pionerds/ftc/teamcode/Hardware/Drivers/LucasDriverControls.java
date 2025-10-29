@@ -7,8 +7,9 @@ import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
 public class LucasDriverControls extends DriverControls {
 
-    public LucasDriverControls(String driverName, float maxSpeed) {
+    public LucasDriverControls(String driverName, boolean isDriver, float maxSpeed) {
         super(driverName, maxSpeed);
+        this.setIsDriver(isDriver);
     }
 
     boolean resetGyroPressed = false;
@@ -29,6 +30,9 @@ public class LucasDriverControls extends DriverControls {
      * Right_Stick.x - Sends Rotational Request to Drivetrain
      *
      **/
+    boolean start_pressed_already = false;
+    boolean reset_Gyro_Pressed = false;
+
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
         // Resets
@@ -50,13 +54,6 @@ public class LucasDriverControls extends DriverControls {
         PioNerdAprilTag blueTarget = hardware.vision.getPioNerdAprilTag(
             AprilTagNames.BlueTarget
         );
-        if (gamepad.x && !(blueTarget == null) && gamepad.right_trigger > 0) {
-            // Send the distance to the aimbot class
-            hardware.launcher.setLauncherVelocity(blueTarget.range(2));
-        }
-        if (gamepad.right_trigger > 0) {
-            hardware.launcher.setLauncherVelocity(gamepad.right_trigger * 400);
-        }
 
         // Set Rotation Speed for Drivetrain
         setRotationSpeed(

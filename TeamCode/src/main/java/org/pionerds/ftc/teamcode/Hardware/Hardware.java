@@ -48,11 +48,11 @@ public final class Hardware {
             this.telemetry = telemetry;
 
             mapping.init(this, hardwareMap);
+            gyro.init(this);
             drivetrain.init(this, telemetry);
             vision.init(this);
             launcher.init(this);
             storage.init(this,true);
-            gyro.init(this);
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());
         }
