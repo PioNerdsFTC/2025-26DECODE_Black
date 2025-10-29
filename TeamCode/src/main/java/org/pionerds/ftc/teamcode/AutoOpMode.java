@@ -72,7 +72,7 @@ public class AutoOpMode extends OpMode {
         pathBuilder = new PathBuilder(follower);
         follower.setStartingPose(startPose);
 
-        hardware.init(hardwareMap, telemetry, new ElapsedTime());
+        hardware.init(hardwareMap, telemetry, hardware.elapsedTime);
         pathChain = pathBuilder
             .addPath(
                 new BezierLine(startPose, scanPose)
