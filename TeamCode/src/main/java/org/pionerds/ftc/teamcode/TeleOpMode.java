@@ -41,7 +41,7 @@ public class TeleOpMode extends LinearOpMode {
         telemetry.update();
 
         // Main loop!
-        while (opModeIsActive()) {
+        while (opModeIsActive() && hardware.continueRunning) {
 
             hardware.tick(gamepad1,gamepad2);
             //hardware.storage.testRotateSusan(1);

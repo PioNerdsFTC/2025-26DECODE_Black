@@ -19,7 +19,6 @@ public abstract class DriverControls {
 
     public DriverControls(String driverName, float maxSpeed) {
         this.driverName = driverName;
-        this.isDriver = isDriver;
         this.maxSpeed = maxSpeed;
     }
 

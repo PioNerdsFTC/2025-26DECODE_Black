@@ -271,8 +271,8 @@ public class Vision {
                     "Range: " +
                     blueTargetAprilTag.range(2) +
                     "Pythag A,B: " +
-                    (Math.sqrt(Math.pow((blueTargetAprilTag.x(2)), 2)) +
-                        Math.pow((blueTargetAprilTag.x(2)), 2))
+                    (Math.sqrt(Math.pow((blueTargetAprilTag.x(2)), 2) +
+                        Math.pow((blueTargetAprilTag.x(2)), 2)))
             );
         }
     }
