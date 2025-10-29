@@ -30,7 +30,6 @@ public class LucasDriverControls extends DriverControls {
      * Right_Stick.x - Sends Rotational Request to Drivetrain
      *
      **/
-    boolean reset_Gyro_Pressed = false;
 
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
