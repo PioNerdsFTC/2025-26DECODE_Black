@@ -4,18 +4,17 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.pionerds.ftc.teamcode.Hardware.AimbotMotorMovement;
-import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
+import org.pionerds.ftc.teamcode.Hardware.Artifact;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Pathfinding.Constants;
+
+import java.util.Arrays;
 
 @Autonomous(name = "AutoOpMode", group = "Examples")
 public class AutoOpMode extends OpMode {
@@ -26,6 +25,7 @@ public class AutoOpMode extends OpMode {
     private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot.
     private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
     private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
+    private String artifact = "gulp";
     final Hardware hardware = new Hardware();
 
     private int pathState;
@@ -47,15 +47,16 @@ public class AutoOpMode extends OpMode {
      **/
     @Override
     public void loop() {
+        follower.update();
         autonomousPathUpdate();
         // These loop the movements of the robot, these must be called continuously in order to work
-        follower.update();
 
         // Feedback to Driver Hub for debugging
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("pattern",artifact);
         telemetry.update();
     }
 
@@ -117,21 +118,23 @@ public class AutoOpMode extends OpMode {
         switch (pathState) {
             case 0:
                 if(!follower.isBusy()) {
-                    follower.followPath(pathChain,true);
+                    follower.followPath(pathChain,false);
                     setPathState(1);
                 }
+                break;
 
             case 1:
                 if(!follower.isBusy()) {
-                    hardware.vision.getArtifactPattern();
+                    artifact = Arrays.toString(hardware.vision.getArtifactPattern());
                     setPathState(2);
                 }
+                break;
 
             case 2:
-                if(!follower.isBusy()) {
                     follower.followPath(pathChain2, true);
                     setPathState(3);
-                }
+                break;
+
             case 3:
                 if(!follower.isBusy()) {
                     /* Set the state to a Case we won't use or define, so it just stops running an new paths */
