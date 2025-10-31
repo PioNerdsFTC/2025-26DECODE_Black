@@ -148,6 +148,8 @@ public class Storage {
     public LazySusanPositions bestBallPos(LazySusanPositions currentPosEnum, String idealColor, Artifact[] colors) {
         String currentPos = currentPosEnum.name();
         String finalPos = "OUTPUT1";
+        // Position mapping: Each pair of positions maps to one color slot in inventory
+        // INTAKE1/INTAKE2 (0,1) -> colors[0], INTAKE3/OUTPUT1 (2,3) -> colors[1], OUTPUT2/OUTPUT3 (4,5) -> colors[2]
         String[] positions =
                 {"INTAKE1","INTAKE2","INTAKE3","OUTPUT1","OUTPUT2","OUTPUT3"};
         int pos = 0;
@@ -157,12 +159,15 @@ public class Storage {
                 break;
             }
         }
+        // Check current position's color slot (pos/2 maps position index to color array index)
         if (colors[pos/2].name().equals(idealColor)) {
             finalPos = positions[pos/2];
         }
+        // Check 2 slots clockwise: (pos+4)%6 wraps around the 6-position array, /2 converts to color index
         else if (colors[((pos+4)%6)/2].name().equals(idealColor)) {
             finalPos = positions[((pos+4)%6)/2];
         }
+        // Check 1 slot clockwise: (pos+2)%6 wraps around the 6-position array, /2 converts to color index
         else if (colors[((pos+2)%6)/2].name().equals(idealColor)) {
             finalPos = positions[((pos+2)%6)/2];
         }
