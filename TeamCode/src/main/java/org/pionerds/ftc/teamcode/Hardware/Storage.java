@@ -9,45 +9,28 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Storage {
     private Hardware hardware;
 
-    private Servo servo0;
-    private Servo servo1;
+    private Servo feederServo;
     private DcMotorEx susanMotorEx;
     private int susanTargetTicks = 0;
     private final int susanVelocityRequest = 300;
-    private final int gearRatio = 6; // equals (90/15)
+    private final int gearRatio = 3; // equals (90/30)
     private final int TPR = 288 * gearRatio; // ticks-per-revolution
 
     private boolean isInitialized = false;
-    private Artifact[] inventory = new Artifact[3];
+    private Artifact[] inventory = new Artifact[] {Artifact.EMPTY, Artifact.EMPTY, Artifact.EMPTY};
     private LazySusanPositions currentSusanPositionEnum = LazySusanPositions.INTAKE1;
-    private int artifactsScored = 0;
-
     Storage() {}
 
-    public void init(Hardware hardware, boolean resetArtifactsScored) {
-        if (resetArtifactsScored) artifactsScored = 0;
-
+    public void init(Hardware hardware) {
         this.hardware = hardware;
 
-        if (
-            this.hardware.mapping.getServoMotor("servo0") != null &&
-            this.hardware.mapping.getServoMotor("servo1") != null &&
-            this.hardware.mapping.getMotor(
-                "susanMotor",
-                40.0,
-                DcMotorSimple.Direction.FORWARD,
-                DcMotor.ZeroPowerBehavior.BRAKE
-            ) !=
-            null
-        ) {
-            servo0 = this.hardware.mapping.getServoMotor("servo0");
-            servo1 = this.hardware.mapping.getServoMotor("servo1");
-            susanMotorEx = this.hardware.mapping.getMotor(
-                "susanMotor",
-                40.0,
-                DcMotorSimple.Direction.FORWARD,
-                DcMotor.ZeroPowerBehavior.BRAKE
-            );
+
+        Servo feeder = this.hardware.mapping.getServoMotor("feeder");
+        DcMotorEx susan = this.hardware.mapping.getMotor("susanMotor", 40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
+
+        if (feeder != null && susan != null) {
+            feederServo = feeder;
+            susanMotorEx = susan;
             susanMotorEx.setTargetPositionTolerance(1);
             isInitialized = true;
         } else {
@@ -61,20 +44,19 @@ public class Storage {
         if (!isInitialized) return;
         double pos = 1;
 
-        servo0.setPosition(pos);
-        servo1.setPosition(pos);
+        feederServo.setPosition(pos);
     }
 
     public void contract() {
         if (!isInitialized) return;
         double pos = 0;
 
-        servo0.setPosition(pos);
-        servo1.setPosition(pos);
+        feederServo.setPosition(pos);
     }
 
     public void moveSusanTo(LazySusanPositions susanPosition) {
         if (!isInitialized) return;
+        if (susanPosition.equals(currentSusanPositionEnum)) return;
 
         int tickOffset = 0; // default: ((0 * 360)*(TPR/360)) = 0
         int currentPos = susanMotorEx.getCurrentPosition();
@@ -139,28 +121,59 @@ public class Storage {
         updateSusan();
     }
 
-    public void algorithmSusan(){
-        Artifact[] artifactPattern = hardware.vision.getArtifactPattern();
+    public Artifact bestArtifact(int ballsOnRamp){
+        Artifact[] pattern = hardware.vision.getArtifactPattern();
 
-        moveSusanTo(selectArtifactPosition(artifactPattern));
+        return pattern[ballsOnRamp%3];
+    }
+
+    public void automatedSusan(int ballsOnRamp){
+
+        moveSusanTo(bestBallPos(currentSusanPositionEnum, bestArtifact(ballsOnRamp).name(),inventory));
 
     }
 
+    public void printAlgorithmData(int ballsOnRamp){
+        hardware.telemetry.addLine("\n========== STORAGE ==========");
+        hardware.telemetry.addLine("CurrentPos: "+currentSusanPositionEnum.name());
+        hardware.telemetry.addLine("TargetPos: "+bestBallPos(currentSusanPositionEnum, bestArtifact(ballsOnRamp).name(),inventory).name());
+        hardware.telemetry.addLine("BestArfifact: "+bestArtifact(ballsOnRamp).name());
+        hardware.telemetry.addLine("\nInventory:");
+        hardware.telemetry.addLine(inventory[0].name());
+        hardware.telemetry.addLine(inventory[1].name());
+        hardware.telemetry.addLine(inventory[2].name());
+        hardware.telemetry.addLine("\n=============================");
+    }
 
-    private LazySusanPositions selectArtifactPosition(Artifact[] artifactPattern){
-        // For efficiency, check if the target ball is in the current slot, so don't rotate
-        if(currentSusanPositionEnum == LazySusanPositions.OUTPUT1 && inventory[0] == artifactPattern[0]
-        || currentSusanPositionEnum == LazySusanPositions.OUTPUT2 && inventory[1] == artifactPattern[1]
-        || currentSusanPositionEnum == LazySusanPositions.OUTPUT3 && inventory[2] == artifactPattern[2]){
-            return currentSusanPositionEnum;
+    public LazySusanPositions bestBallPos(LazySusanPositions currentPosEnum, String idealColor, Artifact[] colors) {
+        String currentPos = currentPosEnum.name();
+        String finalPos = "OUTPUT1";
+        String[] positions =
+                {"INTAKE1","INTAKE2","INTAKE3","OUTPUT1","OUTPUT2","OUTPUT3"};
+        int pos = 0;
+        for(int i = 0; i<positions.length; i++){
+            if(positions[i].equals(currentPos)){
+                pos = i;
+            }
         }
-
-        // run a return loop for the slots
-        for(int i=0; i<3; i++){
-            for(int j=0; i<3; i++){
-                if(inventory[i]==artifactPattern[j]){
-
-                }
+        if (colors[pos/2].name().equals(idealColor)) {
+            finalPos = positions[pos/2];
+        }
+        else if (colors[((pos+4)%6)/2].name().equals(idealColor)) {
+            finalPos = positions[((pos+4)%6)/2];
+        }
+        else if (colors[((pos+2)%6)/2].name().equals(idealColor)) {
+            finalPos = positions[((pos+2)%6)/2];
+        }
+        else {
+            String[] susanPosListString = new String[] {"OUTPUT1","OUTPUT2","OUTPUT3"};
+            for(int i = 0; i<3; i++){
+                if(!inventory[i].equals(Artifact.EMPTY)) finalPos = susanPosListString[i];
+            }
+        }
+        for(LazySusanPositions susanPosReturn : LazySusanPositions.values()){
+            if(susanPosReturn.name().equals(finalPos)){
+                return susanPosReturn;
             }
         }
         return LazySusanPositions.OUTPUT1;

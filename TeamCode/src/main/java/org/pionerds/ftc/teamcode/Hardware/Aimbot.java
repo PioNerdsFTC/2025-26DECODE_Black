@@ -28,7 +28,7 @@ public class Aimbot {
 
     }
 
-    public boolean isOutOfRange(AprilTagNames tagName){
+    public boolean isInRange(AprilTagNames tagName){
         return (hardware.vision.getPioNerdAprilTag(tagName).range() < maxLaunchDistanceCM);
     }
 
@@ -41,10 +41,13 @@ public class Aimbot {
     }
 
     double tickDelay = 100.0;
+    double stopDelay = 1000.0;
     double lastTick = 0.0;
+    double lastStopTick = 0.0;
+    boolean stopPending = false;
 
-    public void tick(AprilTagNames tagName, AimbotMotorMovement movementType){
-        if (lastTick + tickDelay < hardware.elapsedTime.milliseconds()) {
+    public void tick(AprilTagNames tagName, AimbotMotorMovement movementType, boolean stopRequested){
+        if (hardware.elapsedTime.milliseconds() - lastTick > tickDelay) {
             lastTick = hardware.elapsedTime.milliseconds();
 
             PioNerdAprilTag pioTag = hardware.vision.getPioNerdAprilTag(tagName);
@@ -54,14 +57,22 @@ public class Aimbot {
 
             // detect if it is in the launching range
             if (range < maxLaunchDistanceCM) {
-                telemetry.addLine("\nLauncher Motor:");
-                if (movementType == AimbotMotorMovement.VELOCITY) {
-                    //hardware.launcher.setLauncherVelocity(calculateMotorVelocity(range));
-                } else { // USE POWER FOR THIS ONE!
-                    //hardware.launcher.setLauncherPower(calculateMotorPower(range));
+            telemetry.addLine("\nLauncher Motor:");
+                if(!stopPending){
+                    hardware.launcher.setLauncherVelocity(calculateMotorVelocity(range));
+                    if(stopRequested){
+                        hardware.storage.feed();
+                    }
+                } else if (hardware.elapsedTime.milliseconds() - lastStopTick > stopDelay) {
+                    // waited delay, so it's time to stop the motor!
+                    hardware.launcher.stopLaunchers();
+                    hardware.storage.contract();
+                }
+                if(stopRequested && !stopPending){
+                    stopPending = true;
+                    lastStopTick = lastTick;
                 }
             } else {
-                telemetry.clearAll();
                 telemetry.addLine("Out of range!");
             }
         }

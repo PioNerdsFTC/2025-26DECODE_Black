@@ -1,6 +1,8 @@
 package org.pionerds.ftc.teamcode.Hardware.Drivers;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+
+import org.pionerds.ftc.teamcode.Hardware.AimbotMotorMovement;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
@@ -34,42 +36,29 @@ public class LucasSusanControls extends DriverControls {
 
     boolean reset_Gyro_Pressed = false;
     boolean movingSusan = false;
+    boolean stoppingAimbot = false;
+    int ballsOnRamp = 0;
 
 
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
-        // A-Button
-        if (gamepad.dpad_down) {
-            hardware.storage.feed();
-        } else {
-            hardware.storage.contract();
+        hardware.telemetry.addLine("\nBalls On Ramp: "+ballsOnRamp);
+        if (gamepad.a && !gamepad.b) {
+            if(!movingSusan){
+                hardware.storage.automatedSusan(ballsOnRamp);
+            }
+            hardware.aimbot.tick(AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY, false);
+            movingSusan = true;
+        } else if (gamepad.a && gamepad.b) {
+            hardware.aimbot.tick(AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY, true);
+            ballsOnRamp++;
+            stoppingAimbot = true;
+        } else if (!(gamepad.a)) {
+            movingSusan = false;
+            stoppingAimbot = false;
         }
 
-        if (!movingSusan) {
-            if (gamepad.dpad_down) {
-                hardware.storage.moveSusanTo(LazySusanPositions.INTAKE2);
-            } else if (gamepad.dpad_left) {
-                hardware.storage.moveSusanTo(LazySusanPositions.INTAKE1);
-            } else if (gamepad.dpad_right) {
-                hardware.storage.moveSusanTo(LazySusanPositions.INTAKE3);
-            } else if (gamepad.y) {
-                hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT2);
-            } else if (gamepad.x) {
-                hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT1);
-            } else if (gamepad.b) {
-                hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT3);
-            }
-            movingSusan = true;
-        } else if (
-            !(gamepad.dpad_down ||
-                gamepad.dpad_left ||
-                gamepad.dpad_right ||
-                gamepad.y ||
-                gamepad.x ||
-                gamepad.b ||
-                gamepad.a)
-        ) {
-            movingSusan = false;
-        }
+        hardware.storage.printAlgorithmData(ballsOnRamp);
+
     }
 }

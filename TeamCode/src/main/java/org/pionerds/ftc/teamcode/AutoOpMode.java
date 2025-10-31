@@ -125,7 +125,7 @@ public class AutoOpMode extends OpMode {
             case 1:
                 if(!follower.isBusy()) {
                     follower.followPath(pathChain2, true);
-                    hardware.aimbot.tick(AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY);
+                    hardware.aimbot.tick(AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY,false);
                     setPathState(2);
                 }
             case 2:

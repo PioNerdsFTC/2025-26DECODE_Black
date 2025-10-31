@@ -52,7 +52,8 @@ public final class Hardware {
             drivetrain.init(this, telemetry);
             vision.init(this);
             launcher.init(this);
-            storage.init(this,true);
+            storage.init(this);
+
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());
         }
@@ -70,8 +71,7 @@ public final class Hardware {
         HardwareMap hardwareMap,
         Telemetry telemetry,
         DriverControls driverControls1,
-        DriverControls driverControls2,
-        double maxDistanceLaunch
+        DriverControls driverControls2
     ) {
         try {
             this.telemetry = telemetry;
@@ -80,11 +80,12 @@ public final class Hardware {
             drivetrain.init(this,telemetry);
             vision.init(this);
             launcher.init(this);
-            storage.init(this,true);
+            storage.init(this);
             gyro.init(this); //REMOVE WHEN AT COMPETITION I THINK
 
             this.driverControls1 = driverControls1;
             this.driverControls2 = driverControls2;
+
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());
         }
@@ -102,7 +103,10 @@ public final class Hardware {
             // this.launcher.launcherButton(gamepad1);
         } catch (Exception e) {
             this.telemetry.addLine(e.getMessage());
-            if (!Environment.competing) this.continueRunning = false;
+            if (!Environment.competing) {
+                telemetry.update();
+                this.continueRunning = false;
+            }
         }
     }
 
