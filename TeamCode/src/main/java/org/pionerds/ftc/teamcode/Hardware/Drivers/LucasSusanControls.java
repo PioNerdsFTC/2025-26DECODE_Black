@@ -53,7 +53,7 @@ public class LucasSusanControls extends DriverControls {
             hardware.aimbot.tick(AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY, true);
             ballsOnRamp++;
             stoppingAimbot = true;
-        } else if (!(gamepad.a)) {
+        } else {
             movingSusan = false;
             stoppingAimbot = false;
         }
