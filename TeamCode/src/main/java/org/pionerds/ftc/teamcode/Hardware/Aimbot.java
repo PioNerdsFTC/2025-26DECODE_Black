@@ -51,7 +51,6 @@ public class Aimbot {
             lastTick = hardware.elapsedTime.milliseconds();
 
             PioNerdAprilTag pioTag = hardware.vision.getPioNerdAprilTag(tagName);
-            AprilTagDetection unwrappedDetection = pioTag.getAprilTagDetection();
 
             double range = pioTag.range();
 
@@ -59,7 +58,12 @@ public class Aimbot {
             if (range < maxLaunchDistanceCM) {
                 telemetry.addLine("\nLauncher Motor:");
                 if(!stopPending){
-                    hardware.launcher.setLauncherVelocity(calculateMotorVelocity(range));
+                    if(movementType.equals(AimbotMotorMovement.VELOCITY)){
+                        hardware.launcher.setLauncherVelocity(calculateMotorVelocity(range));
+                    } else {
+                        hardware.launcher.setLauncherVelocity(calculateMotorPower(range));
+                    }
+
                     if(stopRequested){
                         hardware.storage.feed();
                     }
