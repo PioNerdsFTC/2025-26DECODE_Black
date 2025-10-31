@@ -37,6 +37,7 @@ public class LucasSusanControls extends DriverControls {
     boolean reset_Gyro_Pressed = false;
     boolean movingSusan = false;
     boolean stoppingAimbot = false;
+    boolean ballCountPressed = false;
     int ballsOnRamp = 0;
 
 
@@ -51,11 +52,15 @@ public class LucasSusanControls extends DriverControls {
             movingSusan = true;
         } else if (gamepad.a && gamepad.b) {
             hardware.aimbot.tick(AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY, true);
-            ballsOnRamp++;
+            if(!ballCountPressed){
+                ballsOnRamp++;
+                ballCountPressed = true;
+            }
             stoppingAimbot = true;
         } else {
             movingSusan = false;
             stoppingAimbot = false;
+            ballCountPressed = false;
         }
 
         hardware.storage.printAlgorithmData(ballsOnRamp);
