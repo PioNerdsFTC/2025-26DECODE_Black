@@ -20,14 +20,14 @@ public class TeleOpMode extends LinearOpMode {
         1.0f
     );
     final DriverControls driverControls2 = new LucasSusanControls(
-            "Lucas Susan",
-            false,
-            1.0f
+        "Lucas S",
+        false,
+        0.7f
     );
 
     @Override
     public void runOpMode() throws InterruptedException {
-        hardware.init(hardwareMap, telemetry,driverControls1,driverControls2,400.0);
+        hardware.init(hardwareMap, telemetry, driverControls1, driverControls2,400.00,new ElapsedTime());
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 

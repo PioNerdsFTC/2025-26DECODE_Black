@@ -42,8 +42,9 @@ public final class Hardware {
      * Use in Autonomous
      * @param hardwareMap
      * @param telemetry
+     * @param elapsedTime
      */
-    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
+    public void init(HardwareMap hardwareMap, Telemetry telemetry, ElapsedTime elapsedTime) {
         try {
             this.telemetry = telemetry;
 
@@ -53,6 +54,9 @@ public final class Hardware {
             vision.init(this);
             launcher.init(this);
             storage.init(this,true);
+            gyro.init(this);
+            this.elapsedTime = elapsedTime;
+
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());
         }
@@ -71,7 +75,8 @@ public final class Hardware {
         Telemetry telemetry,
         DriverControls driverControls1,
         DriverControls driverControls2,
-        double maxDistanceLaunch
+        double maxDistanceLaunch,
+        ElapsedTime elapsedTime
     ) {
         try {
             this.telemetry = telemetry;
