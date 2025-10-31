@@ -57,7 +57,7 @@ public class Aimbot {
 
             // detect if it is in the launching range
             if (range < maxLaunchDistanceCM) {
-            telemetry.addLine("\nLauncher Motor:");
+                telemetry.addLine("\nLauncher Motor:");
                 if(!stopPending){
                     hardware.launcher.setLauncherVelocity(calculateMotorVelocity(range));
                     if(stopRequested){
