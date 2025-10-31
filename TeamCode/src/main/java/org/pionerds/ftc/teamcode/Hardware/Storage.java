@@ -154,6 +154,7 @@ public class Storage {
         for(int i = 0; i<positions.length; i++){
             if(positions[i].equals(currentPos)){
                 pos = i;
+                break;
             }
         }
         if (colors[pos/2].name().equals(idealColor)) {
