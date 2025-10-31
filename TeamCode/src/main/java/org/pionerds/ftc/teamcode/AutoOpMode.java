@@ -4,6 +4,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
@@ -117,10 +118,8 @@ public class AutoOpMode extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                if(!follower.isBusy()) {
-                    follower.followPath(pathChain,false);
-                    setPathState(1);
-                }
+                follower.followPath(pathChain,false);
+                setPathState(1);
                 break;
 
             case 1:
@@ -131,8 +130,10 @@ public class AutoOpMode extends OpMode {
                 break;
 
             case 2:
+                if(!artifact.equals("gulp")) {
                     follower.followPath(pathChain2, true);
                     setPathState(3);
+                }
                 break;
 
             case 3:
