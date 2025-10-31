@@ -67,6 +67,7 @@ public class Aimbot {
                     // waited delay, so it's time to stop the motor!
                     hardware.launcher.stopLaunchers();
                     hardware.storage.contract();
+                    stopPending = false;
                 }
                 if(stopRequested && !stopPending){
                     stopPending = true;
