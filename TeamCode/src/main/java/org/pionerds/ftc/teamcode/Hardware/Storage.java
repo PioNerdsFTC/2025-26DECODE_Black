@@ -137,7 +137,7 @@ public class Storage {
         hardware.telemetry.addLine("\n========== STORAGE ==========");
         hardware.telemetry.addLine("CurrentPos: "+currentSusanPositionEnum.name());
         hardware.telemetry.addLine("TargetPos: "+bestBallPos(currentSusanPositionEnum, bestArtifact(ballsOnRamp).name(),inventory).name());
-        hardware.telemetry.addLine("BestArfifact: "+bestArtifact(ballsOnRamp).name());
+        hardware.telemetry.addLine("BestArtifact: "+bestArtifact(ballsOnRamp).name());
         hardware.telemetry.addLine("\nInventory:");
         hardware.telemetry.addLine(inventory[0].name());
         hardware.telemetry.addLine(inventory[1].name());
