@@ -129,14 +129,14 @@ public class Storage {
 
     public void automatedSusan(int ballsOnRamp){
 
-        moveSusanTo(bestBallPos(currentSusanPositionEnum, bestArtifact(ballsOnRamp).name(),inventory));
+        moveSusanTo(bestBallPos(currentSusanPositionEnum, bestArtifact(ballsOnRamp).name()));
 
     }
 
     public void printAlgorithmData(int ballsOnRamp){
         hardware.telemetry.addLine("\n========== STORAGE ==========");
         hardware.telemetry.addLine("CurrentPos: "+currentSusanPositionEnum.name());
-        hardware.telemetry.addLine("TargetPos: "+bestBallPos(currentSusanPositionEnum, bestArtifact(ballsOnRamp).name(),inventory).name());
+        hardware.telemetry.addLine("TargetPos: "+bestBallPos(currentSusanPositionEnum, bestArtifact(ballsOnRamp).name()).name());
         hardware.telemetry.addLine("BestArtifact: "+bestArtifact(ballsOnRamp).name());
         hardware.telemetry.addLine("\nInventory:");
         hardware.telemetry.addLine(inventory[0].name());
@@ -145,32 +145,34 @@ public class Storage {
         hardware.telemetry.addLine("\n=============================");
     }
 
-    public LazySusanPositions bestBallPos(LazySusanPositions currentPosEnum, String idealColor, Artifact[] colors) {
+    public LazySusanPositions bestBallPos(LazySusanPositions currentPosEnum, String idealColor) {
         String currentPos = currentPosEnum.name();
         String finalPos = "OUTPUT1";
         String[] positions =
-                {"INTAKE1","INTAKE2","INTAKE3","OUTPUT1","OUTPUT2","OUTPUT3"};
+                {"OUTPUT1","OUTPUT2","OUTPUT3"};
         int pos = 0;
-        for(int i = 0; i<positions.length; i++){
-            if(positions[i].equals(currentPos)){
+        for(int i = 0; i<3; i++){
+            if(positions[i].substring(positions[i].length()-1).equals(currentPos.substring(currentPos.length()-1))){
                 pos = i;
                 break;
             }
         }
-        if (colors[pos/2].name().equals(idealColor)) {
-            finalPos = positions[pos/2];
+        if (inventory[pos].name().equals(idealColor)) {
+            finalPos = positions[pos];
         }
-        else if (colors[((pos+4)%6)/2].name().equals(idealColor)) {
-            finalPos = positions[((pos+4)%6)/2];
+        // check two spaces to the right (wraps to left) | AKA CHECKS TO THE LEFT!
+        else if (inventory[((pos+2)%3)].name().equals(idealColor)) {
+            finalPos = positions[((pos+2)%3)];
         }
-        else if (colors[((pos+2)%6)/2].name().equals(idealColor)) {
-            finalPos = positions[((pos+2)%6)/2];
+        // check one space to the right (wraps to left)
+        else if (inventory[((pos+1)%3)].name().equals(idealColor)) {
+            finalPos = positions[((pos+1)%3)];
         }
         else {
-            String[] susanPosListString = new String[] {"OUTPUT1","OUTPUT2","OUTPUT3"};
             for(int i = 0; i<3; i++){
-                if(!inventory[i].equals(Artifact.EMPTY)) finalPos = susanPosListString[i];
+                if(!inventory[i].equals(Artifact.EMPTY)) finalPos = positions[i];
             }
+
         }
         for(LazySusanPositions susanPosReturn : LazySusanPositions.values()){
             if(susanPosReturn.name().equals(finalPos)){
