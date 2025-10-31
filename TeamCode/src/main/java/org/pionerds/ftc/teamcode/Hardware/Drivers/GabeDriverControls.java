@@ -13,6 +13,7 @@ public class GabeDriverControls extends DriverControls {
         float maxSpeed
     ) {
         super(driverName, maxSpeed);
+        this.setIsDriver(isDriver);
     }
 
     /**
