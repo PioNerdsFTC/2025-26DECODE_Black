@@ -61,7 +61,7 @@ public class Aimbot {
                     if(movementType.equals(AimbotMotorMovement.VELOCITY)){
                         hardware.launcher.setLauncherVelocity(calculateMotorVelocity(range));
                     } else {
-                        hardware.launcher.setLauncherVelocity(calculateMotorPower(range));
+                        hardware.launcher.setLauncherPower(calculateMotorPower(range));
                     }
 
                     if(stopRequested){

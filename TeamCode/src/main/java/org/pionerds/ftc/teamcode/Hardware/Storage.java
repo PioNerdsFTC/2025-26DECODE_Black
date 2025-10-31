@@ -160,11 +160,11 @@ public class Storage {
         if (inventory[pos].name().equals(idealColor)) {
             finalPos = positions[pos];
         }
-        // check two spaces to the right (wraps to left) | AKA CHECKS TO THE LEFT!
+        // Check one position counter-clockwise (two positions clockwise in circular array)
         else if (inventory[((pos+2)%3)].name().equals(idealColor)) {
             finalPos = positions[((pos+2)%3)];
         }
-        // check one space to the right (wraps to left)
+        // Check one position clockwise
         else if (inventory[((pos+1)%3)].name().equals(idealColor)) {
             finalPos = positions[((pos+1)%3)];
         }
