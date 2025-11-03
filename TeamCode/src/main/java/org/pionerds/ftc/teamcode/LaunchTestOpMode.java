@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasSusanControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
 @TeleOp(name = "LaunchTest")

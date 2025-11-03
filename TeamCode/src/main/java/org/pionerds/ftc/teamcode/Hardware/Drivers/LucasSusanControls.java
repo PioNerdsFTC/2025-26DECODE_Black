@@ -1,10 +1,9 @@
 package org.pionerds.ftc.teamcode.Hardware.Drivers;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
+
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
-import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
 public class LucasSusanControls extends DriverControls {
 

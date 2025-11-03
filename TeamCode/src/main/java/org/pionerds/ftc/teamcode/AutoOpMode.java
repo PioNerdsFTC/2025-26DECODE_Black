@@ -4,7 +4,6 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
@@ -26,7 +25,7 @@ public class AutoOpMode extends OpMode {
     private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot.
     private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
     private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
-    private String artifact = "gulp";
+    private Artifact[] artifactPattern = new Artifact[3];
     final Hardware hardware = new Hardware();
 
     private int pathState;
@@ -57,7 +56,7 @@ public class AutoOpMode extends OpMode {
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
-        telemetry.addData("pattern",artifact);
+        telemetry.addData("pattern", Arrays.toString(artifactPattern));
         telemetry.update();
     }
 
@@ -124,16 +123,14 @@ public class AutoOpMode extends OpMode {
 
             case 1:
                 if(!follower.isBusy()) {
-                    artifact = Arrays.toString(hardware.vision.getArtifactPattern());
+                    artifactPattern = hardware.vision.getArtifactPattern();
                     setPathState(2);
                 }
                 break;
 
             case 2:
-                if(!artifact.equals("gulp")) {
                     follower.followPath(pathChain2, true);
                     setPathState(3);
-                }
                 break;
 
             case 3:
