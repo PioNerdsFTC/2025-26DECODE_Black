@@ -82,7 +82,7 @@ public class Aimbot {
                     // waited delay, so it's time to stop the motor!
                     hardware.launcher.stopLaunchers();
                     hardware.storage.disableFeeder();
-                    hardware.storage.disableIntake(Artifact.EMPTY);
+                    hardware.storage.disableIntake(Artifact.EMPTY); // basically just clearing artifact from inventory when shot
                     stopPending = false;
                 } else if (!stopRequested) {
                     // If stop is no longer requested during the delay, reset stopPending
