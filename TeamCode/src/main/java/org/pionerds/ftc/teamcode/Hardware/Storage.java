@@ -33,7 +33,7 @@ public class Storage {
         DcMotorEx intake = this.hardware.mapping.getMotor("intake",40.0,DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
         DcMotorEx susan = this.hardware.mapping.getMotor("susanMotor", 40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
 
-        if (feeder != null && bumpUpFeeder != null && susan != null) {
+        if (feeder != null && bumpUpFeeder != null && susan != null && intake != null) {
             feederServo = feeder;
             bumpUpServo = bumpUpFeeder;
             susanMotorEx = susan;
@@ -48,6 +48,7 @@ public class Storage {
 
 
     public void enableFeeder() {
+        if (!isInitialized) return;
         feederServo.setPower(1);
         if(isSusanInPosition(1)) {
             bumpUpServo.setPosition(0.05);
@@ -57,6 +58,7 @@ public class Storage {
     }
 
     public void disableFeeder() {
+        if (!isInitialized) return;
         feederServo.setPower(0);
         bumpUpServo.setPosition(0);
     }
@@ -70,16 +72,31 @@ public class Storage {
     }
 
     public void enableIntake(){
+        if (!isInitialized) return;
         intakeMotorEx.setPower(0.7);
     }
 
     public void disableIntake(){
+        if (!isInitialized) return;
         intakeMotorEx.setPower(0);
     }
 
     public void disableIntake(Artifact artifact){
+        if (!isInitialized) return;
         intakeMotorEx.setPower(0);
-        inventory[Integer.parseInt(currentSusanPositionEnum.name().substring(currentSusanPositionEnum.name().length()-1))-1] = artifact;
+        // Extract position index from enum name (e.g., "INTAKE1" or "OUTPUT1" -> index 0)
+        try {
+            char lastChar = currentSusanPositionEnum.name().charAt(currentSusanPositionEnum.name().length() - 1);
+            if (Character.isDigit(lastChar)) {
+                int index = Character.getNumericValue(lastChar) - 1; // Convert 1-based to 0-based
+                if (index >= 0 && index < inventory.length) {
+                    inventory[index] = artifact;
+                }
+            }
+        } catch (Exception e) {
+            // Log error but don't crash
+            hardware.telemetry.addLine("Error updating inventory: " + e.getMessage());
+        }
     }
 
     public void moveSusanTo(LazySusanPositions susanPosition) {
@@ -162,10 +179,12 @@ public class Storage {
     }
 
     public void printAlgorithmData(int ballsOnRamp){
+        Artifact bestArtifact = bestArtifact(ballsOnRamp);
+        LazySusanPositions targetPos = bestBallPos(currentSusanPositionEnum, bestArtifact.name());
         hardware.telemetry.addLine("\n========== STORAGE ==========");
         hardware.telemetry.addLine("CurrentPos: "+currentSusanPositionEnum.name());
-        hardware.telemetry.addLine("TargetPos: "+bestBallPos(currentSusanPositionEnum, bestArtifact(ballsOnRamp).name()).name());
-        hardware.telemetry.addLine("BestArtifact: "+bestArtifact(ballsOnRamp).name());
+        hardware.telemetry.addLine("TargetPos: "+targetPos.name());
+        hardware.telemetry.addLine("BestArtifact: "+bestArtifact.name());
         hardware.telemetry.addLine("\nInventory:");
         hardware.telemetry.addLine(inventory[0].name());
         hardware.telemetry.addLine(inventory[1].name());
@@ -178,12 +197,20 @@ public class Storage {
         String finalPos = "OUTPUT1";
         String[] positions =
                 {"OUTPUT1","OUTPUT2","OUTPUT3"};
+        // Extract the numeric index from the position name (e.g., "OUTPUT1" -> 0, "INTAKE2" -> 1)
+        // This works because both INTAKE and OUTPUT positions use 1-based numbering
         int pos = 0;
-        for(int i = 0; i<3; i++){
-            if(positions[i].substring(positions[i].length()-1).equals(currentPos.substring(currentPos.length()-1))){
-                pos = i;
-                break;
+        try {
+            char lastChar = currentPos.charAt(currentPos.length() - 1);
+            if (Character.isDigit(lastChar)) {
+                pos = Character.getNumericValue(lastChar) - 1; // Convert 1-based to 0-based index
+                // Ensure pos is within valid range [0, 2]
+                if (pos < 0 || pos > 2) {
+                    pos = 0;
+                }
             }
+        } catch (Exception e) {
+            pos = 0; // Default to first position on error
         }
         if (inventory[pos].name().equals(idealColor)) {
             finalPos = positions[pos];
@@ -238,10 +265,12 @@ public class Storage {
     }
 
     public int getSusanCurrentTicks(){
+        if (!isInitialized) return 0;
         return susanMotorEx.getCurrentPosition();
     }
 
     public boolean isSusanInPosition(int ticks){
+        if (!isInitialized) return false;
         return (Math.abs(susanTargetTicks-getSusanCurrentTicks())<ticks);
     }
 

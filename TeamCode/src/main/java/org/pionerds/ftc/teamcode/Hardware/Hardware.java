@@ -54,7 +54,7 @@ public final class Hardware {
             launcher.init(this);
             storage.init(this);
             gyro.init(this);
-            this.elapsedTime = elapsedTime;
+            aimbot.setHardware(this);
 
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());
@@ -85,6 +85,7 @@ public final class Hardware {
             launcher.init(this);
             storage.init(this);
             gyro.init(this); //REMOVE WHEN AT COMPETITION I THINK
+            aimbot.setHardware(this);
 
             this.driverControls1 = driverControls1;
             this.driverControls2 = driverControls2;

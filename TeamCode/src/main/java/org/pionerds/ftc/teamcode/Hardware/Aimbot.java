@@ -9,8 +9,14 @@ public class Aimbot {
     private Hardware hardware;
     private Telemetry telemetry;
     private DriverControls controls;
-    private double maxLaunchDistanceCM;
+    private double maxLaunchDistanceCM = 100; // Default max distance
     private boolean aimbotEnabled = false;
+    
+    // Package-private method to set hardware reference from Hardware class
+    void setHardware(Hardware hardware) {
+        this.hardware = hardware;
+        this.telemetry = hardware.telemetry;
+    }
 
     public void init(Hardware hardware, Telemetry telemetry, DriverControls controls, double maxLaunchDistanceCM, AprilTagNames tagName, AimbotMotorMovement motorMoveType) {
         this.hardware = hardware;
@@ -47,6 +53,9 @@ public class Aimbot {
     boolean stopPending = false;
 
     public void tick(AprilTagNames tagName, AimbotMotorMovement movementType, boolean stopRequested){
+        // Safety checks
+        if (hardware == null || hardware.elapsedTime == null || telemetry == null) return;
+        
         if (hardware.elapsedTime.milliseconds() - lastTick > tickDelay) {
             lastTick = hardware.elapsedTime.milliseconds();
 
@@ -66,6 +75,8 @@ public class Aimbot {
 
                     if(stopRequested){
                         hardware.storage.enableFeeder();
+                        stopPending = true;
+                        lastStopTick = lastTick;
                     }
                 } else if (hardware.elapsedTime.milliseconds() - lastStopTick > stopDelay) {
                     // waited delay, so it's time to stop the motor!
@@ -73,11 +84,9 @@ public class Aimbot {
                     hardware.storage.disableFeeder();
                     hardware.storage.disableIntake(Artifact.EMPTY);
                     stopPending = false;
-                }
-                if(stopRequested && !stopPending){
-                    stopPending = true;
-                    lastStopTick = lastTick;
-
+                } else if (!stopRequested) {
+                    // If stop is no longer requested during the delay, reset stopPending
+                    stopPending = false;
                 }
             } else {
                 telemetry.addLine("Out of range!");
