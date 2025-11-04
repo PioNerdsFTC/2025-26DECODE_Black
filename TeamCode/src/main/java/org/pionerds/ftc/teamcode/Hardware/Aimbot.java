@@ -3,6 +3,7 @@ package org.pionerds.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
+import org.pionerds.ftc.teamcode.ScheduleTask;
 
 /**
  * Aimbot class manages the automated launcher system for scoring artifacts.
@@ -15,15 +16,14 @@ public class Aimbot {
     private Hardware hardware;
     private Telemetry telemetry;
     private DriverControls controls;
-    private double maxLaunchDistanceCM = 100; // Default max distance in centimeters for effective launching
-    private boolean aimbotEnabled = false;    // Tracks if aimbot system is active
-    
+    private double maxLaunchDistanceCM = 10000; // Default max distance in centimeters for effective launching
     // Timing variables for controlled launching sequence
     double tickDelay = 100.0;       // Minimum milliseconds between aimbot tick executions
     double stopDelay = 1000.0;      // Milliseconds to wait after feeding before stopping launcher
     double lastTick = 0.0;          // Timestamp of last tick execution
     double lastStopTick = 0.0;      // Timestamp when stop sequence began
     boolean stopPending = false;    // Tracks if we're in the delayed stop sequence
+    boolean isStopped = false;      // Tracks if aimbot is stopped
     
     // Package-private method to set hardware reference from Hardware class
     /**
@@ -40,17 +40,12 @@ public class Aimbot {
      * 
      * @param hardware Main hardware object
      * @param telemetry Telemetry for debugging output
-     * @param controls Driver controls object
-     * @param maxLaunchDistanceCM Maximum effective launch distance in centimeters
      * @param tagName AprilTag to track (not currently used, kept for future expansion)
      * @param motorMoveType Movement type (not currently used, kept for future expansion)
      */
-    public void init(Hardware hardware, Telemetry telemetry, DriverControls controls, double maxLaunchDistanceCM, AprilTagNames tagName, AimbotMotorMovement motorMoveType) {
+    public void init(Hardware hardware, Telemetry telemetry, AprilTagNames tagName, AimbotMotorMovement motorMoveType) {
         this.hardware = hardware;
         this.telemetry = telemetry;
-        this.controls = controls;
-        this.maxLaunchDistanceCM = maxLaunchDistanceCM;
-        aimbotEnabled = true;
     }
 
     /**
@@ -111,15 +106,24 @@ public class Aimbot {
      * @param stopRequested True when user wants to fire an artifact
      */
     public void tick(AprilTagNames tagName, AimbotMotorMovement movementType, boolean stopRequested){
+        // Save tons of processing power
+        if(isStopped && stopRequested) return;
+        if(stopPending && !stopRequested) return;
+
         // Safety checks - ensure all required objects are initialized
         if (hardware == null || hardware.elapsedTime == null || telemetry == null) return;
-        
+
         // Rate limiting: only execute once per tickDelay milliseconds
         if (hardware.elapsedTime.milliseconds() - lastTick > tickDelay) {
+            telemetry.addLine("\n\nTICKING AIMBOT\n");
             lastTick = hardware.elapsedTime.milliseconds();
 
             // Get the target AprilTag data from vision system
             PioNerdAprilTag pioTag = hardware.vision.getPioNerdAprilTag(tagName);
+            if (pioTag == null) {
+                telemetry.addLine("TAG == NULL");
+                return;
+            }
             double range = pioTag.range();
 
             // Only operate if robot is within effective launch range
@@ -136,19 +140,24 @@ public class Aimbot {
                     }
 
                     // STATE 2: Stop requested - begin firing sequence
-                    if(stopRequested){
+                    if(stopRequested && !stopPending && !isStopped){
                         hardware.storage.enableFeeder();  // Start feeding artifact into launcher
                         stopPending = true;               // Enter stop pending state
                         lastStopTick = lastTick;         // Record when we started the stop sequence
+                        ScheduleTask.add(()->{
+                            this.tick(AprilTagNames.BlueTarget,AimbotMotorMovement.VELOCITY,true);
+                                },
+                                hardware.elapsedTime.milliseconds()+5500);
                     }
                     
                 // STATE 3: Stop pending - waiting for artifact to feed before stopping
-                } else if (hardware.elapsedTime.milliseconds() - lastStopTick > stopDelay) {
+                } else if (!isStopped && (hardware.elapsedTime.milliseconds() - lastStopTick > stopDelay)) {
                     // Delay has elapsed, artifact should be launched - now stop everything
                     hardware.launcher.stopLaunchers();
                     hardware.storage.disableFeeder();
                     hardware.storage.disableIntake(Artifact.EMPTY); // Clear artifact from inventory slot
                     stopPending = false;  // Reset state for next firing sequence
+                    isStopped = true; // Tells aimbot it is stopped and stops it from being stopped repeatedly
                     
                 // OPTIONAL: Cancel stop sequence if stop is no longer requested during delay
                 } else if (!stopRequested) {
@@ -160,6 +169,10 @@ public class Aimbot {
             }
         }
 
+    }
+
+    public void allowStopping(){
+        if(!stopPending) isStopped = false;
     }
 
 }

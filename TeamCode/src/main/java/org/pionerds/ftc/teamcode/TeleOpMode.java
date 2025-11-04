@@ -86,6 +86,8 @@ public class TeleOpMode extends LinearOpMode {
             // Display distance to target AprilTag for aiming assistance
             hardware.vision.printTagDistanceToTelemetry(AprilTagNames.BlueTarget);
 
+            ScheduleTask.runTasks();
+
             // Update telemetry display on Driver Station
             telemetry.update();
 

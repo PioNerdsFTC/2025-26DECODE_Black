@@ -57,6 +57,7 @@ public class LucasSusanControls extends DriverControls {
         
         // D-pad UP: Position susan and prepare to launch (but don't fire yet)
         if (gamepad.dpad_up && !gamepad.dpad_down) {
+            hardware.telemetry.addLine("Controller: Starting Aimbot");
             // Only trigger susan movement once per button press
             if(!movingSusan){
                 hardware.storage.automatedSusan(ballsOnRamp);  // Move susan to optimal position
@@ -67,6 +68,7 @@ public class LucasSusanControls extends DriverControls {
             
         // D-pad DOWN: Fire the artifact and increment ball counter
         } else if (!gamepad.dpad_up && gamepad.dpad_down) {
+            hardware.telemetry.addLine("Controller: Stopping Aimbot");
             // Trigger aimbot with stopRequested=true to initiate firing sequence
             hardware.aimbot.tick(AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY, true);
             
@@ -82,6 +84,7 @@ public class LucasSusanControls extends DriverControls {
             movingSusan = false;
             stoppingAimbot = false;
             ballCountPressed = false;
+            hardware.aimbot.allowStopping();
         }
 
         // === MANUAL BALL COUNTER ADJUSTMENT ===
@@ -89,6 +92,7 @@ public class LucasSusanControls extends DriverControls {
         
         // D-pad RIGHT: Increment counter
         if(gamepad.dpad_right && !ballCountPressed) {
+            hardware.telemetry.addLine("Controller: Increasing BallCount");
             if(ballsOnRamp==9){
                 ballsOnRamp = 0;  // Wrap to 0 after 9
             } else {
@@ -98,6 +102,7 @@ public class LucasSusanControls extends DriverControls {
             
         // D-pad LEFT: Decrement counter
         } else if(gamepad.dpad_left && !ballCountPressed){
+            hardware.telemetry.addLine("Controller: Decrease BallCount");
             if(ballsOnRamp==0) {
                 ballsOnRamp = 9;  // Wrap to 9 from 0
             } else {
@@ -130,6 +135,7 @@ public class LucasSusanControls extends DriverControls {
         // === TELEMETRY OUTPUT ===
         // Display current algorithm state for debugging
         hardware.storage.printAlgorithmData(ballsOnRamp);
+        hardware.vision.printTagDistanceToTelemetry(AprilTagNames.BlueTarget);
 
     }
 }

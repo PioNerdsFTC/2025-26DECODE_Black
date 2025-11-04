@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
+import org.pionerds.ftc.teamcode.ScheduleTask;
 import org.pionerds.ftc.teamcode.Utils.Environment;
 
 /**
@@ -54,6 +55,7 @@ public final class Hardware {
             launcher.init(this);
             storage.init(this);
             gyro.init(this);
+            aimbot.init(this,telemetry,AprilTagNames.BlueTarget,AimbotMotorMovement.VELOCITY);
             aimbot.setHardware(this);
 
         } catch (Exception e) {
@@ -98,7 +100,7 @@ public final class Hardware {
 
     /** Runs for each iteration of the OpMode, may or may not be necessary */
     public void tick(Gamepad gamepad1, Gamepad gamepad2) {
-        try {
+        //try {
             driverControls1.tickControls(gamepad1, this);
             driverControls2.tickControls(gamepad2, this);
 
@@ -106,18 +108,19 @@ public final class Hardware {
             telemetry.addLine("Gyro:");
             telemetry.addLine("Yaw: " + angles.getYaw());
             // this.launcher.launcherButton(gamepad1);
-        } catch (Exception e) {
-            this.telemetry.addLine(e.getMessage());
-            telemetry.update();
+        //} catch (Exception e) {
+        //    this.telemetry.addLine(e.getMessage());
+        //    telemetry.update();
             //if (!Environment.competing) {
             //    telemetry.update();
             //    this.continueRunning = false;
             //}
-        }
+        //}
     }
 
     public void addElapsedTime(ElapsedTime elapsedTime){
         this.elapsedTime = elapsedTime;
+        ScheduleTask.initTime(elapsedTime);
     }
 
     public void stop() {
