@@ -162,10 +162,12 @@ public class Storage {
     }
 
     public void printAlgorithmData(int ballsOnRamp){
+        Artifact bestArtifact = bestArtifact(ballsOnRamp);
+        LazySusanPositions targetPos = bestBallPos(currentSusanPositionEnum, bestArtifact.name());
         hardware.telemetry.addLine("\n========== STORAGE ==========");
         hardware.telemetry.addLine("CurrentPos: "+currentSusanPositionEnum.name());
-        hardware.telemetry.addLine("TargetPos: "+bestBallPos(currentSusanPositionEnum, bestArtifact(ballsOnRamp).name()).name());
-        hardware.telemetry.addLine("BestArtifact: "+bestArtifact(ballsOnRamp).name());
+        hardware.telemetry.addLine("TargetPos: "+targetPos.name());
+        hardware.telemetry.addLine("BestArtifact: "+bestArtifact.name());
         hardware.telemetry.addLine("\nInventory:");
         hardware.telemetry.addLine(inventory[0].name());
         hardware.telemetry.addLine(inventory[1].name());
@@ -178,12 +180,20 @@ public class Storage {
         String finalPos = "OUTPUT1";
         String[] positions =
                 {"OUTPUT1","OUTPUT2","OUTPUT3"};
+        // Extract the numeric index from the position name (e.g., "OUTPUT1" -> 0, "INTAKE2" -> 1)
+        // This works because both INTAKE and OUTPUT positions use 1-based numbering
         int pos = 0;
-        for(int i = 0; i<3; i++){
-            if(positions[i].substring(positions[i].length()-1).equals(currentPos.substring(currentPos.length()-1))){
-                pos = i;
-                break;
+        try {
+            char lastChar = currentPos.charAt(currentPos.length() - 1);
+            if (Character.isDigit(lastChar)) {
+                pos = Character.getNumericValue(lastChar) - 1; // Convert 1-based to 0-based index
+                // Ensure pos is within valid range [0, 2]
+                if (pos < 0 || pos > 2) {
+                    pos = 0;
+                }
             }
+        } catch (Exception e) {
+            pos = 0; // Default to first position on error
         }
         if (inventory[pos].name().equals(idealColor)) {
             finalPos = positions[pos];

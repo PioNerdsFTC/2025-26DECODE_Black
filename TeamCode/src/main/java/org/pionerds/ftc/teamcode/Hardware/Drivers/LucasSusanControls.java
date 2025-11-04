@@ -50,22 +50,23 @@ public class LucasSusanControls extends DriverControls {
             ballCountPressed = false;
         }
 
-        if(!ballCountPressed){
-            if(gamepad.dpad_right) {
-                if(ballsOnRamp==9){
-                    ballsOnRamp = 0;
-                } else {
-                    ballsOnRamp+=1;
-                }
+        // Handle manual ball count adjustment with debouncing
+        if(gamepad.dpad_right && !ballCountPressed) {
+            if(ballsOnRamp==9){
+                ballsOnRamp = 0;
+            } else {
+                ballsOnRamp+=1;
             }
-            if(gamepad.dpad_left){
-                if(ballsOnRamp==0) {
-                    ballsOnRamp = 9;
-                } else {
-                    ballsOnRamp-=1;
-                }
+            ballCountPressed = true;
+        } else if(gamepad.dpad_left && !ballCountPressed){
+            if(ballsOnRamp==0) {
+                ballsOnRamp = 9;
+            } else {
+                ballsOnRamp-=1;
             }
-        } else if(!(gamepad.dpad_right || gamepad.dpad_left)) {
+            ballCountPressed = true;
+        } else if(!(gamepad.dpad_right || gamepad.dpad_left || gamepad.dpad_down)) {
+            // Reset the pressed flag when no directional buttons are pressed
             ballCountPressed = false;
         }
 

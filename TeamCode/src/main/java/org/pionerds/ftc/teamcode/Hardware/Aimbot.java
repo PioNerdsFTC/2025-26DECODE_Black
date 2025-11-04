@@ -66,6 +66,8 @@ public class Aimbot {
 
                     if(stopRequested){
                         hardware.storage.enableFeeder();
+                        stopPending = true;
+                        lastStopTick = lastTick;
                     }
                 } else if (hardware.elapsedTime.milliseconds() - lastStopTick > stopDelay) {
                     // waited delay, so it's time to stop the motor!
@@ -73,11 +75,9 @@ public class Aimbot {
                     hardware.storage.disableFeeder();
                     hardware.storage.disableIntake(Artifact.EMPTY);
                     stopPending = false;
-                }
-                if(stopRequested && !stopPending){
-                    stopPending = true;
-                    lastStopTick = lastTick;
-
+                } else if (!stopRequested) {
+                    // If stop is no longer requested during the delay, reset stopPending
+                    stopPending = false;
                 }
             } else {
                 telemetry.addLine("Out of range!");
