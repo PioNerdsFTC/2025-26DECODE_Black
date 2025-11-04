@@ -9,8 +9,14 @@ public class Aimbot {
     private Hardware hardware;
     private Telemetry telemetry;
     private DriverControls controls;
-    private double maxLaunchDistanceCM;
+    private double maxLaunchDistanceCM = 100; // Default max distance
     private boolean aimbotEnabled = false;
+    
+    // Package-private method to set hardware reference from Hardware class
+    void setHardware(Hardware hardware) {
+        this.hardware = hardware;
+        this.telemetry = hardware.telemetry;
+    }
 
     public void init(Hardware hardware, Telemetry telemetry, DriverControls controls, double maxLaunchDistanceCM, AprilTagNames tagName, AimbotMotorMovement motorMoveType) {
         this.hardware = hardware;
@@ -47,6 +53,9 @@ public class Aimbot {
     boolean stopPending = false;
 
     public void tick(AprilTagNames tagName, AimbotMotorMovement movementType, boolean stopRequested){
+        // Safety checks
+        if (hardware == null || hardware.elapsedTime == null || telemetry == null) return;
+        
         if (hardware.elapsedTime.milliseconds() - lastTick > tickDelay) {
             lastTick = hardware.elapsedTime.milliseconds();
 

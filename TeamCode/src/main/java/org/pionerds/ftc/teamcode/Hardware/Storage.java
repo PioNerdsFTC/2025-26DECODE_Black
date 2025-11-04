@@ -33,7 +33,7 @@ public class Storage {
         DcMotorEx intake = this.hardware.mapping.getMotor("intake",40.0,DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
         DcMotorEx susan = this.hardware.mapping.getMotor("susanMotor", 40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
 
-        if (feeder != null && bumpUpFeeder != null && susan != null) {
+        if (feeder != null && bumpUpFeeder != null && susan != null && intake != null) {
             feederServo = feeder;
             bumpUpServo = bumpUpFeeder;
             susanMotorEx = susan;
@@ -48,6 +48,7 @@ public class Storage {
 
 
     public void enableFeeder() {
+        if (!isInitialized) return;
         feederServo.setPower(1);
         if(isSusanInPosition(1)) {
             bumpUpServo.setPosition(0.05);
@@ -57,6 +58,7 @@ public class Storage {
     }
 
     public void disableFeeder() {
+        if (!isInitialized) return;
         feederServo.setPower(0);
         bumpUpServo.setPosition(0);
     }
@@ -70,16 +72,31 @@ public class Storage {
     }
 
     public void enableIntake(){
+        if (!isInitialized) return;
         intakeMotorEx.setPower(0.7);
     }
 
     public void disableIntake(){
+        if (!isInitialized) return;
         intakeMotorEx.setPower(0);
     }
 
     public void disableIntake(Artifact artifact){
+        if (!isInitialized) return;
         intakeMotorEx.setPower(0);
-        inventory[Integer.parseInt(currentSusanPositionEnum.name().substring(currentSusanPositionEnum.name().length()-1))-1] = artifact;
+        // Extract position index from enum name (e.g., "INTAKE1" or "OUTPUT1" -> index 0)
+        try {
+            char lastChar = currentSusanPositionEnum.name().charAt(currentSusanPositionEnum.name().length() - 1);
+            if (Character.isDigit(lastChar)) {
+                int index = Character.getNumericValue(lastChar) - 1; // Convert 1-based to 0-based
+                if (index >= 0 && index < inventory.length) {
+                    inventory[index] = artifact;
+                }
+            }
+        } catch (Exception e) {
+            // Log error but don't crash
+            hardware.telemetry.addLine("Error updating inventory: " + e.getMessage());
+        }
     }
 
     public void moveSusanTo(LazySusanPositions susanPosition) {
@@ -248,10 +265,12 @@ public class Storage {
     }
 
     public int getSusanCurrentTicks(){
+        if (!isInitialized) return 0;
         return susanMotorEx.getCurrentPosition();
     }
 
     public boolean isSusanInPosition(int ticks){
+        if (!isInitialized) return false;
         return (Math.abs(susanTargetTicks-getSusanCurrentTicks())<ticks);
     }
 
