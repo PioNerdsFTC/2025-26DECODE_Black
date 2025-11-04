@@ -22,7 +22,7 @@ public class AutoOpMode extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
 
-    private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot.
+    private final Pose startPose = new Pose(56, Constants.localizerConstants.robot_Width/2, Math.toRadians(90)); // Start Pose of our robot.
     private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
     private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
     private Artifact[] artifactPattern = new Artifact[3];
@@ -31,8 +31,7 @@ public class AutoOpMode extends OpMode {
     private int pathState;
 
     public PathBuilder pathBuilder;
-    public static PathChain pathChain;
-    public static PathChain pathChain2;
+    public static PathChain startToScoreChain;
 
     /**
      * These change the states of the paths and actions. It will also reset the timers of the individual switches
@@ -74,21 +73,12 @@ public class AutoOpMode extends OpMode {
         follower.setStartingPose(startPose);
 
         hardware.init(hardwareMap, telemetry, hardware.elapsedTime);
-        pathChain = pathBuilder
-            .addPath(
-                new BezierLine(startPose, scanPose)
-            )
+        startToScoreChain = pathBuilder
+            .addPath(new BezierLine(startPose, scanPose))
             .setConstantHeadingInterpolation(Math.toRadians(90))
-            .build();
-
-        pathChain2 = pathBuilder
-            .addPath(
-                new BezierCurve(scanPose, scorePose)
-            )
-            .setLinearHeadingInterpolation(
-                Math.toRadians(90),
-                Math.toRadians(144.046)
-            )
+            .addPoseCallback(scanPose, ()->{hardware.vision.getArtifactPattern();}, 0.5)
+            .addPath(new BezierCurve(scanPose, scorePose))
+            .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(144.046))
             .build();
     }
 
@@ -116,26 +106,20 @@ public class AutoOpMode extends OpMode {
 
     public void autonomousPathUpdate() {
         switch (pathState) {
+
             case 0:
-                follower.followPath(pathChain,false);
+                follower.followPath(startToScoreChain,false);
                 setPathState(1);
                 break;
 
             case 1:
                 if(!follower.isBusy()) {
-                    artifactPattern = hardware.vision.getArtifactPattern();
                     setPathState(2);
                 }
                 break;
 
-            case 2:
-                    follower.followPath(pathChain2, true);
-                    setPathState(3);
-                break;
-
-            case 3:
+            case 87:
                 if(!follower.isBusy()) {
-                    /* Set the state to a Case we won't use or define, so it just stops running an new paths */
                     setPathState(-1);
                 }
                 break;
