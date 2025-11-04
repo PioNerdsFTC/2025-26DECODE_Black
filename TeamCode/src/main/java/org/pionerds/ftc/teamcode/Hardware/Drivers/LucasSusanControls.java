@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.pionerds.ftc.teamcode.Hardware.AimbotMotorMovement;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
+import org.pionerds.ftc.teamcode.Hardware.Artifact;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
@@ -18,39 +19,25 @@ public class LucasSusanControls extends DriverControls {
         super(driverName, maxSpeed);
     }
 
-    /**
-     * Ticked every loop in the TeleOp.
-     * @param gamepad
-     * @param hardware
-     *
-     * @Controls:
-     * Left_Bumper - 0.5 Speed Modifier <br>
-     * A_Button - Feed Intake <br>
-     * !(A_Button) - Contract Intake <br>
-     * X_Button - Send PioNerdTag distance to Aimbot <br>
-     * Right_Trigger - Set Launcher Velocity * 400 (@Overrides X_Button) <br>
-     * Left_Stick - Sends Positional Request to Drivetrain <br>
-     * Right_Stick.x - Sends Rotational Request to Drivetrain
-     *
-     **/
-
     boolean reset_Gyro_Pressed = false;
     boolean movingSusan = false;
     boolean stoppingAimbot = false;
     boolean ballCountPressed = false;
     int ballsOnRamp = 0;
 
+    boolean changingIntakeState = false;
+
 
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
-        hardware.telemetry.addLine("\nBalls On Ramp: "+ballsOnRamp);
-        if (gamepad.a && !gamepad.b) {
+
+        if (gamepad.dpad_up && !gamepad.dpad_down) {
             if(!movingSusan){
                 hardware.storage.automatedSusan(ballsOnRamp);
             }
             hardware.aimbot.tick(AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY, false);
             movingSusan = true;
-        } else if (gamepad.a && gamepad.b) {
+        } else if (!gamepad.dpad_up && gamepad.dpad_down) {
             hardware.aimbot.tick(AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY, true);
             if(!ballCountPressed){
                 ballsOnRamp++;
@@ -61,6 +48,36 @@ public class LucasSusanControls extends DriverControls {
             movingSusan = false;
             stoppingAimbot = false;
             ballCountPressed = false;
+        }
+
+        if(!ballCountPressed){
+            if(gamepad.dpad_right) {
+                if(ballsOnRamp==9){
+                    ballsOnRamp = 0;
+                } else {
+                    ballsOnRamp+=1;
+                }
+            }
+            if(gamepad.dpad_left){
+                if(ballsOnRamp==0) {
+                    ballsOnRamp = 9;
+                } else {
+                    ballsOnRamp-=1;
+                }
+            }
+        } else if(!(gamepad.dpad_right || gamepad.dpad_left)) {
+            ballCountPressed = false;
+        }
+
+        if(!changingIntakeState){
+            if(gamepad.y) hardware.storage.disableIntake(Artifact.EMPTY);
+            if(gamepad.x) hardware.storage.disableIntake(Artifact.PURPLE);
+            if(gamepad.a) hardware.storage.disableIntake(Artifact.GREEN);
+            if(gamepad.b) hardware.storage.enableIntake();
+
+            changingIntakeState = true;
+        } else if(!(gamepad.y || gamepad.x || gamepad.a || gamepad.b)) {
+            changingIntakeState = false;
         }
 
         hardware.storage.printAlgorithmData(ballsOnRamp);

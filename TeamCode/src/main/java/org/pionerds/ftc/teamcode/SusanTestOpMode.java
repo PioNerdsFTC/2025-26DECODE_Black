@@ -7,27 +7,21 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasSusanControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
-@TeleOp(name = "TeleOp")
-public class TeleOpMode extends LinearOpMode {
+@TeleOp(name = "SusanTest")
+public class SusanTestOpMode extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
     final DriverControls driverControls1 = new LucasDriverControls(
-        "Lucas Schwietz",
-        true,
-        1.0f
-    );
-    final DriverControls driverControls2 = new LucasSusanControls(
-        "Lucas S",
-        false,
-        0.7f
+            "Lucas Schwietz",
+            true,
+            1.0f
     );
 
     @Override
     public void runOpMode() throws InterruptedException {
-        hardware.init(hardwareMap, telemetry, driverControls1, driverControls2);
+        hardware.init(hardwareMap, telemetry);
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
@@ -35,27 +29,43 @@ public class TeleOpMode extends LinearOpMode {
         ElapsedTime elapsedTime = new ElapsedTime();
         hardware.addElapsedTime(elapsedTime);
 
-        hardware.storage.resetEncoderSusan();
+        //hardware.storage.resetEncoderSusan();
 
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
+        boolean changingPower = false;
+        double currentPower = 0.00;
 
         // Main loop!
         while (opModeIsActive()) {
 
-            hardware.tick(gamepad1,gamepad2);
-            //hardware.storage.testRotateSusan(0.5);
 
-            //hardware.storage.enableFeeder();
-
-            telemetry.addLine("\nDriver: " + driverControls1.getDriverName());
-            telemetry.addLine("Speed X: " + driverControls1.getSpeedX());
-            telemetry.addLine("Speed Y: " + driverControls1.getSpeedY());
+            //hardware.tick(gamepad1,gamepad2);
+            //hardware.storage.testRotateSusan(1);
 
             //telemetry.addLine("susanPosition: "+hardware.storage.susanMotorEx.getCurrentPosition());
 
-            hardware.vision.printTagDistanceToTelemetry(AprilTagNames.BlueTarget);
+            //hardware.vision.printTagDistanceToTelemetry(AprilTagNames.BlueTarget);
 
+            //driverControls1.tickControls(gamepad1,hardware);
+
+            if(!changingPower){
+                if(gamepad1.dpad_up){
+                    currentPower += 0.1;
+                    changingPower = true;
+                } else if (gamepad1.dpad_down) {
+                    currentPower -= 0.1;
+                    changingPower = true;
+                }
+            } else if (!(gamepad1.dpad_up || gamepad1.dpad_down)) {
+                changingPower = false;
+            }
+            if(gamepad1.b){
+                currentPower = 0;
+            }
+
+            telemetry.addLine("\nPower: "+currentPower);
+            hardware.storage.testRotateSusan(currentPower);
 
             telemetry.update();
 

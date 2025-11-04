@@ -1,5 +1,6 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -9,8 +10,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Storage {
     private Hardware hardware;
 
-    private Servo feederServo;
+    private CRServo feederServo;
     private DcMotorEx susanMotorEx;
+    private DcMotorEx intakeMotorEx;
+    private Servo bumpUpServo;
     private int susanTargetTicks = 0;
     private final int susanVelocityRequest = 300;
     private final int gearRatio = 3; // equals (90/30)
@@ -25,13 +28,17 @@ public class Storage {
         this.hardware = hardware;
 
 
-        Servo feeder = this.hardware.mapping.getServoMotor("feeder");
+        CRServo feeder = this.hardware.mapping.getContinuousServo("feeder", DcMotorSimple.Direction.FORWARD);
+        Servo bumpUpFeeder = this.hardware.mapping.getServoMotor("bumpUp");
+        DcMotorEx intake = this.hardware.mapping.getMotor("intake",40.0,DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
         DcMotorEx susan = this.hardware.mapping.getMotor("susanMotor", 40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
 
-        if (feeder != null && susan != null) {
+        if (feeder != null && bumpUpFeeder != null && susan != null) {
             feederServo = feeder;
+            bumpUpServo = bumpUpFeeder;
             susanMotorEx = susan;
             susanMotorEx.setTargetPositionTolerance(1);
+            intakeMotorEx = intake;
             isInitialized = true;
         } else {
             hardware.telemetry.clearAll();
@@ -40,18 +47,39 @@ public class Storage {
     }
 
 
-    public void feed() {
-        if (!isInitialized) return;
-        double pos = 1;
-
-        feederServo.setPosition(pos);
+    public void enableFeeder() {
+        feederServo.setPower(1);
+        if(isSusanInPosition(1)) {
+            bumpUpServo.setPosition(0.05);
+        } else {
+            hardware.telemetry.addLine("Susan Not In Position.");
+        }
     }
 
-    public void contract() {
-        if (!isInitialized) return;
-        double pos = 0;
+    public void disableFeeder() {
+        feederServo.setPower(0);
+        bumpUpServo.setPosition(0);
+    }
 
-        feederServo.setPosition(pos);
+    public Artifact[] getInventory(){
+        return inventory;
+    }
+
+    public void setArtifact(Artifact artifact, int position){
+        inventory[position] = artifact;
+    }
+
+    public void enableIntake(){
+        intakeMotorEx.setPower(0.7);
+    }
+
+    public void disableIntake(){
+        intakeMotorEx.setPower(0);
+    }
+
+    public void disableIntake(Artifact artifact){
+        intakeMotorEx.setPower(0);
+        inventory[Integer.parseInt(currentSusanPositionEnum.name().substring(currentSusanPositionEnum.name().length()-1))-1] = artifact;
     }
 
     public void moveSusanTo(LazySusanPositions susanPosition) {
@@ -211,6 +239,10 @@ public class Storage {
 
     public int getSusanCurrentTicks(){
         return susanMotorEx.getCurrentPosition();
+    }
+
+    public boolean isSusanInPosition(int ticks){
+        return (Math.abs(susanTargetTicks-getSusanCurrentTicks())<ticks);
     }
 
 }

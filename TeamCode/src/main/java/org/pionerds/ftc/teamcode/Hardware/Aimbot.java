@@ -65,17 +65,19 @@ public class Aimbot {
                     }
 
                     if(stopRequested){
-                        hardware.storage.feed();
+                        hardware.storage.enableFeeder();
                     }
                 } else if (hardware.elapsedTime.milliseconds() - lastStopTick > stopDelay) {
                     // waited delay, so it's time to stop the motor!
                     hardware.launcher.stopLaunchers();
-                    hardware.storage.contract();
+                    hardware.storage.disableFeeder();
+                    hardware.storage.disableIntake(Artifact.EMPTY);
                     stopPending = false;
                 }
                 if(stopRequested && !stopPending){
                     stopPending = true;
                     lastStopTick = lastTick;
+
                 }
             } else {
                 telemetry.addLine("Out of range!");

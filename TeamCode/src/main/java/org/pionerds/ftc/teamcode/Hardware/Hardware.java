@@ -42,9 +42,8 @@ public final class Hardware {
      * Use in Autonomous
      * @param hardwareMap
      * @param telemetry
-     * @param elapsedTime
      */
-    public void init(HardwareMap hardwareMap, Telemetry telemetry, ElapsedTime elapsedTime) {
+    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         try {
             this.telemetry = telemetry;
 
@@ -53,12 +52,13 @@ public final class Hardware {
             drivetrain.init(this, telemetry);
             vision.init(this);
             launcher.init(this);
-            storage.init(this,true);
+            storage.init(this);
             gyro.init(this);
             this.elapsedTime = elapsedTime;
 
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());
+            telemetry.update();
         }
     }
 
@@ -74,9 +74,7 @@ public final class Hardware {
         HardwareMap hardwareMap,
         Telemetry telemetry,
         DriverControls driverControls1,
-        DriverControls driverControls2,
-        double maxDistanceLaunch,
-        ElapsedTime elapsedTime
+        DriverControls driverControls2
     ) {
         try {
             this.telemetry = telemetry;
@@ -93,6 +91,7 @@ public final class Hardware {
 
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());
+            telemetry.update();
         }
     }
 
@@ -108,10 +107,11 @@ public final class Hardware {
             // this.launcher.launcherButton(gamepad1);
         } catch (Exception e) {
             this.telemetry.addLine(e.getMessage());
-            if (!Environment.competing) {
-                telemetry.update();
-                this.continueRunning = false;
-            }
+            telemetry.update();
+            //if (!Environment.competing) {
+            //    telemetry.update();
+            //    this.continueRunning = false;
+            //}
         }
     }
 
