@@ -1,5 +1,6 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -33,25 +34,30 @@ public class Launcher {
         launcher1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
 
+    /**
+     * Set launcher power to
+     * @param power power to set launcher to
+     */
+
     public void setLauncherPower(double power) {
         launcher0.setPower(power);
         launcher1.setPower(power);
     }
 
+    /**
+     * Set launcher velocity to
+     * @param velocity velocity to set launcher to
+     */
     public void setLauncherVelocity(double velocity) {
         launcher0.setVelocity(velocity);
         launcher1.setVelocity(velocity);
     }
 
-    public void launcherButton(Gamepad operatorGamepad) {
-        if (operatorGamepad.y) {
-            setLauncherPower(1);
-        } else {
-            setLauncherPower(0);
-        }
-    }
 
-    public void stopLaunchers(){
+    /**
+     * Stops the launchers
+     */
+    public void stopLaunchers() {
         launcher0.setPower(0);
         launcher1.setPower(0);
     }

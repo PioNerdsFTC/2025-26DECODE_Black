@@ -5,15 +5,16 @@ import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
-public class LucasDriverControls extends DriverControls {
+public class GabeDriverControls extends DriverControls {
 
-    public LucasDriverControls(String driverName, boolean isDriver, float maxSpeed) {
+    public GabeDriverControls(
+        String driverName,
+        boolean isDriver,
+        float maxSpeed
+    ) {
         super(driverName, maxSpeed);
         this.setIsDriver(isDriver);
     }
-
-    boolean resetGyroPressed = false;
-    boolean start_pressed_already = false;
 
     /**
      * Ticked every loop in the TeleOp.
@@ -31,6 +32,8 @@ public class LucasDriverControls extends DriverControls {
      *
      **/
 
+    boolean reset_Gyro_Pressed = false;
+
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
         // Resets
@@ -38,8 +41,12 @@ public class LucasDriverControls extends DriverControls {
 
         // Left Bumper
         if (gamepad.left_bumper) {
-            setSpeedMultiplier(0.5f);
-            setRotationMultiplier(0.5f);
+            //  setSpeedMultiplier(0.5f);
+            setRotationSpeed(0.5f);
+        } else if (gamepad.right_bumper) {
+            setRotationSpeed(-0.5f);
+        } else if (!gamepad.right_bumper && !gamepad.left_bumper) {
+            setRotationSpeed(0);
         }
 
         // A-Button
@@ -52,11 +59,13 @@ public class LucasDriverControls extends DriverControls {
         PioNerdAprilTag blueTarget = hardware.vision.getPioNerdAprilTag(
             AprilTagNames.BlueTarget
         );
-
-        // Set Rotation Speed for Drivetrain
-        setRotationSpeed(
-            gamepad.right_stick_x
-        );
+        if (gamepad.x && !(blueTarget == null) && gamepad.right_trigger > 0) {
+            // Send the distance to the aimbot class
+            hardware.launcher.setLauncherVelocity(blueTarget.range(2));
+        }
+        if (gamepad.right_trigger > 0) {
+            hardware.launcher.setLauncherVelocity(gamepad.right_trigger * 400);
+        }
 
         // Set Speeds to the value or the capped value for the driver
         if (gamepad.left_stick_x < 0) {
@@ -79,16 +88,15 @@ public class LucasDriverControls extends DriverControls {
             );
         }
 
-        if (!resetGyroPressed && gamepad.dpad_up && gamepad.dpad_right) {
-            resetGyroPressed = true;
+        if (!reset_Gyro_Pressed && gamepad.dpad_up && gamepad.dpad_right) {
+            reset_Gyro_Pressed = true;
             hardware.gyro.resetYaw();
-
         } else {
-            resetGyroPressed = false;
+            reset_Gyro_Pressed = false;
         }
 
         if (getIsDriver()) {
-            hardware.drivetrain.driveWithControls(this, false, false);
+            hardware.drivetrain.driveWithControls(this, true, true);
         }
     }
 }

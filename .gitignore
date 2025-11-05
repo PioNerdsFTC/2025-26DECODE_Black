@@ -6,6 +6,15 @@
 
 !libs/*.aar
 
+**/org.eclipse.*
+**/.project
+**/.classpath
+**/.settings
+
+.vscode
+
+.project
+
 # Files for the ART/Dalvik VM
 *.dex
 
