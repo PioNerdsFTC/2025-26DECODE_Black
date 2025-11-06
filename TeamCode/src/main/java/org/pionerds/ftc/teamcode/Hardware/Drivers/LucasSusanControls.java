@@ -40,6 +40,7 @@ public class LucasSusanControls extends DriverControls {
     boolean stoppingAimbot = false;        // Tracks if d-pad down is held (firing sequence)
     boolean ballCountPressed = false;      // Tracks if any d-pad button is pressed (prevents double-counting)
     int ballsOnRamp = 0;                   // Counter for artifacts scored (used to determine next target)
+    boolean stoppedAlready = true;
 
     boolean changingIntakeState = false;   // Tracks if any intake button is pressed (prevents multiple state changes)
     /**
@@ -65,20 +66,28 @@ public class LucasSusanControls extends DriverControls {
             // Keep aimbot active to track target (stopRequested=false means don't fire)
             hardware.aimbot.tick(AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY, false);
             movingSusan = true;  // Mark button as held
+            stoppedAlready = false;
             
         // D-pad DOWN: Fire the artifact and increment ball counter
-        } else if (!gamepad.dpad_up && gamepad.dpad_down) {
+        } else if (!stoppedAlready && !gamepad.dpad_up && gamepad.dpad_down) {
             hardware.telemetry.addLine("Controller: Stopping Aimbot");
+            stoppedAlready = true;
             // Trigger aimbot with stopRequested=true to initiate firing sequence
             hardware.aimbot.tick(AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY, true);
-            
+
             // Increment ball counter once per button press (debounced)
-            if(!ballCountPressed){
+            if (!ballCountPressed) {
                 ballsOnRamp++;
                 ballCountPressed = true;
             }
             stoppingAimbot = true;  // Mark button as held
-            
+
+        // Pressing stick down to go to empty space
+        } else if (gamepad.right_stick_button) {
+            hardware.storage.goToEmptySusan();
+            movingSusan = true;
+
+
         // Neither button pressed: Reset all state flags
         } else {
             movingSusan = false;

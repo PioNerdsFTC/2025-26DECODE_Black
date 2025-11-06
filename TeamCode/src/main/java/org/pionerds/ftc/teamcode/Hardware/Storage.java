@@ -46,7 +46,7 @@ public class Storage {
         // Retrieve hardware components from the hardware map
         CRServo feeder = this.hardware.mapping.getContinuousServo("feeder", DcMotorSimple.Direction.FORWARD);
         Servo bumpUpFeeder = this.hardware.mapping.getServoMotor("bumpUp");
-        DcMotorEx intake = this.hardware.mapping.getMotor("intake",40.0,DcMotorSimple.Direction.REVERSE, DcMotor.ZeroPowerBehavior.FLOAT);
+        DcMotorEx intake = this.hardware.mapping.getMotor("intake",40.0,DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
         DcMotorEx susan = this.hardware.mapping.getMotor("susanMotor", 40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Verify all components were successfully mapped
@@ -171,13 +171,13 @@ public class Storage {
                 tickOffset = 192; // ((2/3 * 360)*(TPR/360)) = 192 ticks (240 degrees)
                 break;
             case OUTPUT1:
-                tickOffset = 48; // (((180 - (1/3) * 360))*(TPR/360)) = 48 ticks (60 degrees)
-                break;
-            case OUTPUT2:
                 tickOffset = 144; // (((180 - (0) * 360))*(TPR/360)) = 144 ticks (180 degrees)
                 break;
-            case OUTPUT3:
+            case OUTPUT2:
                 tickOffset = 240; // (((180 + (1/3) * 360))*(tpr/360)) = 240 ticks (300 degrees)
+                break;
+            case OUTPUT3:
+                tickOffset = 48; // (((180 - (1/3) * 360))*(TPR/360)) = 48 ticks (60 degrees)
                 break;
         }
         currentSusanPositionEnum = susanPosition;  // Update tracked position
@@ -246,7 +246,11 @@ public class Storage {
      */
     public void automatedSusan(int ballsOnRamp){
         // Move to the best position for the next artifact that should be scored
-        moveSusanTo(bestBallPos(currentSusanPositionEnum, bestArtifact(ballsOnRamp).name()));
+        moveSusanTo(bestBallPos(currentSusanPositionEnum, bestArtifact(ballsOnRamp).name(),true));
+    }
+
+    public void goToEmptySusan(){
+        moveSusanTo(bestBallPos(currentSusanPositionEnum,"EMPTY",false));
     }
 
     /**
@@ -257,7 +261,7 @@ public class Storage {
      */
     public void printAlgorithmData(int ballsOnRamp){
         Artifact bestArtifact = bestArtifact(ballsOnRamp);
-        LazySusanPositions targetPos = bestBallPos(currentSusanPositionEnum, bestArtifact.name());
+        LazySusanPositions targetPos = bestBallPos(currentSusanPositionEnum, bestArtifact.name(),true);
         hardware.telemetry.addLine("\n========== STORAGE ==========");
         hardware.telemetry.addLine("CurrentPos: "+currentSusanPositionEnum.name());
         hardware.telemetry.addLine("TargetPos: "+targetPos.name());
@@ -282,12 +286,15 @@ public class Storage {
      * @param idealColor Name of the artifact color we want to score
      * @return The lazy susan position enum that should be moved to
      */
-    public LazySusanPositions bestBallPos(LazySusanPositions currentPosEnum, String idealColor) {
+    public LazySusanPositions bestBallPos(LazySusanPositions currentPosEnum, String idealColor, boolean output) {
         String currentPos = currentPosEnum.name();
         String finalPos = "OUTPUT1";  // Default fallback position
+        if(!output) finalPos = "INPUT1";
+
         String[] positions =
                 {"OUTPUT1","OUTPUT2","OUTPUT3"};  // Output positions correspond to inventory indices
-        
+        if(!output) positions = new String[] {"INPUT1", "INPUT2", "INPUT3"};
+
         // Extract the numeric index from the position name (e.g., "OUTPUT1" -> 0, "INTAKE2" -> 1)
         // This works because both INTAKE and OUTPUT positions use 1-based numbering
         int pos = 0;
@@ -332,6 +339,8 @@ public class Storage {
                 return susanPosReturn;
             }
         }
+
+        if(!output) return  LazySusanPositions.INTAKE1;
         return LazySusanPositions.OUTPUT1;  // Final fallback
     }
 
@@ -395,6 +404,10 @@ public class Storage {
     public boolean isSusanInPosition(int ticks){
         if (!isInitialized) return false;
         return (Math.abs(susanTargetTicks-getSusanCurrentTicks())<ticks);
+    }
+
+    public LazySusanPositions getCurrentSusanPositionEnum(){
+        return currentSusanPositionEnum;
     }
 
 }

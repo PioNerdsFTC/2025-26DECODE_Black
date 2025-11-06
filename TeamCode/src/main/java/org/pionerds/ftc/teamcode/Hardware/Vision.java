@@ -19,7 +19,6 @@ public class Vision {
 
     private boolean obeliskIdentified = false;
     private static final boolean USE_WEBCAM = true; // true for webcam, false for phone camera
-
     /**
      * The variable to store our instance of the AprilTag processor.
      */
