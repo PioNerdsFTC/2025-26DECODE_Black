@@ -136,7 +136,7 @@ public class Drivetrain {
         if (hasDumbDrivePreference) {
             robotCentricDrive(driverControls);
         } else {
-            stickDrive(driverControls, hardware.gyro.getAngles().getYaw());
+            stickDrive(driverControls, hardware.gyro.getAngles()[0]);
             stickTurn(driverControls);
         }
 

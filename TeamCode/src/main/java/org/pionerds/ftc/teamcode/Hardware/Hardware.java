@@ -101,9 +101,9 @@ public final class Hardware {
             driverControls1.tickControls(gamepad1, this);
             driverControls2.tickControls(gamepad2, this);
 
-            YawPitchRollAngles angles = this.gyro.getAngles();
+            double[] angles = this.gyro.getAngles();
             telemetry.addLine("Gyro:");
-            telemetry.addLine("Yaw: " + angles.getYaw());
+            telemetry.addLine("Yaw: " + angles[0]);
             // this.launcher.launcherButton(gamepad1);
         } catch (Exception e) {
             this.telemetry.addLine(e.getMessage());
