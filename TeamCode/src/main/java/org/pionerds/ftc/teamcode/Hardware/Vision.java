@@ -260,14 +260,14 @@ public class Vision {
             hardware.telemetry.addLine(
                 "\n" +
                     aprilTag.name() +
-                    " Distances" +
-                    "x: " +
+                    "\nDistances" +
+                    "\nx: " +
                     blueTargetAprilTag.x(2) +
-                    "y: " +
+                    "\ny: " +
                     blueTargetAprilTag.y(2) +
-                    "z: " +
+                    "\nz: " +
                     blueTargetAprilTag.z(2) +
-                    "Range: " +
+                    "\nRange: " +
                     blueTargetAprilTag.range(2)
             );
         }

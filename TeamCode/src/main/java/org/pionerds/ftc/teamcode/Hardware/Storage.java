@@ -44,15 +44,15 @@ public class Storage {
         this.hardware = hardware;
 
         // Retrieve hardware components from the hardware map
-        CRServo feeder = this.hardware.mapping.getContinuousServo("feeder", DcMotorSimple.Direction.FORWARD);
-        Servo bumpUpFeeder = this.hardware.mapping.getServoMotor("bumpUp");
-        DcMotorEx intake = this.hardware.mapping.getMotor("intake",40.0,DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+        //CRServo feeder = this.hardware.mapping.getContinuousServo("feeder", DcMotorSimple.Direction.FORWARD);
+        //Servo bumpUpFeeder = this.hardware.mapping.getServoMotor("bumpUp");
+        DcMotorEx intake = this.hardware.mapping.getMotor("intakeMotor",40.0,DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
         DcMotorEx susan = this.hardware.mapping.getMotor("susanMotor", 40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Verify all components were successfully mapped
-        if (feeder != null && bumpUpFeeder != null && susan != null && intake != null) {
-            feederServo = feeder;
-            bumpUpServo = bumpUpFeeder;
+        if (/*feeder != null && bumpUpFeeder != null && */susan != null && intake != null) {
+            /*feederServo = feeder;
+            bumpUpServo = bumpUpFeeder;*/
             susanMotorEx = susan;
             susanMotorEx.setTargetPositionTolerance(1);  // Set precision for position control (within 1 tick)
             intakeMotorEx = intake;
