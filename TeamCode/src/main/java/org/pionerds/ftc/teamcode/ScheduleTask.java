@@ -3,6 +3,7 @@ package org.pionerds.ftc.teamcode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ScheduleTask {
     private static ElapsedTime elapsedTime;
@@ -21,12 +22,20 @@ public class ScheduleTask {
 
     public static void runTasks() {
         if (elapsedTime == null) return;
-        for (int i = 0; i < runnableList.size(); i++) {
-            if (timeList.get(i) < elapsedTime.milliseconds()) {
-                runnableList.get(i).run();
-                runnableList.remove(i);
-                timeList.remove(i);
-                i--;
+        double currentTime = elapsedTime.milliseconds();
+        
+        // Use iterator for safe removal during iteration
+        Iterator<Runnable> runnableIterator = runnableList.iterator();
+        Iterator<Double> timeIterator = timeList.iterator();
+        
+        while (runnableIterator.hasNext() && timeIterator.hasNext()) {
+            Runnable runnable = runnableIterator.next();
+            Double time = timeIterator.next();
+            
+            if (time < currentTime) {
+                runnable.run();
+                runnableIterator.remove();
+                timeIterator.remove();
             }
         }
     }
