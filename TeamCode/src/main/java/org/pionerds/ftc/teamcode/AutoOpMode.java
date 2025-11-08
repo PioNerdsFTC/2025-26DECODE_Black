@@ -149,7 +149,8 @@ public class AutoOpMode extends OpMode {
     /**
      * Called once when autonomous ends.
      * Everything stops automatically, so no manual cleanup needed.
-     */
+     * r o b o t i c s
+     **/
     @Override
     public void stop() {}
 
