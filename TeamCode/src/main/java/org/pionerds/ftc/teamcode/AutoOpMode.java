@@ -168,7 +168,7 @@ public class AutoOpMode extends OpMode {
             // STATE 1: Wait at scan position and perform vision scan
             case 1:
                 if(!follower.isBusy()) {
-                    pickupPose = pickupPose.withY(pickupPose.getY()-(24*pickupCycle));
+                    pickupPose = pickupPose.withY(pickupPose.getY() - (24 * pickupCycle));
 
                     scoreToPickupChain = pathBuilder
                         .addPath(new BezierCurve(scorePose, pickupPose))
