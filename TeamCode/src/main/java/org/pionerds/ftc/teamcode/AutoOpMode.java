@@ -187,6 +187,8 @@ public class AutoOpMode extends OpMode {
                 }
                 else if(!follower.isBusy()){
                     follower.followPath(pickupToScoreChain, false);
+                    pickupCycle++;
+                    setPathState(1);
                 }
                 break;
 
