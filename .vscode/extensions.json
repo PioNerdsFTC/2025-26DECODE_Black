@@ -1,8 +1,0 @@
-{
-  "recommendations": [
-    "vscjava.vscode-java-pack",
-    "jetbrains.kotlin",
-    "aaron-bond.better-comments",
-    "esbenp.prettier-vscode"
-  ]
-}

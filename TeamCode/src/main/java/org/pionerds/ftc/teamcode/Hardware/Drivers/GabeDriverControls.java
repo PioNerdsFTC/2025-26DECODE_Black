@@ -1,6 +1,7 @@
 package org.pionerds.ftc.teamcode.Hardware.Drivers;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
@@ -12,7 +13,8 @@ public class GabeDriverControls extends DriverControls {
         boolean isDriver,
         float maxSpeed
     ) {
-        super(driverName, isDriver, maxSpeed);
+        super(driverName, maxSpeed);
+        this.setIsDriver(isDriver);
     }
 
     /**
@@ -50,9 +52,9 @@ public class GabeDriverControls extends DriverControls {
 
         // A-Button
         if (gamepad.a) {
-            hardware.storage.feed();
+            hardware.storage.enableFeeder();
         } else {
-            hardware.storage.contract();
+            hardware.storage.disableFeeder();
         }
 
         PioNerdAprilTag blueTarget = hardware.vision.getPioNerdAprilTag(

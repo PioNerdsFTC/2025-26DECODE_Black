@@ -2,12 +2,11 @@ package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.GabeDriverControls;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
-import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
 @TeleOp(name = "TeleOpGabe")
 public class TeleOpModeGabe extends LinearOpMode {

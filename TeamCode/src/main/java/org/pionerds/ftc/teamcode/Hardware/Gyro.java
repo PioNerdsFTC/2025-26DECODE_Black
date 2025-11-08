@@ -2,7 +2,9 @@ package org.pionerds.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IMU;
+
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
 public class Gyro {
 
@@ -34,7 +36,21 @@ public class Gyro {
         }
     }
 
-    public YawPitchRollAngles getAngles() {
-        return gyro.getRobotYawPitchRollAngles();
+    /**
+     * Gets the accumulated angles (yaw, pitch, roll) by adding stored angles to current gyro readings.
+     * The returned array contains [yaw, pitch, roll] in the gyro's default angle unit (usually degrees).
+     * @return double array containing [yaw, pitch, roll]
+     */
+    public double[] getAngles() {
+
+        double[] result = {0.0,0.0,0.0};
+        YawPitchRollAngles newGyroData = gyro.getRobotYawPitchRollAngles();
+        double[] oldGyroData = DataStorage.getAllStoredAngles();
+
+        result[0] = oldGyroData[0] + newGyroData.getYaw();
+        result[1] = oldGyroData[1] + newGyroData.getPitch();
+        result[2] = oldGyroData[2] + newGyroData.getRoll();
+
+        return result;
     }
 }

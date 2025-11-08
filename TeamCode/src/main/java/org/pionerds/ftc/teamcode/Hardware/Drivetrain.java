@@ -1,11 +1,9 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
-import static com.qualcomm.robotcore.hardware.DcMotorSimple.*;
+import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 
-import android.util.Log;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 
@@ -31,6 +29,8 @@ public class Drivetrain {
                 DcMotor.ZeroPowerBehavior.BRAKE
             );
         }
+
+        motors[2].setDirection(Direction.REVERSE);
     }
 
     /**
@@ -136,7 +136,7 @@ public class Drivetrain {
         if (hasDumbDrivePreference) {
             robotCentricDrive(driverControls);
         } else {
-            stickDrive(driverControls, hardware.gyro.getAngles().getYaw());
+            stickDrive(driverControls, hardware.gyro.getAngles()[0]);
             stickTurn(driverControls);
         }
 
@@ -150,8 +150,8 @@ public class Drivetrain {
      * @param orientation The orientation of the robot.
      */
     public void stickDrive(DriverControls driverControls, double orientation) {
-        double x = driverControls.getSpeedX();
-        double y = driverControls.getSpeedY();
+        double x = -driverControls.getSpeedX();
+        double y = -driverControls.getSpeedY();
 
         double[] convertedAngle = convertOrientation(x, y, orientation);
 
@@ -183,7 +183,7 @@ public class Drivetrain {
                 "Rotation Speed: " + driverControls.getRotationSpeed()
             );
 
-            double x = -driverControls.getRotationSpeed();
+            double x = driverControls.getRotationSpeed();
 
             for (int i = 0; i < 4; i++) {
                 motorSpeed[i] += x;

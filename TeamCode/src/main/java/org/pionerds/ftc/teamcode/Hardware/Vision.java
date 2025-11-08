@@ -1,7 +1,5 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -12,6 +10,9 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Vision {
 
     private final DistanceUnit DISTANCE_UNIT = DistanceUnit.CM;
@@ -19,7 +20,6 @@ public class Vision {
 
     private boolean obeliskIdentified = false;
     private static final boolean USE_WEBCAM = true; // true for webcam, false for phone camera
-
     /**
      * The variable to store our instance of the AprilTag processor.
      */
@@ -232,31 +232,21 @@ public class Vision {
      * @param command the command to execute.
      */
     public void controlVisionPortal(VisionCommands command) {
-        if (command == VisionCommands.RESUME) {
-            visionPortal.resumeStreaming();
-        } else if (command == VisionCommands.CLOSE) {
-            visionPortal.close();
-        } else if (command == VisionCommands.STOP) {
-            visionPortal.stopLiveView();
-        } else if (command == VisionCommands.PAUSE) {
-            visionPortal.stopStreaming();
+        switch (command) {
+            case RESUME:
+                visionPortal.resumeStreaming();
+                break;
+            case CLOSE:
+                visionPortal.close();
+                break;
+            case STOP:
+                visionPortal.stopLiveView();
+                break;
+            case PAUSE:
+                visionPortal.stopStreaming();
+                break;
         }
     }
-
-    /*
-    telemetry.addLine("obeliskIdentified: "+hardware.vision.isObeliskIdentified());
-            for(AprilTagMetadata metadata: hardware.vision.currentDetectionsMetadata()){
-                telemetry.addLine("AprilTag: \""+metadata.name+"\"");
-                telemetry.addLine("" + metadata.id);
-            }
-     */
-
-    /* Add Artifact Pattern to Telemetry
-            for(int i=0;i<3;i++){
-                Artifact a = hardware.vision.getArtifactPattern()[i];
-                telemetry.addLine("Artifact: " + a.name());
-            }
-    */
 
     /**
      * Print the distance of the AprilTag to the telemetry.
@@ -268,15 +258,18 @@ public class Vision {
         blueTargetAprilTag = getPioNerdAprilTag(aprilTag);
 
         if (blueTargetAprilTag != null) {
-            hardware.telemetry.addLine("\n" + aprilTag.name() + " Distances");
-            hardware.telemetry.addLine("x: " + blueTargetAprilTag.x(2));
-            hardware.telemetry.addLine("y: " + blueTargetAprilTag.y(2));
-            hardware.telemetry.addLine("z: " + blueTargetAprilTag.z(2));
-            hardware.telemetry.addLine("Range: " + blueTargetAprilTag.range(2));
             hardware.telemetry.addLine(
-                "Pythag A,B: " +
-                    (Math.sqrt(Math.pow((blueTargetAprilTag.x(2)), 2)) +
-                        Math.pow((blueTargetAprilTag.x(2)), 2))
+                "\n" +
+                    aprilTag.name() +
+                    "\nDistances" +
+                    "\nx: " +
+                    blueTargetAprilTag.x(2) +
+                    "\ny: " +
+                    blueTargetAprilTag.y(2) +
+                    "\nz: " +
+                    blueTargetAprilTag.z(2) +
+                    "\nRange: " +
+                    blueTargetAprilTag.range(2)
             );
         }
     }
