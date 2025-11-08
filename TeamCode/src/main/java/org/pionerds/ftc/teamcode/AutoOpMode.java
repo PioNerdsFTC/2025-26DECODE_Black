@@ -17,42 +17,69 @@ import org.pionerds.ftc.teamcode.Pathfinding.Constants;
 
 import java.util.Arrays;
 
+/**
+ * AutoOpMode - Autonomous operation mode for the robot.
+ * 
+ * This OpMode implements a state machine for autonomous navigation and scoring:
+ * 
+ * State 0: Start - Move from starting position to scanning position
+ * State 1: Scan - Wait for robot to arrive, then scan artifact pattern with vision
+ * State 2: Navigate - Move to scoring position with scanned pattern data
+ * State 3: Complete - Wait for arrival, then stop (no further actions)
+ * 
+ * Uses Pedro Pathing library for advanced path following with Bezier curves.
+ */
 @Autonomous(name = "AutoOpMode", group = "Examples")
 public class AutoOpMode extends OpMode {
 
+    // Path following system from Pedro Pathing library
     private Follower follower;
+    
+    // Timers for tracking durations and timeouts
     private Timer pathTimer, actionTimer, opmodeTimer;
 
-    private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot.
-    private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
-    private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
-    private String artifact = "gulp";
+    // Key positions on the field (coordinates in inches, angles in radians)
+    private final Pose startPose = new Pose(56, 8, Math.toRadians(90));    // Starting position
+    private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));    // Position to scan artifacts
+    private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046)); // Position to score
+    
+    // Stores the scanned artifact pattern as a string
+    private String artifact = "gulp";  // "gulp" indicates no scan yet
+    
     final Hardware hardware = new Hardware();
 
+    // State machine variable - tracks which autonomous phase we're in
     private int pathState;
 
+    // Path builders for creating navigation routes
     public PathBuilder pathBuilder;
-    public static PathChain pathChain;
-    public static PathChain pathChain2;
+    public static PathChain pathChain;   // Path from start to scan position
+    public static PathChain pathChain2;  // Path from scan to score position
 
     /**
-     * These change the states of the paths and actions. It will also reset the timers of the individual switches
-     **/
+     * Changes the current state of the autonomous state machine.
+     * Also resets the path timer to measure duration of the new state.
+     * 
+     * @param pState The new state number to transition to
+     */
     public void setPathState(int pState) {
         pathState = pState;
         pathTimer.resetTimer();
     }
 
     /**
-     * This is the main loop of the OpMode, it will run repeatedly after clicking "Play".
-     **/
+     * Main loop - runs repeatedly during autonomous period.
+     * Updates path following and executes state machine logic.
+     */
     @Override
     public void loop() {
+        // Update path follower to continue moving along current path
         follower.update();
+        
+        // Execute state machine logic to progress through autonomous sequence
         autonomousPathUpdate();
-        // These loop the movements of the robot, these must be called continuously in order to work
 
-        // Feedback to Driver Hub for debugging
+        // Send diagnostic information to Driver Station for debugging
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
@@ -62,19 +89,26 @@ public class AutoOpMode extends OpMode {
     }
 
     /**
-     * This method is called once at the init of the OpMode.
-     **/
+     * Initialization method - called once when "INIT" is pressed.
+     * Sets up timers, path follower, hardware, and pre-builds navigation paths.
+     */
     @Override
     public void init() {
+        // Initialize timing systems
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
 
+        // Set up path following system with robot's hardware configuration
         follower = Constants.createFollower(hardwareMap);
         pathBuilder = new PathBuilder(follower);
         follower.setStartingPose(startPose);
 
-        hardware.init(hardwareMap, telemetry, hardware.elapsedTime);
+        // Initialize robot hardware (sensors, motors, vision, etc.)
+        hardware.init(hardwareMap, telemetry);
+        
+        // Pre-build path 1: Start position to scanning position
+        // Uses a Bezier line (straight path) with constant 90-degree heading
         pathChain = pathBuilder
             .addPath(
                 new BezierLine(startPose, scanPose)
@@ -82,63 +116,83 @@ public class AutoOpMode extends OpMode {
             .setConstantHeadingInterpolation(Math.toRadians(90))
             .build();
 
+        // Pre-build path 2: Scanning position to scoring position
+        // Uses a Bezier curve (smooth curved path) with gradual heading change
         pathChain2 = pathBuilder
             .addPath(
                 new BezierCurve(scanPose, scorePose)
             )
             .setLinearHeadingInterpolation(
-                Math.toRadians(90),
-                Math.toRadians(144.046)
+                Math.toRadians(90),      // Start heading (facing forward)
+                Math.toRadians(144.046)  // End heading (angled toward goal)
             )
             .build();
     }
 
     /**
-     * This method is called continuously after Init while waiting for "play".
-     **/
+     * Called continuously after init while waiting for start.
+     * Currently unused but required by OpMode structure.
+     */
     @Override
     public void init_loop() {}
 
     /**
-     * This method is called once at the start of the OpMode.
-     * It runs all the setup actions, including building paths and starting the path system
-     **/
+     * Called once when "START" is pressed to begin autonomous.
+     * Resets timers and starts the state machine at state 0.
+     */
     @Override
     public void start() {
         opmodeTimer.resetTimer();
-        setPathState(0);
+        setPathState(0);  // Begin with first state
     }
 
     /**
-     * We do not use this because everything should automatically disable
-     **/
+     * Called once when autonomous ends.
+     * Everything stops automatically, so no manual cleanup needed.
+     */
     @Override
     public void stop() {}
 
+    /**
+     * State machine for autonomous navigation and actions.
+     * Called every loop iteration to progress through the autonomous sequence.
+     * 
+     * State flow:
+     * 0 -> Start first path (to scan position)
+     * 1 -> Wait for arrival, then scan artifact pattern
+     * 2 -> Start second path (to score position) once pattern is scanned
+     * 3 -> Wait for arrival, then complete (state -1 prevents further actions)
+     */
     public void autonomousPathUpdate() {
         switch (pathState) {
+            // STATE 0: Begin navigation to scanning position
             case 0:
-                follower.followPath(pathChain,false);
-                setPathState(1);
+                follower.followPath(pathChain, false);  // Start following first path (non-holding)
+                setPathState(1);  // Immediately transition to waiting state
                 break;
 
+            // STATE 1: Wait at scan position and perform vision scan
             case 1:
-                if(!follower.isBusy()) {
+                if(!follower.isBusy()) {  // Check if robot has reached scan position
+                    // Get the artifact pattern from vision system
                     artifact = Arrays.toString(hardware.vision.getArtifactPattern());
-                    setPathState(2);
+                    setPathState(2);  // Move to next state after scan completes
                 }
                 break;
 
+            // STATE 2: Begin navigation to scoring position
             case 2:
-                if(!artifact.equals("gulp")) {
-                    follower.followPath(pathChain2, true);
-                    setPathState(3);
+                if(!artifact.equals("gulp")) {  // Ensure we have valid scan data
+                    follower.followPath(pathChain2, true);  // Start following second path (holding at end)
+                    setPathState(3);  // Transition to final waiting state
                 }
                 break;
 
+            // STATE 3: Wait for arrival at scoring position, then complete
             case 3:
-                if(!follower.isBusy()) {
-                    /* Set the state to a Case we won't use or define, so it just stops running an new paths */
+                if(!follower.isBusy()) {  // Check if robot has reached scoring position
+                    /* Set state to -1 (undefined) so no further path updates occur */
+                    /* In a full implementation, this is where scoring actions would happen */
                     setPathState(-1);
                 }
                 break;

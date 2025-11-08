@@ -51,9 +51,9 @@ public class GabeDriverControls extends DriverControls {
 
         // A-Button
         if (gamepad.a) {
-            hardware.storage.feed();
+            hardware.storage.enableFeeder();
         } else {
-            hardware.storage.contract();
+            hardware.storage.disableFeeder();
         }
 
         PioNerdAprilTag blueTarget = hardware.vision.getPioNerdAprilTag(
