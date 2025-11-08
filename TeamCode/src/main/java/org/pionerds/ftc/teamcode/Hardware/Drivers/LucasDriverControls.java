@@ -3,6 +3,7 @@ package org.pionerds.ftc.teamcode.Hardware.Drivers;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
+import org.pionerds.ftc.teamcode.Hardware.Artifact;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
@@ -14,8 +15,6 @@ public class LucasDriverControls extends DriverControls {
     }
 
     boolean resetGyroPressed = false;
-    boolean start_pressed_already = false;
-
     /**
      * Ticked every loop in the TeleOp.
      * @param gamepad
@@ -42,17 +41,6 @@ public class LucasDriverControls extends DriverControls {
             setSpeedMultiplier(0.5f);
             setRotationMultiplier(0.5f);
         }
-
-        // A-Button
-        if (gamepad.a) {
-            hardware.storage.feed();
-        } else {
-            hardware.storage.contract();
-        }
-
-        PioNerdAprilTag blueTarget = hardware.vision.getPioNerdAprilTag(
-            AprilTagNames.BlueTarget
-        );
 
         // Set Rotation Speed for Drivetrain
         setRotationSpeed(

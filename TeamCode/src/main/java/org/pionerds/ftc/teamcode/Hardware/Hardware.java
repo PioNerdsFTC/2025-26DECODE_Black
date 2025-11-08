@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
+import org.pionerds.ftc.teamcode.ScheduleTask;
 import org.pionerds.ftc.teamcode.Utils.Environment;
 
 /**
@@ -40,9 +41,8 @@ public final class Hardware {
      * Use in Autonomous
      * @param hardwareMap
      * @param telemetry
-     * @param elapsedTime
      */
-    public void init(HardwareMap hardwareMap, Telemetry telemetry, ElapsedTime elapsedTime) {
+    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         try {
             this.telemetry = telemetry;
 
@@ -51,12 +51,14 @@ public final class Hardware {
             drivetrain.init(this, telemetry);
             vision.init(this);
             launcher.init(this);
-            storage.init(this,true);
+            storage.init(this);
             gyro.init(this);
-            this.elapsedTime = elapsedTime;
+            aimbot.init(this,telemetry,AprilTagNames.BlueTarget,AimbotMotorMovement.VELOCITY);
+            aimbot.setHardware(this);
 
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());
+            telemetry.update();
         }
     }
 
@@ -72,9 +74,7 @@ public final class Hardware {
         HardwareMap hardwareMap,
         Telemetry telemetry,
         DriverControls driverControls1,
-        DriverControls driverControls2,
-        double maxDistanceLaunch,
-        ElapsedTime elapsedTime
+        DriverControls driverControls2
     ) {
         try {
             this.telemetry = telemetry;
@@ -83,34 +83,42 @@ public final class Hardware {
             drivetrain.init(this,telemetry);
             vision.init(this);
             launcher.init(this);
-            storage.init(this,true);
+            storage.init(this);
             gyro.init(this); //REMOVE WHEN AT COMPETITION I THINK
+            aimbot.setHardware(this);
 
             this.driverControls1 = driverControls1;
             this.driverControls2 = driverControls2;
+
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());
+            telemetry.update();
         }
     }
 
     /** Runs for each iteration of the OpMode, may or may not be necessary */
     public void tick(Gamepad gamepad1, Gamepad gamepad2) {
-        try {
+        //try {
             driverControls1.tickControls(gamepad1, this);
             driverControls2.tickControls(gamepad2, this);
 
-            YawPitchRollAngles angles = this.gyro.getAngles();
+            double[] angles = this.gyro.getAngles();
             telemetry.addLine("Gyro:");
-            telemetry.addLine("Yaw: " + angles.getYaw());
+            telemetry.addLine("Yaw: " + angles[0]);
             // this.launcher.launcherButton(gamepad1);
-        } catch (Exception e) {
-            this.telemetry.addLine(e.getMessage());
-            if (!Environment.competing) this.continueRunning = false;
-        }
+        //} catch (Exception e) {
+        //    this.telemetry.addLine(e.getMessage());
+        //    telemetry.update();
+            //if (!Environment.competing) {
+            //    telemetry.update();
+            //    this.continueRunning = false;
+            //}
+        //}
     }
 
     public void addElapsedTime(ElapsedTime elapsedTime){
         this.elapsedTime = elapsedTime;
+        ScheduleTask.initTime(elapsedTime);
     }
 
     public void stop() {
