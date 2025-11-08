@@ -31,6 +31,8 @@ public class Drivetrain {
                 DcMotor.ZeroPowerBehavior.BRAKE
             );
         }
+
+        motors[2].setDirection(Direction.REVERSE);
     }
 
     /**
@@ -108,8 +110,8 @@ public class Drivetrain {
      * @param driverControls The driver controls object.
      */
     public void robotCentricDrive(DriverControls driverControls) {
-        double x = -driverControls.getSpeedX();
-        double y = -driverControls.getSpeedY();
+        double x = driverControls.getSpeedX();
+        double y = driverControls.getSpeedY();
 
         if (Math.abs(x) < 0.2 && Math.abs(y) < 0.2) {
             stopMotors();
@@ -150,8 +152,8 @@ public class Drivetrain {
      * @param orientation The orientation of the robot.
      */
     public void stickDrive(DriverControls driverControls, double orientation) {
-        double x = driverControls.getSpeedX();
-        double y = driverControls.getSpeedY();
+        double x = -driverControls.getSpeedX();
+        double y = -driverControls.getSpeedY();
 
         double[] convertedAngle = convertOrientation(x, y, orientation);
 
@@ -183,7 +185,7 @@ public class Drivetrain {
                 "Rotation Speed: " + driverControls.getRotationSpeed()
             );
 
-            double x = -driverControls.getRotationSpeed();
+            double x = driverControls.getRotationSpeed();
 
             for (int i = 0; i < 4; i++) {
                 motorSpeed[i] += x;
