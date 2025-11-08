@@ -93,11 +93,6 @@ public class AutoOpMode extends OpMode {
             .setLinearHeadingInterpolation(scanPose.getHeading(), scorePose.getHeading())
             .build();
 
-        scoreToPickupChain = pathBuilder
-            .addPath(new BezierCurve(scorePose, pickupPose))
-            .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPose.getHeading())
-            .build();
-
         pickupToScoreChain = pathBuilder
             .addPath(new BezierCurve(pickupPose, scorePose))
             .setLinearHeadingInterpolation(pickupPose.getHeading(), scorePose.getHeading())
@@ -137,6 +132,12 @@ public class AutoOpMode extends OpMode {
             case 1:
                 if(!follower.isBusy()) {
                     pickupPose = pickupPose.withY(pickupPose.getY()-(24*pickupCycle));
+
+                    scoreToPickupChain = pathBuilder
+                        .addPath(new BezierCurve(scorePose, pickupPose))
+                        .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPose.getHeading())
+                        .build();
+
                     follower.followPath(scoreToPickupChain,false);
                     setPathState(2);
                 }
