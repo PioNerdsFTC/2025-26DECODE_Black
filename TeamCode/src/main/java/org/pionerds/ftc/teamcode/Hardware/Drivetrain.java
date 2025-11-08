@@ -1,11 +1,9 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
-import static com.qualcomm.robotcore.hardware.DcMotorSimple.*;
+import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 
-import android.util.Log;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 

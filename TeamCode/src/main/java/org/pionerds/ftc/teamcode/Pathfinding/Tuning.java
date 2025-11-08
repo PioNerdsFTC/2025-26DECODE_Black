@@ -1,8 +1,8 @@
 package org.pionerds.ftc.teamcode.Pathfinding;
 
 import static org.pionerds.ftc.teamcode.Pathfinding.Tuning.changes;
-import static org.pionerds.ftc.teamcode.Pathfinding.Tuning.drawOnlyCurrent;
 import static org.pionerds.ftc.teamcode.Pathfinding.Tuning.draw;
+import static org.pionerds.ftc.teamcode.Pathfinding.Tuning.drawOnlyCurrent;
 import static org.pionerds.ftc.teamcode.Pathfinding.Tuning.follower;
 import static org.pionerds.ftc.teamcode.Pathfinding.Tuning.stopRobot;
 import static org.pionerds.ftc.teamcode.Pathfinding.Tuning.telemetryM;
@@ -16,11 +16,15 @@ import com.bylazar.field.Style;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.*;
-import com.pedropathing.math.*;
-import com.pedropathing.paths.*;
+import com.pedropathing.geometry.BezierCurve;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.math.Vector;
+import com.pedropathing.paths.HeadingInterpolator;
+import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
 import com.pedropathing.telemetry.SelectableOpMode;
-import com.pedropathing.util.*;
+import com.pedropathing.util.PoseHistory;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 

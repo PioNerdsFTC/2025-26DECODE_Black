@@ -4,14 +4,12 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.pionerds.ftc.teamcode.Hardware.Artifact;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Pathfinding.Constants;
 
@@ -38,23 +36,27 @@ public class AutoOpMode extends OpMode {
     // Timers for tracking durations and timeouts
     private Timer pathTimer, actionTimer, opmodeTimer;
 
-    // Key positions on the field (coordinates in inches, angles in radians)
-    private final Pose startPose = new Pose(56, 8, Math.toRadians(90));    // Starting position
-    private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));    // Position to scan artifacts
-    private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046)); // Position to score
-    
-    // Stores the scanned artifact pattern as a string
-    private String artifact = "gulp";  // "gulp" indicates no scan yet
-    
+    private final Pose startPose = new Pose(56, Constants.localizerConstants.robot_Width/2, Math.toRadians(90)); // Start Pose of our robot.
+    private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
+    private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
+    private Pose pickupPose = new Pose(48, 84, Math.toRadians(180));
+    private final Pose endPose = new Pose(38.75, 33.25, Math.toRadians(180));
+
+    private boolean scanned = false;
+    private int pickupCycle = 0;
+
+    private String artifactPattern = "No scan attempt yet";
+
     final Hardware hardware = new Hardware();
 
     // State machine variable - tracks which autonomous phase we're in
     private int pathState;
 
-    // Path builders for creating navigation routes
-    public PathBuilder pathBuilder;
-    public static PathChain pathChain;   // Path from start to scan position
-    public static PathChain pathChain2;  // Path from scan to score position
+    private PathBuilder pathBuilder;
+    private PathChain startToScoreChain;
+    private PathChain scoreToPickupChain;
+    private PathChain pickupToScoreChain;
+
 
     /**
      * Changes the current state of the autonomous state machine.
@@ -73,18 +75,18 @@ public class AutoOpMode extends OpMode {
      */
     @Override
     public void loop() {
-        // Update path follower to continue moving along current path
-        follower.update();
-        
-        // Execute state machine logic to progress through autonomous sequence
+        if(!scanned){
+            artifactPattern = Arrays.toString(hardware.vision.getArtifactPattern());
+        }
         autonomousPathUpdate();
-
-        // Send diagnostic information to Driver Station for debugging
+        // These loop the movements of the robot, these must be called continuously in order to work
+        follower.update();
+        // Feedback to Driver Hub for debugging
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
-        telemetry.addData("pattern",artifact);
+        telemetry.addData("pattern", artifactPattern);
         telemetry.update();
     }
 
@@ -104,28 +106,19 @@ public class AutoOpMode extends OpMode {
         pathBuilder = new PathBuilder(follower);
         follower.setStartingPose(startPose);
 
-        // Initialize robot hardware (sensors, motors, vision, etc.)
-        hardware.init(hardwareMap, telemetry);
-        
-        // Pre-build path 1: Start position to scanning position
-        // Uses a Bezier line (straight path) with constant 90-degree heading
-        pathChain = pathBuilder
-            .addPath(
-                new BezierLine(startPose, scanPose)
-            )
+        hardware.init(hardwareMap, telemetry, hardware.elapsedTime);
+
+        startToScoreChain = pathBuilder
+            .addPath(new BezierLine(startPose, scanPose))
             .setConstantHeadingInterpolation(Math.toRadians(90))
+            .addPath(new BezierCurve(scanPose, scorePose))
+            .addParametricCallback(80, () -> {scanned=true;})
+            .setLinearHeadingInterpolation(scanPose.getHeading(), scorePose.getHeading())
             .build();
 
-        // Pre-build path 2: Scanning position to scoring position
-        // Uses a Bezier curve (smooth curved path) with gradual heading change
-        pathChain2 = pathBuilder
-            .addPath(
-                new BezierCurve(scanPose, scorePose)
-            )
-            .setLinearHeadingInterpolation(
-                Math.toRadians(90),      // Start heading (facing forward)
-                Math.toRadians(144.046)  // End heading (angled toward goal)
-            )
+        pickupToScoreChain = pathBuilder
+            .addPath(new BezierCurve(pickupPose, scorePose))
+            .setLinearHeadingInterpolation(pickupPose.getHeading(), scorePose.getHeading())
             .build();
     }
 
@@ -166,34 +159,41 @@ public class AutoOpMode extends OpMode {
      */
     public void autonomousPathUpdate() {
         switch (pathState) {
-            // STATE 0: Begin navigation to scanning position
+
             case 0:
-                follower.followPath(pathChain, false);  // Start following first path (non-holding)
-                setPathState(1);  // Immediately transition to waiting state
+                follower.followPath(startToScoreChain,false);
+                setPathState(1);
                 break;
 
             // STATE 1: Wait at scan position and perform vision scan
             case 1:
-                if(!follower.isBusy()) {  // Check if robot has reached scan position
-                    // Get the artifact pattern from vision system
-                    artifact = Arrays.toString(hardware.vision.getArtifactPattern());
-                    setPathState(2);  // Move to next state after scan completes
+                if(!follower.isBusy()) {
+                    pickupPose = pickupPose.withY(pickupPose.getY() - (24 * pickupCycle));
+
+                    scoreToPickupChain = pathBuilder
+                        .addPath(new BezierCurve(scorePose, pickupPose))
+                        .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPose.getHeading())
+                        .build();
+
+                    follower.followPath(scoreToPickupChain,false);
+                    setPathState(2);
                 }
                 break;
 
             // STATE 2: Begin navigation to scoring position
             case 2:
-                if(!artifact.equals("gulp")) {  // Ensure we have valid scan data
-                    follower.followPath(pathChain2, true);  // Start following second path (holding at end)
-                    setPathState(3);  // Transition to final waiting state
+                if(pickupCycle==2 && !follower.isBusy()){
+                    setPathState(67);
+                }
+                else if(!follower.isBusy()){
+                    follower.followPath(pickupToScoreChain, false);
+                    pickupCycle++;
+                    setPathState(1);
                 }
                 break;
 
-            // STATE 3: Wait for arrival at scoring position, then complete
-            case 3:
-                if(!follower.isBusy()) {  // Check if robot has reached scoring position
-                    /* Set state to -1 (undefined) so no further path updates occur */
-                    /* In a full implementation, this is where scoring actions would happen */
+            case 67:
+                if(!follower.isBusy()) {
                     setPathState(-1);
                 }
                 break;
