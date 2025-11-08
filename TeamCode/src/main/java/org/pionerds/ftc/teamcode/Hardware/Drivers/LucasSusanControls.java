@@ -2,6 +2,9 @@ package org.pionerds.ftc.teamcode.Hardware.Drivers;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.pionerds.ftc.teamcode.Hardware.AimbotMotorMovement;
+import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
+import org.pionerds.ftc.teamcode.Hardware.Artifact;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
