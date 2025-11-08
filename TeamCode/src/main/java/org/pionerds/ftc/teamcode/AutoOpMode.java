@@ -45,7 +45,7 @@ public class AutoOpMode extends OpMode {
     private boolean scanned = false;
     private int pickupCycle = 0;
 
-    private String artifactPattern = new String("No scan attempt yet");
+    private String artifactPattern = "No scan attempt yet";
 
     final Hardware hardware = new Hardware();
 
