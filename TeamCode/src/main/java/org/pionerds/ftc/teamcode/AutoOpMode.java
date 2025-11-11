@@ -4,6 +4,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
@@ -36,11 +37,12 @@ public class AutoOpMode extends OpMode {
     private final Pose startPose = new Pose(56, Constants.localizerConstants.robot_Width / 2, Math.toRadians(90)); // Start Pose of our robot.
     private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
     private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
-    private Pose pickupPose = new Pose(48, 84, Math.toRadians(180));
+    private final Pose pickupPose = new Pose(48, 84, Math.toRadians(180));
     private final Pose endPose = new Pose(38.75, 33.25, Math.toRadians(180));
 
     private boolean scanned = false;
     private int pickupCycle = 0;
+    private final double pileYCoordOffset = 24;
 
     private String artifactPattern = "No scan attempt yet";
 
@@ -51,7 +53,6 @@ public class AutoOpMode extends OpMode {
 
     private PathBuilder pathBuilder;
     private PathChain startToScoreChain;
-    private PathChain scoreToPickupChain;
     private PathChain pickupToScoreChain;
 
 
@@ -82,7 +83,7 @@ public class AutoOpMode extends OpMode {
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
-        telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("heading", Math.toDegrees(follower.getPose().getHeading()));
         telemetry.addData("pattern", artifactPattern);
         telemetry.update();
     }
@@ -115,10 +116,8 @@ public class AutoOpMode extends OpMode {
             .setLinearHeadingInterpolation(scanPose.getHeading(), scorePose.getHeading())
             .build();
 
-        pickupToScoreChain = pathBuilder
-            .addPath(new BezierCurve(pickupPose, scorePose))
-            .setLinearHeadingInterpolation(pickupPose.getHeading(), scorePose.getHeading())
-            .build();
+        Path pickupToScore = new Path(new BezierCurve(pickupPose, scorePose));
+        pickupToScore.setLinearHeadingInterpolation(pickupPose.getHeading(), scorePose.getHeading());
     }
 
     /**
@@ -148,14 +147,15 @@ public class AutoOpMode extends OpMode {
     public void stop() {
     }
 
-    private void updatePickupPose(int cycle) {
-        pickupPose = pickupPose.withY(pickupPose.getY() - (24 * cycle));
+    private PathChain updatePickupPose(int cycle) {
 
-        scoreToPickupChain = pathBuilder
-            .addPath(new BezierCurve(scorePose, pickupPose))
+        return(pathBuilder
+            .addPath(new BezierCurve(scorePose, pickupPose.withY(pickupPose.getY() - (pileYCoordOffset * cycle))))
             .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPose.getHeading())
-            .build();
+            .build()
+        );
     }
+
 
     public void autonomousPathUpdate() {
         switch (pathState) {
@@ -170,7 +170,7 @@ public class AutoOpMode extends OpMode {
             case 1:
                 if (!follower.isBusy()) {
                     updatePickupPose(pickupCycle);
-                    follower.followPath(scoreToPickupChain, false);
+                    follower.followPath(updatePickupPose(pickupCycle), false);
                     setPathState(2);
                 }
                 break;
