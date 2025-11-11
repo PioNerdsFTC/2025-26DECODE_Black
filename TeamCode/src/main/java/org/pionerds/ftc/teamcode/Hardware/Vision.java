@@ -110,8 +110,8 @@ public class Vision {
         for (AprilTagDetection detection : currentDetections()) {
             if (
                 !(detection == null) &&
-                !(detection.metadata == null) &&
-                detection.metadata.name.equals(tagName.name())
+                    !(detection.metadata == null) &&
+                    detection.metadata.name.equals(tagName.name())
             ) {
                 return detection.ftcPose;
             }
@@ -127,8 +127,8 @@ public class Vision {
         for (AprilTagDetection detection : currentDetections()) {
             if (
                 !(detection == null) &&
-                !(detection.metadata == null) &&
-                detection.metadata.name.equals(aprilTagName.name())
+                    !(detection.metadata == null) &&
+                    detection.metadata.name.equals(aprilTagName.name())
             ) {
                 return new PioNerdAprilTag(detection); // Return the PioNerdAprilTag object.
             }
@@ -155,7 +155,7 @@ public class Vision {
     public ArrayList<AprilTagMetadata> currentDetectionsMetadata() {
         ArrayList<AprilTagMetadata> detectionNames = new ArrayList<
             AprilTagMetadata
-        >();
+            >();
         List<AprilTagDetection> currentDetections = this.currentDetections();
 
         // iterate and get names

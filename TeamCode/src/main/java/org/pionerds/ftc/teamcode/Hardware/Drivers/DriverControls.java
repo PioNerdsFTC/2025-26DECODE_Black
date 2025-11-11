@@ -56,7 +56,8 @@ public abstract class DriverControls {
     public float getSpeedY() {
         return speedY;
     }
-    public float getMaxRotationSpeed(){
+
+    public float getMaxRotationSpeed() {
         return maxRotationSpeed;
     }
 
@@ -75,6 +76,7 @@ public abstract class DriverControls {
     public void setMaxSpeed(float maxSpeed) {
         this.maxSpeed = maxSpeed;
     }
+
     public void setMaxRotationSpeed(float maxRotationSpeed) {
         this.maxRotationSpeed = maxRotationSpeed;
     }

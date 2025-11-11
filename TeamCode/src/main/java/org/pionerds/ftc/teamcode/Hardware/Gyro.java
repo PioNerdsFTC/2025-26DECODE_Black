@@ -43,7 +43,7 @@ public class Gyro {
      */
     public double[] getAngles() {
 
-        double[] result = {0.0,0.0,0.0};
+        double[] result = {0.0, 0.0, 0.0};
         YawPitchRollAngles newGyroData = gyro.getRobotYawPitchRollAngles();
         double[] oldGyroData = DataStorage.getAllStoredAngles();
 

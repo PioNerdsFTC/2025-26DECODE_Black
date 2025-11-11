@@ -15,13 +15,12 @@ public class LucasDriverControls extends DriverControls {
     }
 
     boolean resetGyroPressed = false;
+
     /**
      * Ticked every loop in the TeleOp.
      * @param gamepad
      * @param hardware
-     *
-     * @Controls:
-     * Left_Bumper - 0.5 Speed Modifier <br>
+     * @Controls: Left_Bumper - 0.5 Speed Modifier <br>
      * A_Button - Feed Intake <br>
      * !(A_Button) - Contract Intake <br>
      * X_Button - Send PioNerdTag distance to Aimbot <br>
