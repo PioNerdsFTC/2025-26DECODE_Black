@@ -162,7 +162,9 @@ public class AutoOpMode extends OpMode {
 
             case 0:
                 follower.followPath(startToScoreChain,false);
-                setPathState(1);
+                if(!follower.isBusy()){
+                    setPathState(1);
+                }
                 break;
 
             // STATE 1: Wait at scan position and perform vision scan
