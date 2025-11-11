@@ -17,14 +17,11 @@ import java.util.Arrays;
 
 /**
  * AutoOpMode - Autonomous operation mode for the robot.
- * 
  * This OpMode implements a state machine for autonomous navigation and scoring:
- * 
  * State 0: Start - Move from starting position to scanning position
  * State 1: Scan - Wait for robot to arrive, then scan artifact pattern with vision
  * State 2: Navigate - Move to scoring position with scanned pattern data
  * State 3: Complete - Wait for arrival, then stop (no further actions)
- * 
  * Uses Pedro Pathing library for advanced path following with Bezier curves.
  */
 @Autonomous(name = "AutoOpMode", group = "Examples")
@@ -150,7 +147,6 @@ public class AutoOpMode extends OpMode {
     /**
      * State machine for autonomous navigation and actions.
      * Called every loop iteration to progress through the autonomous sequence.
-     * 
      * State flow:
      * 0 -> Start first path (to scan position)
      * 1 -> Wait for arrival, then scan artifact pattern
