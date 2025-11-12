@@ -43,7 +43,6 @@ public class AutoOpMode extends OpMode {
 
     private boolean scanned = false;
     private int pickupCycle = 0;
-    private final double pileYCoordOffset = 24;
 
     private String artifactPattern = "No scan attempt yet";
 
@@ -54,8 +53,7 @@ public class AutoOpMode extends OpMode {
 
     private PathBuilder pathBuilder;
     private PathChain startToScoreChain;
-    private PathChain pickupToScoreChain;
-
+    private Path pickupToScore;
 
     /**
      * Changes the current state of the autonomous state machine.
@@ -117,7 +115,7 @@ public class AutoOpMode extends OpMode {
             .setLinearHeadingInterpolation(scanPose.getHeading(), scorePose.getHeading())
             .build();
 
-        Path pickupToScore = new Path(new BezierCurve(pickupPose, scorePose));
+        pickupToScore = new Path(new BezierCurve(pickupPose, scorePose));
         pickupToScore.setLinearHeadingInterpolation(pickupPose.getHeading(), scorePose.getHeading());
     }
 
@@ -146,9 +144,12 @@ public class AutoOpMode extends OpMode {
      **/
     @Override
     public void stop() {
+        DataStorage.storeAngle(0, follower.getPose().getHeading());
     }
 
     private PathChain updatePickupPose(int cycle) {
+
+        double pileYCoordOffset = 24;
 
         return(pathBuilder
             .addPath(new BezierCurve(scorePose, pickupPose.withY(pickupPose.getY() - (pileYCoordOffset * cycle))))
@@ -180,7 +181,7 @@ public class AutoOpMode extends OpMode {
                 if (pickupCycle == 2 && !follower.isBusy()) {
                     setPathState(67);
                 } else if (!follower.isBusy()) {
-                    follower.followPath(pickupToScoreChain, false);
+                    follower.followPath(pickupToScore, false);
                     pickupCycle++;
                     setPathState(1);
                 }
@@ -188,7 +189,6 @@ public class AutoOpMode extends OpMode {
 
             case 67:
                 if (!follower.isBusy()) {
-                    DataStorage.storeAngle(0,follower.getPose().getHeading());
                     setPathState(-1);
                 }
                 break;
