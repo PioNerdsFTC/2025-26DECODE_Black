@@ -45,6 +45,7 @@ public class AutoOpMode extends OpMode {
     private int pickupCycle = 0;
     private int nextBall = 0;
 
+
     private String artifactPattern = "No scan attempt yet";
 
     final Hardware hardware = new Hardware();
@@ -55,6 +56,16 @@ public class AutoOpMode extends OpMode {
     private PathBuilder pathBuilder;
     private PathChain startToScoreChain;
     private Path pickupToScore;
+
+    private enum State {
+        START_TO_SCORE,
+        SCORE_TO_PICKUP,
+        PICKUP_BALLS,
+        PICKUP_TO_SCORE,
+        PARKING,
+        DONE
+    }
+    private State currentState;
 
     /**
      * Changes the current state of the autonomous state machine.
@@ -85,6 +96,8 @@ public class AutoOpMode extends OpMode {
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", Math.toDegrees(follower.getPose().getHeading()));
         telemetry.addData("pattern", artifactPattern);
+        telemetry.addData("pickup cycle", pickupCycle);
+        telemetry.addData("next ball", nextBall);
         telemetry.update();
     }
 
@@ -172,7 +185,7 @@ public class AutoOpMode extends OpMode {
     }
 
     public void autonomousPathUpdate() {
-        switch (pathState) {
+        switch (getPathState()) {
 
             case 0:
                 follower.followPath(startToScoreChain, false);
@@ -187,7 +200,6 @@ public class AutoOpMode extends OpMode {
                     setPathState(2);
                 }
                 else if (!follower.isBusy()) {
-                    updatePickupPose(pickupCycle);
                     follower.followPath(nextBallPath(nextBall));
                     follower.followPath(updatePickupPose(pickupCycle), false);
 
@@ -210,5 +222,9 @@ public class AutoOpMode extends OpMode {
                 }
                 break;
         }
+    }
+
+    private int getPathState() {
+        return pathState;
     }
 }
