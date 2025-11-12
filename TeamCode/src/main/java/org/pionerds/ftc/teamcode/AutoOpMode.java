@@ -43,6 +43,7 @@ public class AutoOpMode extends OpMode {
 
     private boolean scanned = false;
     private int pickupCycle = 0;
+    private int nextBall = 0;
 
     private String artifactPattern = "No scan attempt yet";
 
@@ -108,10 +109,10 @@ public class AutoOpMode extends OpMode {
         startToScoreChain = pathBuilder
             .addPath(new BezierLine(startPose, scanPose))
             .setConstantHeadingInterpolation(Math.toRadians(90))
-            .addPath(new BezierCurve(scanPose, scorePose))
-            .addParametricCallback(80, () -> {
+            .addParametricCallback(1.0, () -> {
                 scanned = true;
             })
+            .addPath(new BezierCurve(scanPose, scorePose))
             .setLinearHeadingInterpolation(scanPose.getHeading(), scorePose.getHeading())
             .build();
 
@@ -149,7 +150,7 @@ public class AutoOpMode extends OpMode {
 
     private PathChain updatePickupPose(int cycle) {
 
-        double pileYCoordOffset = 24;
+        final double pileYCoordOffset = 24;
 
         return(pathBuilder
             .addPath(new BezierCurve(scorePose, pickupPose.withY(pickupPose.getY() - (pileYCoordOffset * cycle))))
@@ -158,6 +159,17 @@ public class AutoOpMode extends OpMode {
         );
     }
 
+    private PathChain nextBallPath(int ball){
+
+        final double ballXCoordOffset = 5;
+        final Pose currentPose = follower.getPose();
+
+        return(pathBuilder
+            .addPath(new BezierLine(currentPose, currentPose.withX(currentPose.getX() - (ballXCoordOffset * ball))))
+            .setConstantHeadingInterpolation(Math.toRadians(180))
+            .build()
+        );
+    }
 
     public void autonomousPathUpdate() {
         switch (pathState) {
@@ -170,10 +182,15 @@ public class AutoOpMode extends OpMode {
                 break;
 
             case 1:
-                if (!follower.isBusy()) {
-                    updatePickupPose(pickupCycle);
-                    follower.followPath(updatePickupPose(pickupCycle), false);
+                if (nextBall == 2 && !follower.isBusy()) {
+                    nextBall = 0;
                     setPathState(2);
+                }
+                else if (!follower.isBusy()) {
+                    updatePickupPose(pickupCycle);
+                    follower.followPath(nextBallPath(nextBall));
+                    follower.followPath(updatePickupPose(pickupCycle), false);
+
                 }
                 break;
 
