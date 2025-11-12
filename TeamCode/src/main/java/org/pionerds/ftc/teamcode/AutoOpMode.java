@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Pathfinding.Constants;
+import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
 import java.util.Arrays;
 
@@ -187,6 +188,7 @@ public class AutoOpMode extends OpMode {
 
             case 67:
                 if (!follower.isBusy()) {
+                    DataStorage.storeAngle(0,follower.getPose().getHeading());
                     setPathState(-1);
                 }
                 break;
