@@ -26,7 +26,7 @@ public class PioNerdAprilTag {
                     MULTIPLY_TO_DISTANCE *
                     Math.pow(10.0, decimalPlaces)
             ) /
-            Math.pow(10.0, decimalPlaces)
+                Math.pow(10.0, decimalPlaces)
         );
     }
 
@@ -41,7 +41,7 @@ public class PioNerdAprilTag {
                     MULTIPLY_TO_DISTANCE *
                     Math.pow(10.0, decimalPlaces)
             ) /
-            Math.pow(10.0, decimalPlaces)
+                Math.pow(10.0, decimalPlaces)
         );
     }
 
@@ -56,7 +56,7 @@ public class PioNerdAprilTag {
                     MULTIPLY_TO_DISTANCE *
                     Math.pow(10.0, decimalPlaces)
             ) /
-            Math.pow(10.0, decimalPlaces)
+                Math.pow(10.0, decimalPlaces)
         );
     }
 
@@ -71,7 +71,7 @@ public class PioNerdAprilTag {
                     MULTIPLY_TO_DISTANCE *
                     Math.pow(10.0, decimalPlaces)
             ) /
-            Math.pow(10.0, decimalPlaces)
+                Math.pow(10.0, decimalPlaces)
         );
     }
 }

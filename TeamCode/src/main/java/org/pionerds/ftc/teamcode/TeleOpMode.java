@@ -12,7 +12,7 @@ import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
 /**
  * TeleOpMode - Main teleoperated (driver-controlled) operation mode for the robot.
- * 
+ * <p>
  * This OpMode sets up:
  * - Two driver control stations (one for driving, one for storage/launching)
  * - All robot hardware systems
@@ -23,14 +23,14 @@ import org.pionerds.ftc.teamcode.Hardware.Hardware;
 public class TeleOpMode extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
-    
+
     // Driver 1: Primary robot driver (handles movement and navigation)
     final DriverControls driverControls1 = new LucasDriverControls(
         "Lucas Schwietz",
         true,        // Is primary driver
         1.0f         // Full speed control
     );
-    
+
     // Driver 2: Storage system operator (handles lazy susan and launching)
     final DriverControls driverControls2 = new LucasSusanControls(
         "Lucas S",
@@ -52,7 +52,7 @@ public class TeleOpMode extends LinearOpMode {
 
         // Wait for the driver to press "START" button
         waitForStart();
-        
+
         // === START PHASE ===
         // Create and register elapsed time tracker for timing-dependent operations
         ElapsedTime elapsedTime = new ElapsedTime();
@@ -69,8 +69,8 @@ public class TeleOpMode extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Process gamepad inputs and update all hardware systems
-            hardware.tick(gamepad1,gamepad2);
-            
+            hardware.tick(gamepad1, gamepad2);
+
             // Commented out test code (kept for debugging purposes):
             //hardware.storage.testRotateSusan(0.5);
             //hardware.storage.enableFeeder();

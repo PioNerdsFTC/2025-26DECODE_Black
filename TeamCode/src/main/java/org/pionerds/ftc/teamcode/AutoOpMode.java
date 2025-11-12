@@ -4,6 +4,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
@@ -29,18 +30,19 @@ public class AutoOpMode extends OpMode {
 
     // Path following system from Pedro Pathing library
     private Follower follower;
-    
+
     // Timers for tracking durations and timeouts
     private Timer pathTimer, actionTimer, opmodeTimer;
 
-    private final Pose startPose = new Pose(56, Constants.localizerConstants.robot_Width/2, Math.toRadians(90)); // Start Pose of our robot.
+    private final Pose startPose = new Pose(56, Constants.localizerConstants.robot_Width / 2, Math.toRadians(90)); // Start Pose of our robot.
     private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
     private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
-    private Pose pickupPose = new Pose(48, 84, Math.toRadians(180));
+    private final Pose pickupPose = new Pose(48, 84, Math.toRadians(180));
     private final Pose endPose = new Pose(38.75, 33.25, Math.toRadians(180));
 
     private boolean scanned = false;
     private int pickupCycle = 0;
+    private final double pileYCoordOffset = 24;
 
     private String artifactPattern = "No scan attempt yet";
 
@@ -51,14 +53,13 @@ public class AutoOpMode extends OpMode {
 
     private PathBuilder pathBuilder;
     private PathChain startToScoreChain;
-    private PathChain scoreToPickupChain;
     private PathChain pickupToScoreChain;
 
 
     /**
      * Changes the current state of the autonomous state machine.
      * Also resets the path timer to measure duration of the new state.
-     * 
+     *
      * @param pState The new state number to transition to
      */
     public void setPathState(int pState) {
@@ -72,7 +73,7 @@ public class AutoOpMode extends OpMode {
      */
     @Override
     public void loop() {
-        if(!scanned){
+        if (!scanned) {
             artifactPattern = Arrays.toString(hardware.vision.getArtifactPattern());
         }
         autonomousPathUpdate();
@@ -82,7 +83,7 @@ public class AutoOpMode extends OpMode {
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
-        telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("heading", Math.toDegrees(follower.getPose().getHeading()));
         telemetry.addData("pattern", artifactPattern);
         telemetry.update();
     }
@@ -109,14 +110,14 @@ public class AutoOpMode extends OpMode {
             .addPath(new BezierLine(startPose, scanPose))
             .setConstantHeadingInterpolation(Math.toRadians(90))
             .addPath(new BezierCurve(scanPose, scorePose))
-            .addParametricCallback(80, () -> {scanned=true;})
+            .addParametricCallback(80, () -> {
+                scanned = true;
+            })
             .setLinearHeadingInterpolation(scanPose.getHeading(), scorePose.getHeading())
             .build();
 
-        pickupToScoreChain = pathBuilder
-            .addPath(new BezierCurve(pickupPose, scorePose))
-            .setLinearHeadingInterpolation(pickupPose.getHeading(), scorePose.getHeading())
-            .build();
+        Path pickupToScore = new Path(new BezierCurve(pickupPose, scorePose));
+        pickupToScore.setLinearHeadingInterpolation(pickupPose.getHeading(), scorePose.getHeading());
     }
 
     /**
@@ -124,7 +125,8 @@ public class AutoOpMode extends OpMode {
      * Currently unused but required by OpMode structure.
      */
     @Override
-    public void init_loop() {}
+    public void init_loop() {
+    }
 
     /**
      * Called once when "START" is pressed to begin autonomous.
@@ -142,48 +144,41 @@ public class AutoOpMode extends OpMode {
      * r o b o t i c s
      **/
     @Override
-    public void stop() {}
+    public void stop() {
+    }
 
-    /**
-     * State machine for autonomous navigation and actions.
-     * Called every loop iteration to progress through the autonomous sequence.
-     * State flow:
-     * 0 -> Start first path (to scan position)
-     * 1 -> Wait for arrival, then scan artifact pattern
-     * 2 -> Start second path (to score position) once pattern is scanned
-     * 3 -> Wait for arrival, then complete (state -1 prevents further actions)
-     */
+    private PathChain updatePickupPose(int cycle) {
+
+        return(pathBuilder
+            .addPath(new BezierCurve(scorePose, pickupPose.withY(pickupPose.getY() - (pileYCoordOffset * cycle))))
+            .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPose.getHeading())
+            .build()
+        );
+    }
+
+
     public void autonomousPathUpdate() {
         switch (pathState) {
 
             case 0:
-                follower.followPath(startToScoreChain,false);
-                if(!follower.isBusy()){
+                follower.followPath(startToScoreChain, false);
+                if (!follower.isBusy()) {
                     setPathState(1);
                 }
                 break;
 
-            // STATE 1: Wait at scan position and perform vision scan
             case 1:
-                if(!follower.isBusy()) {
-                    pickupPose = pickupPose.withY(pickupPose.getY() - (24 * pickupCycle));
-
-                    scoreToPickupChain = pathBuilder
-                        .addPath(new BezierCurve(scorePose, pickupPose))
-                        .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPose.getHeading())
-                        .build();
-
-                    follower.followPath(scoreToPickupChain,false);
+                if (!follower.isBusy()) {
+                    updatePickupPose(pickupCycle);
+                    follower.followPath(updatePickupPose(pickupCycle), false);
                     setPathState(2);
                 }
                 break;
 
-            // STATE 2: Begin navigation to scoring position
             case 2:
-                if(pickupCycle==2 && !follower.isBusy()){
+                if (pickupCycle == 2 && !follower.isBusy()) {
                     setPathState(67);
-                }
-                else if(!follower.isBusy()){
+                } else if (!follower.isBusy()) {
                     follower.followPath(pickupToScoreChain, false);
                     pickupCycle++;
                     setPathState(1);
@@ -191,7 +186,7 @@ public class AutoOpMode extends OpMode {
                 break;
 
             case 67:
-                if(!follower.isBusy()) {
+                if (!follower.isBusy()) {
                     setPathState(-1);
                 }
                 break;

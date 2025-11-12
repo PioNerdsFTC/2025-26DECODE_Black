@@ -6,15 +6,15 @@ import java.util.ArrayList;
 
 public class ScheduleTask {
     private static ElapsedTime elapsedTime;
-    private static ArrayList<Runnable> runnableList = new ArrayList<Runnable>();
-    private static ArrayList<Double> timeList = new ArrayList<Double>();
+    private static final ArrayList<Runnable> runnableList = new ArrayList<Runnable>();
+    private static final ArrayList<Double> timeList = new ArrayList<Double>();
 
 
-    public static void initTime(ElapsedTime time){
+    public static void initTime(ElapsedTime time) {
         elapsedTime = time;
     }
 
-    public static void add(Runnable runnable, double time){
+    public static void add(Runnable runnable, double time) {
         runnableList.add(runnable);
         timeList.add(time);
     }
