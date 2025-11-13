@@ -55,9 +55,7 @@ public class AutoOpMode extends OpMode {
 
     public enum State {
         START_TO_SCORE,
-        SCORE_TO_PICKUP,
         PICKUP_BALLS,
-        PICKUP_TO_SCORE,
         PARKING,
         DONE
     }
