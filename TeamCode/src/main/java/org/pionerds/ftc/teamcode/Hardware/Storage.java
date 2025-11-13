@@ -43,7 +43,7 @@ public class Storage {
         // Retrieve hardware components from the hardware map
         CRServo feeder = this.hardware.mapping.getContinuousServo("feeder", DcMotorSimple.Direction.FORWARD);
         Servo bumpUpFeeder = this.hardware.mapping.getServoMotor("bumpUp");
-        DcMotorEx intake = this.hardware.mapping.getMotor("intakeMotor", 40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+        DcMotorEx intake = this.hardware.mapping.getMotor("intakeMotor", 40.0, DcMotorSimple.Direction.REVERSE, DcMotor.ZeroPowerBehavior.FLOAT);
         DcMotorEx susan = this.hardware.mapping.getMotor("susanMotor", 40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Verify all components were successfully mapped

@@ -18,13 +18,13 @@ public class Launcher {
         launcher0 = this.hardware.mapping.getMotor(
             "launcher0",
             3.0,
-            DcMotorSimple.Direction.FORWARD,
+            DcMotorSimple.Direction.REVERSE,
             DcMotorEx.ZeroPowerBehavior.FLOAT
         );
         launcher1 = this.hardware.mapping.getMotor(
             "launcher1",
             3.0,
-            DcMotorSimple.Direction.REVERSE,
+            DcMotorSimple.Direction.FORWARD,
             DcMotorEx.ZeroPowerBehavior.FLOAT
         );
 

@@ -80,7 +80,8 @@ public class Aimbot {
      * @return Calculated motor velocity
      */
     private double calculateMotorVelocity(double range) {
-        return range * 1.5;
+        //return range * 1.5;
+        return 1890;
     }
 
     /**
