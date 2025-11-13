@@ -87,7 +87,6 @@ public class AutoOpMode extends OpMode {
 
     /**
      * Initialization method - called once when "INIT" is pressed.
-     * Sets up timers, path follower, hardware, and pre-builds navigation paths.
      */
     @Override
     public void init() {
@@ -141,7 +140,6 @@ public class AutoOpMode extends OpMode {
 
     /**
      * Called once when "START" is pressed to begin autonomous.
-     * Resets timers and starts the state machine at state 0.
      */
     @Override
     public void start() {
@@ -152,7 +150,6 @@ public class AutoOpMode extends OpMode {
     /**
      * Called once when autonomous ends.
      * Everything stops automatically, so no manual cleanup needed.
-     * r o b o t i c s
      **/
     @Override
     public void stop() {
