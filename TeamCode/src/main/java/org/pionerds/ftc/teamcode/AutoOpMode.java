@@ -43,21 +43,16 @@ public class AutoOpMode extends OpMode {
 
     private boolean scanned = false;
     private int pickupCycle = 0;
-    private int nextBall = 0;
-
 
     private String artifactPattern = "No scan attempt yet";
 
     final Hardware hardware = new Hardware();
 
-    // State machine variable - tracks which autonomous phase we're in
-    private int pathState;
-
     private PathBuilder pathBuilder;
     private PathChain startToScoreChain;
     private Path pickupToScore;
 
-    private enum State {
+    public enum State {
         START_TO_SCORE,
         SCORE_TO_PICKUP,
         PICKUP_BALLS,
@@ -65,7 +60,8 @@ public class AutoOpMode extends OpMode {
         PARKING,
         DONE
     }
-    private State currentState;
+
+    private State pathState;
 
     /**
      * Changes the current state of the autonomous state machine.
@@ -73,7 +69,7 @@ public class AutoOpMode extends OpMode {
      *
      * @param pState The new state number to transition to
      */
-    public void setPathState(int pState) {
+    public void setPathState(State pState) {
         pathState = pState;
         pathTimer.resetTimer();
     }
@@ -97,7 +93,6 @@ public class AutoOpMode extends OpMode {
         telemetry.addData("heading", Math.toDegrees(follower.getPose().getHeading()));
         telemetry.addData("pattern", artifactPattern);
         telemetry.addData("pickup cycle", pickupCycle);
-        telemetry.addData("next ball", nextBall);
         telemetry.update();
     }
 
@@ -148,7 +143,7 @@ public class AutoOpMode extends OpMode {
     @Override
     public void start() {
         opmodeTimer.resetTimer();
-        setPathState(0);  // Begin with first state
+        setPathState(State.START_TO_SCORE);  // Begin with first state
     }
 
     /**
@@ -158,7 +153,6 @@ public class AutoOpMode extends OpMode {
      **/
     @Override
     public void stop() {
-        DataStorage.storeAngle(0, follower.getPose().getHeading());
     }
 
     private PathChain updatePickupPose(int cycle) {
@@ -187,44 +181,44 @@ public class AutoOpMode extends OpMode {
     public void autonomousPathUpdate() {
         switch (getPathState()) {
 
-            case 0:
-                follower.followPath(startToScoreChain, false);
+            case START_TO_SCORE:
                 if (!follower.isBusy()) {
-                    setPathState(1);
+                    follower.followPath(startToScoreChain, false);
+                    setPathState(State.SCORE_TO_PICKUP);
                 }
                 break;
 
-            case 1:
-                if (nextBall == 2 && !follower.isBusy()) {
-                    nextBall = 0;
-                    setPathState(2);
-                }
-                else if (!follower.isBusy()) {
-                    follower.followPath(nextBallPath(nextBall));
-                    follower.followPath(updatePickupPose(pickupCycle), false);
+            case SCORE_TO_PICKUP:
 
+                break;
+
+            case PICKUP_BALLS:
+
+                break;
+
+            case PICKUP_TO_SCORE:
+                if(!follower.isBusy()) {
+                    follower.followPath(new Path(new BezierLine(follower.getPose(), scorePose)));
+                    setPathState(State.PARKING);
                 }
                 break;
 
-            case 2:
-                if (pickupCycle == 2 && !follower.isBusy()) {
-                    setPathState(67);
-                } else if (!follower.isBusy()) {
-                    follower.followPath(pickupToScore, false);
-                    pickupCycle++;
-                    setPathState(1);
+            case PARKING:
+                if(!follower.isBusy()) {
+                    follower.followPath(new Path(new BezierLine(follower.getPose(), endPose)));
+                    setPathState(State.DONE);
                 }
                 break;
 
-            case 67:
-                if (!follower.isBusy()) {
-                    setPathState(-1);
+            case DONE:
+                if(!follower.isBusy()) {
+                    DataStorage.storeAngle(1, follower.getPose().getHeading());
                 }
                 break;
         }
     }
 
-    private int getPathState() {
+    private State getPathState() {
         return pathState;
     }
 }
