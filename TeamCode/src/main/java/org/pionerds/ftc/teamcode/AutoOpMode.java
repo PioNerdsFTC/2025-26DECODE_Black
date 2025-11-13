@@ -66,7 +66,7 @@ public class AutoOpMode extends OpMode {
      * Changes the current state of the autonomous state machine.
      * Also resets the path timer to measure duration of the new state.
      *
-     * @param pState The new state number to transition to
+     * @param pState The new State to transition to
      */
     public void setPathState(State pState) {
         pathState = pState;
