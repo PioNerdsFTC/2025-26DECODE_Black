@@ -9,15 +9,16 @@ import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
 public class LucasDriverControls extends DriverControls {
 
+    boolean resetGyroPressed = false;
+
     public LucasDriverControls(String driverName, boolean isDriver, float maxSpeed) {
         super(driverName, maxSpeed);
         this.setIsDriver(isDriver);
     }
 
-    boolean resetGyroPressed = false;
-
     /**
      * Ticked every loop in the TeleOp.
+     *
      * @param gamepad
      * @param hardware
      * @Controls: Left_Bumper - 0.5 Speed Modifier <br>

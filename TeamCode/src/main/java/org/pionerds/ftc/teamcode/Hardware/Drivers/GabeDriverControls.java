@@ -8,17 +8,9 @@ import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
 public class GabeDriverControls extends DriverControls {
 
-    public GabeDriverControls(
-        String driverName,
-        boolean isDriver,
-        float maxSpeed
-    ) {
-        super(driverName, maxSpeed);
-        this.setIsDriver(isDriver);
-    }
-
     /**
      * Ticked every loop in the TeleOp.
+     *
      * @param gamepad
      * @param hardware
      * @Controls: Left_Bumper - 0.5 Speed Modifier <br>
@@ -32,6 +24,15 @@ public class GabeDriverControls extends DriverControls {
      **/
 
     boolean reset_Gyro_Pressed = false;
+
+    public GabeDriverControls(
+        String driverName,
+        boolean isDriver,
+        float maxSpeed
+    ) {
+        super(driverName, maxSpeed);
+        this.setIsDriver(isDriver);
+    }
 
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {

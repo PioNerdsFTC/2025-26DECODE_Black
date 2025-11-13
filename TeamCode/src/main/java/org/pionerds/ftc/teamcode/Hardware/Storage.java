@@ -12,23 +12,20 @@ import com.qualcomm.robotcore.hardware.Servo;
  * that can hold and transfer artifacts (game pieces).
  */
 public class Storage {
+    private final int susanVelocityRequest = 300;  // Requested velocity for susan motor
+    private final int gearRatio = 3;       // Gear ratio: (90/30) = 3:1
+    private final int TPR = 288 * gearRatio; // Ticks per revolution after gearing (288 * 3 = 864)
+    private final Artifact[] inventory = new Artifact[]{Artifact.EMPTY, Artifact.EMPTY, Artifact.EMPTY};  // Stores what artifact is in each of 3 storage slots
     private Hardware hardware;
-
     // Servos and motors for storage mechanism
     private CRServo feederServo;           // Continuous rotation servo that feeds artifacts to launcher
     private DcMotorEx susanMotorEx;        // Motor that rotates the lazy susan platform
     private DcMotorEx intakeMotorEx;       // Motor that pulls artifacts into the system
     private Servo bumpUpServo;             // Servo that lifts artifacts for feeding
-
     // Position tracking for lazy susan motor
     private int susanTargetTicks = 0;      // Target encoder position for lazy susan motor
-    private final int susanVelocityRequest = 300;  // Requested velocity for susan motor
-    private final int gearRatio = 3;       // Gear ratio: (90/30) = 3:1
-    private final int TPR = 288 * gearRatio; // Ticks per revolution after gearing (288 * 3 = 864)
-
     // Initialization and state tracking
     private boolean isInitialized = false;  // Tracks if hardware components are successfully initialized
-    private final Artifact[] inventory = new Artifact[]{Artifact.EMPTY, Artifact.EMPTY, Artifact.EMPTY};  // Stores what artifact is in each of 3 storage slots
     private LazySusanPositions currentSusanPositionEnum = LazySusanPositions.INTAKE1;  // Current position of lazy susan
 
     Storage() {
@@ -98,6 +95,7 @@ public class Storage {
 
     /**
      * Manually sets an artifact type in a specific inventory slot.
+     *
      * @param artifact The type of artifact (EMPTY, PURPLE, or GREEN)
      * @param position Index of the storage slot (0, 1, or 2)
      */
@@ -149,6 +147,7 @@ public class Storage {
      * Rotates the lazy susan to a specified position using the shortest path.
      * The lazy susan can rotate continuously, so this method calculates whether to reach
      * the target position in the current revolution, previous revolution, or next revolution.
+     *
      * @param susanPosition Target position enum (INTAKE1-3 or OUTPUT1-3)
      */
     public void moveSusanTo(LazySusanPositions susanPosition) {
@@ -389,6 +388,7 @@ public class Storage {
 
     /**
      * Gets the current encoder position of the lazy susan motor.
+     *
      * @return Current encoder tick count
      */
     public int getSusanCurrentTicks() {
@@ -398,6 +398,7 @@ public class Storage {
 
     /**
      * Checks if the lazy susan is within tolerance of its target position.
+     *
      * @param ticks Tolerance in encoder ticks
      * @return true if within tolerance, false otherwise
      */

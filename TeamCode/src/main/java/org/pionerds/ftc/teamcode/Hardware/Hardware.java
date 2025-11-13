@@ -30,15 +30,15 @@ public final class Hardware {
     public Gyro gyro = new Gyro();
 
     public Telemetry telemetry = null;
-    private double maxDistanceLaunch;
-
     /**
      * Whether the hardware class is able to continue running.
      */
     public boolean continueRunning = true;
+    private double maxDistanceLaunch;
 
     /**
      * Use in Autonomous
+     *
      * @param hardwareMap
      * @param telemetry
      */
