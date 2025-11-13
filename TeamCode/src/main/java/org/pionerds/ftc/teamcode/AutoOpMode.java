@@ -211,7 +211,7 @@ public class AutoOpMode extends OpMode {
                     pathStarted = true;
                 }
                 else if (pathStarted && !follower.isBusy()){
-                    setPathState(State.SCORE_TO_PICKUP);
+                    setPathState(State.PICKUP_BALLS);
                     pathStarted = false;
                 }
                 break;
