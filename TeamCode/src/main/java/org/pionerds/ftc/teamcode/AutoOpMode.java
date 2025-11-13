@@ -147,7 +147,7 @@ public class AutoOpMode extends OpMode {
 
             .addPath(new BezierCurve(scorePose, pickupPose3))
             .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPose3.getHeading())
-            .addPath(new BezierLine(pickupPose3, pickupEndPose1))
+            .addPath(new BezierLine(pickupPose3, pickupEndPose3))
             .setConstantHeadingInterpolation(Math.toRadians(180))
             .addParametricCallback(0.3333, intakeBall())
             .addParametricCallback(0.6666, intakeBall())
