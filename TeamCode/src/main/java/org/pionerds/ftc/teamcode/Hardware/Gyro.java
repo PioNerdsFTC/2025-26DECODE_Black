@@ -39,6 +39,7 @@ public class Gyro {
     /**
      * Gets the accumulated angles (yaw, pitch, roll) by adding stored angles to current gyro readings.
      * The returned array contains [yaw, pitch, roll] in the gyro's default angle unit (usually degrees).
+     *
      * @return double array containing [yaw, pitch, roll]
      */
     public double[] getAngles() {

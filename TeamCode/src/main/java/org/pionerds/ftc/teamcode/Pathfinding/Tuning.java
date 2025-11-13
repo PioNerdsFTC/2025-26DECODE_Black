@@ -79,6 +79,27 @@ public class Tuning extends SelectableOpMode {
         });
     }
 
+    public static void drawOnlyCurrent() {
+        try {
+            Drawing.drawRobot(follower.getPose());
+            Drawing.sendPacket();
+        } catch (Exception e) {
+            throw new RuntimeException("Drawing failed " + e);
+        }
+    }
+
+    public static void draw() {
+        Drawing.drawDebug(follower);
+    }
+
+    /**
+     * This creates a full stop of the robot by setting the drive motors to run at 0 power.
+     */
+    public static void stopRobot() {
+        follower.startTeleopDrive(true);
+        follower.setTeleOpDrive(0, 0, 0, true);
+    }
+
     @Override
     public void onSelect() {
         if (follower == null) {
@@ -99,27 +120,6 @@ public class Tuning extends SelectableOpMode {
 
     @Override
     public void onLog(List<String> lines) {
-    }
-
-    public static void drawOnlyCurrent() {
-        try {
-            Drawing.drawRobot(follower.getPose());
-            Drawing.sendPacket();
-        } catch (Exception e) {
-            throw new RuntimeException("Drawing failed " + e);
-        }
-    }
-
-    public static void draw() {
-        Drawing.drawDebug(follower);
-    }
-
-    /**
-     * This creates a full stop of the robot by setting the drive motors to run at 0 power.
-     */
-    public static void stopRobot() {
-        follower.startTeleopDrive(true);
-        follower.setTeleOpDrive(0, 0, 0, true);
     }
 }
 
@@ -338,10 +338,9 @@ class TurnTuner extends OpMode {
  * @version 1.0, 3/13/2024
  */
 class ForwardVelocityTuner extends OpMode {
-    private final ArrayList<Double> velocities = new ArrayList<>();
     public static double DISTANCE = 48;
     public static double RECORD_NUMBER = 10;
-
+    private final ArrayList<Double> velocities = new ArrayList<>();
     private boolean end;
 
     @Override
@@ -448,11 +447,9 @@ class ForwardVelocityTuner extends OpMode {
  * @version 1.0, 3/13/2024
  */
 class LateralVelocityTuner extends OpMode {
-    private final ArrayList<Double> velocities = new ArrayList<>();
-
     public static double DISTANCE = 48;
     public static double RECORD_NUMBER = 10;
-
+    private final ArrayList<Double> velocities = new ArrayList<>();
     private boolean end;
 
     @Override
@@ -551,9 +548,8 @@ class LateralVelocityTuner extends OpMode {
  * @version 1.0, 3/13/2024
  */
 class ForwardZeroPowerAccelerationTuner extends OpMode {
-    private final ArrayList<Double> accelerations = new ArrayList<>();
     public static double VELOCITY = 30;
-
+    private final ArrayList<Double> accelerations = new ArrayList<>();
     private double previousVelocity;
     private long previousTimeNano;
 
@@ -660,8 +656,8 @@ class ForwardZeroPowerAccelerationTuner extends OpMode {
  * @version 1.0, 3/13/2024
  */
 class LateralZeroPowerAccelerationTuner extends OpMode {
-    private final ArrayList<Double> accelerations = new ArrayList<>();
     public static double VELOCITY = 30;
+    private final ArrayList<Double> accelerations = new ArrayList<>();
     private double previousVelocity;
     private long previousTimeNano;
     private boolean stopping;

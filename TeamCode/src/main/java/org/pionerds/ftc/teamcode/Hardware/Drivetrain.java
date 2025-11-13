@@ -9,13 +9,11 @@ import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 
 public class Drivetrain {
 
-    Hardware hardware = null;
-
-    private Telemetry telemetry = null;
-
     private final DcMotor[] motors = {null, null, null, null}; //front right, front left, back left, back right
     private final double[] motorSpeed = {0.0, 0.0, 0.0, 0.0};
     private final String[] motorNames = {"motor0", "motor1", "motor2", "motor3"};
+    Hardware hardware = null;
+    private Telemetry telemetry = null;
 
     public void init(Hardware hardware, Telemetry telemetry) {
         this.hardware = hardware;
@@ -124,6 +122,7 @@ public class Drivetrain {
 
     /**
      * Drives the robot with controls.
+     *
      * @param driverControls         The driver controls object.
      * @param hasDumbDrivePreference Whether to use dumb drive preference.
      * @param bumperTurnPreferred    Whether to prefer bumper turn.
@@ -147,6 +146,7 @@ public class Drivetrain {
 
     /**
      * Applies a drive to the drivetrain based on the speed and orientation.
+     *
      * @param driverControls The driver controls object.
      * @param orientation    The orientation of the robot.
      */
@@ -176,6 +176,7 @@ public class Drivetrain {
 
     /**
      * Applies a turn to the drivetrain based on the rotation speed.
+     *
      * @param driverControls The driver controls object.
      */
     public void stickTurn(DriverControls driverControls) {
@@ -194,6 +195,7 @@ public class Drivetrain {
 
     /**
      * Converts the orientation of the stick to the robot's orientation.
+     *
      * @param x           The x-coordinate of the stick.
      * @param y           The y-coordinate of the stick.
      * @param orientation The orientation of the robot.

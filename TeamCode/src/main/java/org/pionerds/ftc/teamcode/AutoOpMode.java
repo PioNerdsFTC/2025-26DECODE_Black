@@ -28,26 +28,20 @@ import java.util.Arrays;
 @Autonomous(name = "AutoOpMode", group = "Examples")
 public class AutoOpMode extends OpMode {
 
-    // Path following system from Pedro Pathing library
-    private Follower follower;
-
-    // Timers for tracking durations and timeouts
-    private Timer pathTimer, actionTimer, opmodeTimer;
-
+    final Hardware hardware = new Hardware();
     private final Pose startPose = new Pose(56, Constants.localizerConstants.robot_Width / 2, Math.toRadians(90)); // Start Pose of our robot.
     private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
     private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
     private final Pose pickupPose = new Pose(48, 84, Math.toRadians(180));
     private final Pose endPose = new Pose(38.75, 33.25, Math.toRadians(180));
-
+    private final double pileYCoordOffset = 24;
+    // Path following system from Pedro Pathing library
+    private Follower follower;
+    // Timers for tracking durations and timeouts
+    private Timer pathTimer, actionTimer, opmodeTimer;
     private boolean scanned = false;
     private int pickupCycle = 0;
-    private final double pileYCoordOffset = 24;
-
     private String artifactPattern = "No scan attempt yet";
-
-    final Hardware hardware = new Hardware();
-
     // State machine variable - tracks which autonomous phase we're in
     private int pathState;
 
@@ -149,7 +143,7 @@ public class AutoOpMode extends OpMode {
 
     private PathChain updatePickupPose(int cycle) {
 
-        return(pathBuilder
+        return (pathBuilder
             .addPath(new BezierCurve(scorePose, pickupPose.withY(pickupPose.getY() - (pileYCoordOffset * cycle))))
             .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPose.getHeading())
             .build()

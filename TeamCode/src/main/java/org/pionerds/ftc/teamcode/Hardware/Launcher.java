@@ -5,10 +5,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Launcher {
 
-    Hardware hardware = null;
-
     public DcMotorEx launcher0;
     public DcMotorEx launcher1;
+    Hardware hardware = null;
 
     Launcher() {
     }
@@ -35,6 +34,7 @@ public class Launcher {
 
     /**
      * Set launcher power to
+     *
      * @param power power to set launcher to
      */
 
@@ -45,6 +45,7 @@ public class Launcher {
 
     /**
      * Set launcher velocity to
+     *
      * @param velocity velocity to set launcher to
      */
     public void setLauncherVelocity(double velocity) {
