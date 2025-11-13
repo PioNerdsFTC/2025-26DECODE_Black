@@ -77,7 +77,7 @@ public class AutoOpMode extends OpMode {
         // These loop the movements of the robot, these must be called continuously in order to work
         follower.update();
         // Feedback to Driver Hub for debugging
-        telemetry.addData("path state", pathState);
+        telemetry.addData("path state", this.getPathState().toString());
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", Math.toDegrees(follower.getPose().getHeading()));
@@ -107,7 +107,7 @@ public class AutoOpMode extends OpMode {
         startToScoreChain = pathBuilder
             .addPath(new BezierLine(startPose, scanPose))
             .setConstantHeadingInterpolation(Math.toRadians(90))
-            .addParametricCallback(1.0, () -> {
+            .addParametricCallback(100, () -> {
                 scanned = true;
             })
             .addPath(new BezierCurve(scanPose, scorePose))
@@ -120,9 +120,10 @@ public class AutoOpMode extends OpMode {
                     .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPoseList[i].getHeading())
                     .addPath(new BezierLine(pickupPoseList[i], pickupEndPoseList[i]))
                     .setConstantHeadingInterpolation(Math.toRadians(180))
-                    .addParametricCallback(1.0 / 3.0, intakeBall())
-                    .addParametricCallback(2.0 / 3.0, intakeBall())
-                    .addParametricCallback(1.0, intakeBall())
+                    //TODO fix callbacks
+                    .addParametricCallback(33, intakeBall())
+                    .addParametricCallback(66, intakeBall())
+                    .addParametricCallback(100, intakeBall())
                     .addPath(new BezierCurve(pickupEndPoseList[i], scorePose))
                     .setLinearHeadingInterpolation(pickupEndPoseList[i].getHeading(), scorePose.getHeading());
             }
