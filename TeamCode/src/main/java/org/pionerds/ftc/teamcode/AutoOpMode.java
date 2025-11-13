@@ -193,7 +193,7 @@ public class AutoOpMode extends OpMode {
             Timer timer = new Timer();
             timer.resetTimer();
 
-            while (actionTimer.getElapsedTime() < 1000) {
+            while (timer.getElapsedTime() < 1000) {
                 //waiting
             }
 
