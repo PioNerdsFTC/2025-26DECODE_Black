@@ -153,7 +153,7 @@ public class AutoOpMode extends OpMode {
             .addParametricCallback(0.6666, intakeBall())
             .addParametricCallback(0.9999, intakeBall())
             .addPath(new BezierCurve(pickupPose3, scorePose))
-            .setLinearHeadingInterpolation(pickupEndPose1.getHeading(), scorePose.getHeading())
+            .setLinearHeadingInterpolation(pickupEndPose3.getHeading(), scorePose.getHeading())
 
             .build();
         //TODO make this less sus and add lazysusan code and launching code
