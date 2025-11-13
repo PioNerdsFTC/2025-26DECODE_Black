@@ -17,15 +17,6 @@ import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
 import java.util.Arrays;
 
-/**
- * AutoOpMode - Autonomous operation mode for the robot.
- * This OpMode implements a state machine for autonomous navigation and scoring:
- * State 0: Start - Move from starting position to scanning position
- * State 1: Scan - Wait for robot to arrive, then scan artifact pattern with vision
- * State 2: Navigate - Move to scoring position with scanned pattern data
- * State 3: Complete - Wait for arrival, then stop (no further actions)
- * Uses Pedro Pathing library for advanced path following with Bezier curves.
- */
 @Autonomous(name = "AutoOpMode", group = "Examples")
 public class AutoOpMode extends OpMode {
 
@@ -104,6 +95,8 @@ public class AutoOpMode extends OpMode {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
+        Pose[] pickupPoseList = {pickupPose1, pickupPose2, pickupPose3};
+        Pose[] pickupEndPoseList = {pickupEndPose1, pickupEndPose2, pickupEndPose3};
 
         // Set up path following system with robot's hardware configuration
         follower = Constants.createFollower(hardwareMap);
@@ -122,39 +115,20 @@ public class AutoOpMode extends OpMode {
             .setLinearHeadingInterpolation(scanPose.getHeading(), scorePose.getHeading())
             .build();
 
-        pickupAndScoreChain = pathBuilder
-            .addPath(new BezierCurve(scorePose, pickupPose1))
-            .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPose1.getHeading())
-            .addPath(new BezierLine(pickupPose1, pickupEndPose1))
-            .setConstantHeadingInterpolation(Math.toRadians(180))
-            .addParametricCallback(0.3333, intakeBall())
-            .addParametricCallback(0.6666, intakeBall())
-            .addParametricCallback(0.9999, intakeBall())
-            .addPath(new BezierCurve(pickupEndPose1, scorePose))
-            .setLinearHeadingInterpolation(pickupEndPose1.getHeading(), scorePose.getHeading())
-
-            .addPath(new BezierCurve(scorePose, pickupPose2))
-            .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPose2.getHeading())
-            .addPath(new BezierLine(pickupPose2, pickupEndPose2))
-            .setConstantHeadingInterpolation(Math.toRadians(180))
-            .addParametricCallback(0.3333, intakeBall())
-            .addParametricCallback(0.6666, intakeBall())
-            .addParametricCallback(0.9999, intakeBall())
-            .addPath(new BezierCurve(pickupEndPose2, scorePose))
-            .setLinearHeadingInterpolation(pickupEndPose2.getHeading(), scorePose.getHeading())
-
-            .addPath(new BezierCurve(scorePose, pickupPose3))
-            .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPose3.getHeading())
-            .addPath(new BezierLine(pickupPose3, pickupEndPose3))
-            .setConstantHeadingInterpolation(Math.toRadians(180))
-            .addParametricCallback(0.3333, intakeBall())
-            .addParametricCallback(0.6666, intakeBall())
-            .addParametricCallback(0.9999, intakeBall())
-            .addPath(new BezierCurve(pickupEndPose3, scorePose))
-            .setLinearHeadingInterpolation(pickupEndPose3.getHeading(), scorePose.getHeading())
-
-            .build();
-        //TODO make this less sus and add lazysusan code and launching code
+            for (int i = 0; i< pickupPoseList.length; i++) {
+                pathBuilder
+                    .addPath(new BezierCurve(scorePose, pickupPoseList[i]))
+                    .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPoseList[i].getHeading())
+                    .addPath(new BezierLine(pickupPoseList[i], pickupEndPoseList[i]))
+                    .setConstantHeadingInterpolation(Math.toRadians(180))
+                    .addParametricCallback(1.0 / 3.0, intakeBall())
+                    .addParametricCallback(2.0 / 3.0, intakeBall())
+                    .addParametricCallback(1.0, intakeBall())
+                    .addPath(new BezierCurve(pickupEndPoseList[i], scorePose))
+                    .setLinearHeadingInterpolation(pickupEndPoseList[i].getHeading(), scorePose.getHeading());
+            }
+            pickupAndScoreChain = pathBuilder.build();
+        //TODO add lazy-susan code and launching code
     }
 
     /**
