@@ -44,10 +44,6 @@ public class AutoOpMode extends OpMode {
     private PathChain startToScoreChain;
     private PathChain pickupAndScoreChain;
 
-    // NON-BLOCKING intake state (Approach 1)
-    private volatile boolean waitingForIntake = false;
-    private volatile long intakeStartMs = 0;
-    private static final long INTAKE_MS = 1000L; // intake duration in ms
 
     public enum State {
         START_TO_SCORE,
@@ -82,8 +78,6 @@ public class AutoOpMode extends OpMode {
         // Process state machine and path transitions
         autonomousPathUpdate();
 
-        // Poll non-blocking intake waiting state and finish when elapsed
-        handleIntakeWaiting();
 
         // These loop the movements of the robot, these must be called continuously in order to work
         follower.update();
@@ -94,7 +88,6 @@ public class AutoOpMode extends OpMode {
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", Math.toDegrees(follower.getPose().getHeading()));
         telemetry.addData("pattern", artifactPattern);
-        telemetry.addData("waitingForIntake", waitingForIntake);
         telemetry.update();
     }
 
@@ -127,18 +120,16 @@ public class AutoOpMode extends OpMode {
             .setLinearHeadingInterpolation(scanPose.getHeading(), scorePose.getHeading())
             .build();
 
-        // Build pickup/score chain. Reuse builder but ensure correct ordering of callbacks
+        // Build pickup/score chain
         for (int i = 0; i < pickupPoseList.length; i++) {
             pathBuilder
                 .addPath(new BezierCurve(scorePose, pickupPoseList[i]))
+                .addParametricCallback(0.9, () -> {hardware.storage.enableIntake();})
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPoseList[i].getHeading())
 
                 .addPath(new BezierLine(pickupPoseList[i], pickupEndPoseList[i]))
+                .addParametricCallback(0.9, () -> {hardware.storage.disableIntake();})
                 .setConstantHeadingInterpolation(Math.toRadians(180))
-                // NON-BLOCKING: add parametric callbacks that set up a pause + intake start
-                .addParametricCallback(1.0/3.0, intakeBall())
-                .addParametricCallback(2.0/3.0, intakeBall())
-                .addParametricCallback(1.0, intakeBall())
 
                 .addPath(new BezierCurve(pickupEndPoseList[i], scorePose))
                 .setLinearHeadingInterpolation(pickupEndPoseList[i].getHeading(), scorePose.getHeading());
@@ -172,48 +163,6 @@ public class AutoOpMode extends OpMode {
     public void stop() {
     }
 
-    /**
-     * NON-BLOCKING intake callback factory.
-     * This turns on intake, pauses following, records start time, and returns immediately.
-     * The actual wait and resume happens on the main loop via handleIntakeWaiting().
-     */
-    private Runnable intakeBall() {
-        return () -> {
-            // If already waiting, do nothing (protect against multiple triggers)
-            if (waitingForIntake) return;
-
-            // Mark that we are intentionally pausing to intake
-            waitingForIntake = true;
-
-            // Pause follower (this sets isBusy = false inside follower)
-            follower.pausePathFollowing();
-
-            // Turn on intake immediately (safe on OpMode thread)
-            hardware.storage.enableIntake();
-
-            // Record start time and return: do NOT block here
-            intakeStartMs = System.currentTimeMillis();
-        };
-    }
-
-    /**
-     * Polling helper called every loop to finish the intake pause when the timeout elapses.
-     */
-    private void handleIntakeWaiting() {
-        if (!waitingForIntake) return;
-
-        long now = System.currentTimeMillis();
-        if (now - intakeStartMs >= INTAKE_MS) {
-            // Stop intake and resume following
-            hardware.storage.disableIntake();
-
-            // Clear waiting flag before resuming to prevent state machine races
-            waitingForIntake = false;
-
-            // Resume follower (will restore isBusy etc. inside follower)
-            follower.resumePathFollowing();
-        }
-    }
 
     public void autonomousPathUpdate() {
         switch (getPathState()) {
@@ -223,8 +172,7 @@ public class AutoOpMode extends OpMode {
                     follower.followPath(startToScoreChain, false);
                     pathStarted = true;
                 }
-                // ignore deliberate pauses for intake
-                else if (pathStarted && !follower.isBusy() && !waitingForIntake) {
+                else if (pathStarted && !follower.isBusy()) {
                     setPathState(State.PICKUP_BALLS);
                     pathStarted = false;
                 }
@@ -235,7 +183,7 @@ public class AutoOpMode extends OpMode {
                     follower.followPath(pickupAndScoreChain);
                     pathStarted = true;
                 }
-                else if (pathStarted && !follower.isBusy() && !waitingForIntake) {
+                else if (pathStarted && !follower.isBusy()) {
                     setPathState(State.PARKING);
                     pathStarted = false;
                 }
@@ -246,7 +194,7 @@ public class AutoOpMode extends OpMode {
                     follower.followPath(new Path(new BezierLine(follower.getPose(), endPose)));
                     pathStarted = true;
                 }
-                else if (pathStarted && !follower.isBusy() && !waitingForIntake) {
+                else if (pathStarted && !follower.isBusy()) {
                     setPathState(State.DONE);
                     pathStarted = false;
                 }
