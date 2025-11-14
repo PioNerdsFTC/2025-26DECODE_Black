@@ -1,25 +1,30 @@
 # AutoOpMode Testing Guide
 
-This repository includes unit tests for the AutoOpMode autonomous operation that simulate motor hardware and display telemetry output.
+This repository includes unit tests that **run your real AutoOpMode code** with simulated motor hardware and display telemetry output.
 
-## Quick Start
+## Quick Start - Run Your REAL AutoOpMode Code
 
-To run the AutoOpMode simulator and see telemetry output:
+To run **your actual AutoOpMode.java code** with simulated hardware:
 
 ```bash
-cd TeamCode/src/test/java
-javac org/pionerds/ftc/teamcode/AutoOpModeSimulator.java
-java org.pionerds.ftc.teamcode.AutoOpModeSimulator
+# Run the test that executes your real AutoOpMode code
+gradle :TeamCode:test --tests AutoOpModeTest.testAutoOpModeSimulation
 ```
+
+This executes your real AutoOpMode code - it calls your init(), start(), and loop() methods exactly as they would run on the robot, but with mock hardware instead of real motors.
+
+**Important**: This is NOT a fake simulation! The test actually instantiates your AutoOpMode class and runs your code.
 
 ## What You'll See
 
-The simulator displays:
-- **Hardware Initialization**: All motors and sensors being initialized
-- **State Transitions**: Movement through START_TO_SCORE → PICKUP_BALLS → PARKING → DONE
-- **Telemetry Data**: Position (x, y), heading, and robot state at each loop iteration
-- **Motor Operations**: Intake motor activations for ball collection
-- **Path Following**: Simulation of the robot following autonomous paths
+When running your real AutoOpMode code with mock hardware, you'll see:
+- **Hardware Initialization**: Output from your init() method
+- **State Transitions**: Your actual state machine executing (START_TO_SCORE → PICKUP_BALLS → PARKING → DONE)
+- **Telemetry Data**: Real telemetry output from your loop() method showing position (x, y), heading, and robot state
+- **Motor Operations**: Your intake and motor control code executing
+- **Path Following**: Your path following logic running with simulated hardware
+
+This is NOT a fake simulation - it's your actual code running!
 
 ## Example Output
 
@@ -58,11 +63,17 @@ PHASE 3: AUTONOMOUS EXECUTION
 
 ## Benefits
 
+✅ **Runs your actual AutoOpMode.java code** - not a fake simulation!
 ✅ Test autonomous logic without robot hardware
 ✅ Rapid debugging and development
-✅ See exactly what telemetry would display
-✅ Verify state machine transitions
-✅ Understand robot behavior before deployment
+✅ See exactly what telemetry your code outputs
+✅ Verify state machine transitions in your real code
+✅ Catch bugs before deployment to the robot
+
+## What's the Difference Between the Test Files?
+
+- **AutoOpModeTest.java**: ✅ **RUNS YOUR REAL AutoOpMode CODE** (Recommended!)
+- **AutoOpModeSimulator.java**: ❌ Hardcoded example only (does not run your actual code)
 
 ## Full Documentation
 
@@ -74,9 +85,9 @@ See `TeamCode/src/test/java/org/pionerds/ftc/teamcode/README.md` for complete do
 
 ## Files Created
 
-- `AutoOpModeSimulator.java` - Standalone simulator with telemetry display
-- `AutoOpModeTest.java` - JUnit test suite
+- `AutoOpModeTest.java` - ⭐ **RECOMMENDED** - JUnit test suite that runs your real AutoOpMode code
+- `AutoOpModeSimulator.java` - Hardcoded example only (does not run actual AutoOpMode code)
 - `MockTelemetry.java` - Mock telemetry implementation
 - `MockHardwareMap.java` - Mock hardware map implementation
 - `MockFollower.java` - Mock path follower implementation
-- `README.md` - Comprehensive test documentation
+- `README.md` - Comprehensive test documentation in test directory

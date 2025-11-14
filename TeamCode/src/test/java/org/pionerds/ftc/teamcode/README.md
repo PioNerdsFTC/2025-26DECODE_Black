@@ -4,28 +4,46 @@ This directory contains unit tests for the AutoOpMode autonomous operation mode.
 
 ## Test Files
 
-### AutoOpModeSimulator.java
-A standalone simulator that can be run directly to see the telemetry output from the autonomous mode execution.
+### ⭐ AutoOpModeTest.java (RECOMMENDED - Runs Your REAL Code!)
+**This test runs your ACTUAL AutoOpMode.java code** with simulated hardware. This is NOT a fake simulation!
+
+The test instantiates your real AutoOpMode class and calls your actual init(), start(), and loop() methods exactly as they would execute on the robot. The only difference is that hardware (motors, sensors) is simulated using mock objects.
 
 **How to run:**
 ```bash
-# Navigate to the test directory
+# Using Gradle (requires network connection for dependencies)
+gradle :TeamCode:test --tests AutoOpModeTest
+
+# Or run specific test methods:
+gradle :TeamCode:test --tests AutoOpModeTest.testAutoOpModeSimulation
+gradle :TeamCode:test --tests AutoOpModeTest.testTelemetryOutput
+gradle :TeamCode:test --tests AutoOpModeTest.testStateTransitions
+```
+
+**What it does:**
+- ✅ Runs your actual AutoOpMode.java code (not a fake!)
+- ✅ Calls your real init(), start(), and loop() methods
+- ✅ Executes your state machine logic (START_TO_SCORE → PICKUP_BALLS → PARKING → DONE)
+- ✅ Shows real telemetry output from your code
+- ✅ Simulates hardware responses (motors, encoders, path following)
+- ✅ Validates state transitions and behavior
+
+**Key Point**: This executes the exact same code that runs on your robot! You can add breakpoints, debug, and see exactly what your autonomous mode does.
+
+### AutoOpModeSimulator.java (Example Only - Not Real Code)
+A standalone hardcoded simulation that shows **example** output. This does NOT run your actual AutoOpMode code.
+
+**How to run:**
+```bash
 cd TeamCode/src/test/java
-
-# Compile the simulator
 javac org/pionerds/ftc/teamcode/AutoOpModeSimulator.java
-
-# Run the simulator
 java org.pionerds.ftc.teamcode.AutoOpModeSimulator
 ```
 
 **What it does:**
-- Simulates the complete autonomous mode execution
-- Shows initialization of all hardware components (motors, sensors, etc.)
-- Displays telemetry output that would normally appear on the driver station
-- Simulates all four states: START_TO_SCORE → PICKUP_BALLS → PARKING → DONE
-- Shows motor positions, headings, and state transitions
-- Simulates intake operations for collecting balls
+- ❌ Does NOT run your AutoOpMode code
+- Shows a hardcoded example of what autonomous execution might look like
+- Useful for understanding the expected flow without running actual code
 
 **Sample Output:**
 ```
@@ -53,21 +71,7 @@ PHASE 3: AUTONOMOUS EXECUTION
 ...
 ```
 
-### AutoOpModeTest.java
-A JUnit-based unit test suite that uses mock objects to test the AutoOpMode class.
 
-**How to run:**
-```bash
-# Using Gradle (requires network connection)
-gradle :TeamCode:test --tests AutoOpModeTest
-```
-
-**What it tests:**
-- Complete autonomous mode simulation
-- Telemetry output validation
-- State transitions (START_TO_SCORE → PICKUP_BALLS → PARKING → DONE)
-- Motor simulation and position tracking
-- Path following behavior
 
 ### Mock Classes
 
@@ -82,12 +86,18 @@ Simulates the pedropathing Follower class for path following without actual hard
 
 ## Features
 
+✅ **Runs Real Code** - AutoOpModeTest and RunAutoOpModeWithMockHardware execute your actual AutoOpMode.java
 ✅ **No Hardware Required** - Tests run completely in software simulation
 ✅ **Telemetry Display** - See all telemetry output as it would appear on the driver station
 ✅ **Motor Simulation** - Simulates motor positions, power, and encoder values
 ✅ **Path Following** - Simulates the robot following paths through the autonomous sequence
 ✅ **State Machine Testing** - Verifies correct state transitions
 ✅ **Intake Operations** - Simulates ball collection with intake motor control
+
+## Which Test Should I Use?
+
+- **Want to test your actual AutoOpMode code?** → Use `AutoOpModeTest.java` ⭐
+- **Just want to see example output?** → Use `AutoOpModeSimulator.java`
 
 ## Why This is Useful
 

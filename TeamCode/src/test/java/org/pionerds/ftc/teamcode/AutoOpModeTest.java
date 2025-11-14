@@ -17,8 +17,18 @@ import static org.junit.Assert.*;
 
 /**
  * Unit test for AutoOpMode that simulates motor hardware and displays telemetry.
- * This test runs the autonomous mode in simulation, showing the telemetry output
- * that would normally be displayed on the driver station.
+ * 
+ * ⭐ IMPORTANT: This test runs your REAL AutoOpMode code! ⭐
+ * 
+ * This is NOT a fake simulation. The test:
+ * 1. Creates an actual instance of your AutoOpMode class
+ * 2. Calls your real init() method
+ * 3. Calls your real start() method
+ * 4. Calls your real loop() method repeatedly
+ * 
+ * The only difference from running on the robot is that hardware (motors, sensors)
+ * is simulated using mock objects. This lets you test your autonomous logic without
+ * needing physical robot hardware.
  */
 public class AutoOpModeTest {
 
