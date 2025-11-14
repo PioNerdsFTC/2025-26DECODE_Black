@@ -132,12 +132,14 @@ public class AutoOpMode extends OpMode {
             pathBuilder
                 .addPath(new BezierCurve(scorePose, pickupPoseList[i]))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPoseList[i].getHeading())
+
                 .addPath(new BezierLine(pickupPoseList[i], pickupEndPoseList[i]))
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 // NON-BLOCKING: add parametric callbacks that set up a pause + intake start
-                .addParametricCallback(33, intakeBall())
-                .addParametricCallback(66, intakeBall())
-                .addParametricCallback(100, intakeBall())
+                .addParametricCallback(1.0/3.0, intakeBall())
+                .addParametricCallback(2.0/3.0, intakeBall())
+                .addParametricCallback(1.0, intakeBall())
+
                 .addPath(new BezierCurve(pickupEndPoseList[i], scorePose))
                 .setLinearHeadingInterpolation(pickupEndPoseList[i].getHeading(), scorePose.getHeading());
         }
