@@ -13,50 +13,60 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Pathfinding.Constants;
+import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
 import java.util.Arrays;
 
-/**
- * AutoOpMode - Autonomous operation mode for the robot.
- * This OpMode implements a state machine for autonomous navigation and scoring:
- * State 0: Start - Move from starting position to scanning position
- * State 1: Scan - Wait for robot to arrive, then scan artifact pattern with vision
- * State 2: Navigate - Move to scoring position with scanned pattern data
- * State 3: Complete - Wait for arrival, then stop (no further actions)
- * Uses Pedro Pathing library for advanced path following with Bezier curves.
- */
 @Autonomous(name = "AutoOpMode", group = "Examples")
 public class AutoOpMode extends OpMode {
 
-    final Hardware hardware = new Hardware();
+    private Follower follower;
+    private Timer pathTimer, actionTimer, opmodeTimer;
+
     private final Pose startPose = new Pose(56, Constants.localizerConstants.robot_Width / 2, Math.toRadians(90)); // Start Pose of our robot.
     private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
     private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
-    private final Pose pickupPose = new Pose(48, 84, Math.toRadians(180));
+    private final Pose pickupPose1 = new Pose(48, 84, Math.toRadians(180));
+    private final Pose pickupPose2 = new Pose(48, 60, Math.toRadians(180));
+    private final Pose pickupPose3 = new Pose(48, 36, Math.toRadians(180));
+    private final Pose pickupEndPose1 = new Pose(32, 84, Math.toRadians(180));
+    private final Pose pickupEndPose2 = new Pose(32, 60, Math.toRadians(180));
+    private final Pose pickupEndPose3 = new Pose(32, 36, Math.toRadians(180));
     private final Pose endPose = new Pose(38.75, 33.25, Math.toRadians(180));
     private final double pileYCoordOffset = 24;
-    // Path following system from Pedro Pathing library
-    private Follower follower;
-    // Timers for tracking durations and timeouts
-    private Timer pathTimer, actionTimer, opmodeTimer;
+  
     private boolean scanned = false;
-    private int pickupCycle = 0;
+    private boolean pathStarted = false;
     private String artifactPattern = "No scan attempt yet";
-    // State machine variable - tracks which autonomous phase we're in
-    private int pathState;
+
+    // Count intake enable/disable calls for debugging/verification
+    private int intakeEnableCount = 0;
+    private int intakeDisableCount = 0;
+    private int getIntakeTotalToggles() { return intakeEnableCount + intakeDisableCount; }
+
+    final Hardware hardware = new Hardware();
 
     private PathBuilder pathBuilder;
     private PathChain startToScoreChain;
-    private PathChain pickupToScoreChain;
+    private PathChain pickupAndScoreChain;
 
+
+    public enum State {
+        START_TO_SCORE,
+        PICKUP_BALLS,
+        PARKING,
+        DONE
+    }
+
+    private State pathState;
 
     /**
      * Changes the current state of the autonomous state machine.
      * Also resets the path timer to measure duration of the new state.
      *
-     * @param pState The new state number to transition to
+     * @param pState The new State to transition to
      */
-    public void setPathState(int pState) {
+    public void setPathState(State pState) {
         pathState = pState;
         pathTimer.resetTimer();
     }
@@ -70,21 +80,28 @@ public class AutoOpMode extends OpMode {
         if (!scanned) {
             artifactPattern = Arrays.toString(hardware.vision.getArtifactPattern());
         }
+
+        // Process state machine and path transitions
         autonomousPathUpdate();
+
+
         // These loop the movements of the robot, these must be called continuously in order to work
         follower.update();
+
         // Feedback to Driver Hub for debugging
-        telemetry.addData("path state", pathState);
+        telemetry.addData("path state", this.getPathState().toString());
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", Math.toDegrees(follower.getPose().getHeading()));
         telemetry.addData("pattern", artifactPattern);
+        telemetry.addData("intake enables (spins)", intakeEnableCount);
+        telemetry.addData("intake disables", intakeDisableCount);
+        telemetry.addData("intake total toggles", getIntakeTotalToggles());
         telemetry.update();
     }
 
     /**
      * Initialization method - called once when "INIT" is pressed.
-     * Sets up timers, path follower, hardware, and pre-builds navigation paths.
      */
     @Override
     public void init() {
@@ -92,6 +109,8 @@ public class AutoOpMode extends OpMode {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
+        Pose[] pickupPoseList = {pickupPose1, pickupPose2, pickupPose3};
+        Pose[] pickupEndPoseList = {pickupEndPose1, pickupEndPose2, pickupEndPose3};
 
         // Set up path following system with robot's hardware configuration
         follower = Constants.createFollower(hardwareMap);
@@ -103,15 +122,31 @@ public class AutoOpMode extends OpMode {
         startToScoreChain = pathBuilder
             .addPath(new BezierLine(startPose, scanPose))
             .setConstantHeadingInterpolation(Math.toRadians(90))
-            .addPath(new BezierCurve(scanPose, scorePose))
-            .addParametricCallback(80, () -> {
+            .addParametricCallback(100, () -> {
                 scanned = true;
             })
+            .addPath(new BezierCurve(scanPose, scorePose))
             .setLinearHeadingInterpolation(scanPose.getHeading(), scorePose.getHeading())
             .build();
 
-        Path pickupToScore = new Path(new BezierCurve(pickupPose, scorePose));
-        pickupToScore.setLinearHeadingInterpolation(pickupPose.getHeading(), scorePose.getHeading());
+        // Build pickup/score chain
+        for (int i = 0; i < pickupPoseList.length; i++) {
+            pathBuilder
+                .addPath(new BezierCurve(scorePose, pickupPoseList[i]))
+                .addParametricCallback(0.9, () -> {hardware.storage.enableIntake(); intakeEnableCount++;})
+                .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPoseList[i].getHeading())
+
+                .addPath(new BezierLine(pickupPoseList[i], pickupEndPoseList[i]))
+                // moved disableIntake() off this segment so it doesn't stop during the pickup->end line
+                .setConstantHeadingInterpolation(Math.toRadians(180))
+
+                .addPath(new BezierCurve(pickupEndPoseList[i], scorePose))
+                // disable intake on the return curve (early in the return) so each pickup leg does enable->disable exactly once
+                .addParametricCallback(0.1, () -> {hardware.storage.disableIntake(); intakeDisableCount++;})
+                .setLinearHeadingInterpolation(pickupEndPoseList[i].getHeading(), scorePose.getHeading());
+        }
+        pickupAndScoreChain = pathBuilder.build();
+        //TODO add lazy-susan code and launching code
     }
 
     /**
@@ -124,66 +159,67 @@ public class AutoOpMode extends OpMode {
 
     /**
      * Called once when "START" is pressed to begin autonomous.
-     * Resets timers and starts the state machine at state 0.
      */
     @Override
     public void start() {
         opmodeTimer.resetTimer();
-        setPathState(0);  // Begin with first state
+        setPathState(State.START_TO_SCORE);  // Begin with first state
     }
 
     /**
      * Called once when autonomous ends.
      * Everything stops automatically, so no manual cleanup needed.
-     * r o b o t i c s
      **/
     @Override
     public void stop() {
     }
 
-    private PathChain updatePickupPose(int cycle) {
-
-        return (pathBuilder
-            .addPath(new BezierCurve(scorePose, pickupPose.withY(pickupPose.getY() - (pileYCoordOffset * cycle))))
-            .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPose.getHeading())
-            .build()
-        );
-    }
-
 
     public void autonomousPathUpdate() {
-        switch (pathState) {
+        switch (getPathState()) {
 
-            case 0:
-                follower.followPath(startToScoreChain, false);
-                if (!follower.isBusy()) {
-                    setPathState(1);
+            case START_TO_SCORE:
+                if (!pathStarted && !follower.isBusy()) {
+                    follower.followPath(startToScoreChain, false);
+                    pathStarted = true;
+                }
+                else if (pathStarted && !follower.isBusy()) {
+                    setPathState(State.PICKUP_BALLS);
+                    pathStarted = false;
                 }
                 break;
 
-            case 1:
-                if (!follower.isBusy()) {
-                    updatePickupPose(pickupCycle);
-                    follower.followPath(updatePickupPose(pickupCycle), false);
-                    setPathState(2);
+            case PICKUP_BALLS:
+                if (!pathStarted && !follower.isBusy()) {
+                    follower.followPath(pickupAndScoreChain);
+                    pathStarted = true;
+                }
+                else if (pathStarted && !follower.isBusy()) {
+                    setPathState(State.PARKING);
+                    pathStarted = false;
                 }
                 break;
 
-            case 2:
-                if (pickupCycle == 2 && !follower.isBusy()) {
-                    setPathState(67);
-                } else if (!follower.isBusy()) {
-                    follower.followPath(pickupToScoreChain, false);
-                    pickupCycle++;
-                    setPathState(1);
+            case PARKING:
+                if(!pathStarted && !follower.isBusy()) {
+                    follower.followPath(new Path(new BezierLine(follower.getPose(), endPose)));
+                    pathStarted = true;
+                }
+                else if (pathStarted && !follower.isBusy()) {
+                    setPathState(State.DONE);
+                    pathStarted = false;
                 }
                 break;
 
-            case 67:
-                if (!follower.isBusy()) {
-                    setPathState(-1);
+            case DONE:
+                if(!follower.isBusy()) {
+                    DataStorage.storeAngle(1, follower.getPose().getHeading());
                 }
                 break;
         }
+    }
+
+    private State getPathState() {
+        return pathState;
     }
 }
