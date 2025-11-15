@@ -80,7 +80,8 @@ public class Aimbot {
      * @return Calculated motor velocity
      */
     private double calculateMotorVelocity(double range) {
-        return range * 1.5;
+        //return range * 1.5;
+        return 1890;
     }
 
     /**
@@ -144,6 +145,7 @@ public class Aimbot {
 
                     // STATE 2: Stop requested - begin firing sequence
                     if (stopRequested && !stopPending && !isStopped) {
+                        telemetry.addLine("STOP REQUESTED AND STOP SEQUENCING!");
                         hardware.storage.enableFeeder();  // Start feeding artifact into launcher
                         stopPending = true;               // Enter stop pending state
                         lastStopTick = lastTick;         // Record when we started the stop sequence
@@ -155,6 +157,7 @@ public class Aimbot {
 
                     // STATE 3: Stop pending - waiting for artifact to feed before stopping
                 } else if (!isStopped && (hardware.elapsedTime.milliseconds() - lastStopTick > stopDelay)) {
+                    telemetry.addLine("STOP TICK AIMBOT");
                     // Delay has elapsed, artifact should be launched - now stop everything
                     hardware.launcher.stopLaunchers();
                     hardware.storage.disableFeeder();
@@ -164,6 +167,7 @@ public class Aimbot {
 
                     // OPTIONAL: Cancel stop sequence if stop is no longer requested during delay
                 } else if (!stopRequested) {
+                    telemetry.addLine("resetting stopPending to false");
                     stopPending = false;  // Allow cancellation of launch sequence
                 }
             } else {

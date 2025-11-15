@@ -28,7 +28,7 @@ public class TeleOpMode extends LinearOpMode {
     final DriverControls driverControls1 = new LucasDriverControls(
         "Lucas Schwietz",
         true,        // Is primary driver
-        1.0f         // Full speed control
+            1.0f
     );
 
     // Driver 2: Storage system operator (handles lazy susan and launching)

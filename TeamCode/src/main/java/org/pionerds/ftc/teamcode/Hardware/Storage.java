@@ -21,7 +21,7 @@ public class Storage {
     private CRServo feederServo;           // Continuous rotation servo that feeds artifacts to launcher
     private DcMotorEx susanMotorEx;        // Motor that rotates the lazy susan platform
     private DcMotorEx intakeMotorEx;       // Motor that pulls artifacts into the system
-    private Servo bumpUpServo;             // Servo that lifts artifacts for feeding
+    private CRServo bumpUpServo;             // Servo that lifts artifacts for feeding
     // Position tracking for lazy susan motor
     private int susanTargetTicks = 0;      // Target encoder position for lazy susan motor
     // Initialization and state tracking
@@ -41,17 +41,17 @@ public class Storage {
         this.hardware = hardware;
 
         // Retrieve hardware components from the hardware map
-        CRServo feeder = this.hardware.mapping.getContinuousServo("feeder", DcMotorSimple.Direction.FORWARD);
-        Servo bumpUpFeeder = this.hardware.mapping.getServoMotor("bumpUp");
-        DcMotorEx intake = this.hardware.mapping.getMotor("intakeMotor", 40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT);
+        //CRServo feeder = this.hardware.mapping.getContinuousServo("feeder", DcMotorSimple.Direction.FORWARD);
+        CRServo bumpUpFeeder = this.hardware.mapping.getContinuousServo("bumpUp", CRServo.Direction.REVERSE);
+        DcMotorEx intake = this.hardware.mapping.getMotor("intakeMotor", 40.0, DcMotorSimple.Direction.REVERSE, DcMotor.ZeroPowerBehavior.FLOAT);
         DcMotorEx susan = this.hardware.mapping.getMotor("susanMotor", 40.0, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Verify all components were successfully mapped
-        if (feeder != null && bumpUpFeeder != null && susan != null && intake != null) {
-            feederServo = feeder;
+        if (/*feeder != null && */bumpUpFeeder != null && susan != null && intake != null) {
+            //feederServo = feeder;
             bumpUpServo = bumpUpFeeder;
             susanMotorEx = susan;
-            susanMotorEx.setTargetPositionTolerance(1);  // Set precision for position control (within 1 tick)
+            susanMotorEx.setTargetPositionTolerance(0);  // Set precision for position control (within 1 tick)
             intakeMotorEx = intake;
             isInitialized = true;  // Mark system as ready
         } else {
@@ -67,12 +67,16 @@ public class Storage {
      */
     public void enableFeeder() {
         if (!isInitialized) return;
-        feederServo.setPower(1);  // Start continuous rotation servo
         if (isSusanInPosition(1)) {  // Verify susan is precisely positioned
-            bumpUpServo.setPosition(0.05);  // Lift artifact into feeding position
+            bumpUpServo.setPower(1);  // Lift artifact into feeding position
         } else {
             hardware.telemetry.addLine("Susan Not In Position.");
         }
+    }
+
+    public void enableFeederManual(){
+        if (!isInitialized) return;
+        bumpUpServo.setPower(1);  // Lift artifact into feeding position
     }
 
     /**
@@ -80,8 +84,7 @@ public class Storage {
      */
     public void disableFeeder() {
         if (!isInitialized) return;
-        feederServo.setPower(0);     // Stop feeder servo
-        bumpUpServo.setPosition(0);  // Lower bump-up servo
+        bumpUpServo.setPower(0);     // Stop feeder servo
     }
 
     /**
