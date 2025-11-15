@@ -33,7 +33,8 @@ public class AutoOpMode extends OpMode {
     private final Pose pickupEndPose2 = new Pose(32, 60, Math.toRadians(180));
     private final Pose pickupEndPose3 = new Pose(32, 36, Math.toRadians(180));
     private final Pose endPose = new Pose(38.75, 33.25, Math.toRadians(180));
-
+    private final double pileYCoordOffset = 24;
+  
     private boolean scanned = false;
     private boolean pathStarted = false;
     private String artifactPattern = "No scan attempt yet";

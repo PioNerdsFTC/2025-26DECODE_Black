@@ -5,10 +5,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.ArrayList;
 
 public class ScheduleTask {
-    private static ElapsedTime elapsedTime;
     private static final ArrayList<Runnable> runnableList = new ArrayList<Runnable>();
     private static final ArrayList<Double> timeList = new ArrayList<Double>();
-
+    private static ElapsedTime elapsedTime;
 
     public static void initTime(ElapsedTime time) {
         elapsedTime = time;

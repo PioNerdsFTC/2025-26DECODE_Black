@@ -13,9 +13,6 @@ import org.pionerds.ftc.teamcode.ScheduleTask;
  */
 public class Aimbot {
 
-    private Hardware hardware;
-    private Telemetry telemetry;
-    private DriverControls controls;
     private final double maxLaunchDistanceCM = 10000; // Default max distance in centimeters for effective launching
     // Timing variables for controlled launching sequence
     double tickDelay = 100.0;       // Minimum milliseconds between aimbot tick executions
@@ -24,6 +21,9 @@ public class Aimbot {
     double lastStopTick = 0.0;      // Timestamp when stop sequence began
     boolean stopPending = false;    // Tracks if we're in the delayed stop sequence
     boolean isStopped = false;      // Tracks if aimbot is stopped
+    private Hardware hardware;
+    private Telemetry telemetry;
+    private DriverControls controls;
 
     // Package-private method to set hardware reference from Hardware class
 

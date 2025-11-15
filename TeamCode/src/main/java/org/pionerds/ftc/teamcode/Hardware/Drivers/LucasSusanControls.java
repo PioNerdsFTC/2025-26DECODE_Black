@@ -25,14 +25,6 @@ import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
  */
 public class LucasSusanControls extends DriverControls {
 
-    public LucasSusanControls(
-        String driverName,
-        boolean isDriver,
-        float maxSpeed
-    ) {
-        super(driverName, maxSpeed);
-    }
-
     // Button state tracking for debouncing (prevents multiple triggers from single press)
     boolean reset_Gyro_Pressed = false;    // Reserved for gyro reset functionality
     boolean movingSusan = false;           // Tracks if d-pad up is held (susan auto-positioning)
@@ -40,8 +32,15 @@ public class LucasSusanControls extends DriverControls {
     boolean ballCountPressed = false;      // Tracks if any d-pad button is pressed (prevents double-counting)
     int ballsOnRamp = 0;                   // Counter for artifacts scored (used to determine next target)
     boolean stoppedAlready = true;
-
     boolean changingIntakeState = false;   // Tracks if any intake button is pressed (prevents multiple state changes)
+
+    public LucasSusanControls(
+        String driverName,
+        boolean isDriver,
+        float maxSpeed
+    ) {
+        super(driverName, maxSpeed);
+    }
 
     /**
      * Main control loop - called every tick to handle gamepad input and update robot state.
