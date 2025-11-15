@@ -38,6 +38,11 @@ public class AutoOpMode extends OpMode {
     private boolean pathStarted = false;
     private String artifactPattern = "No scan attempt yet";
 
+    // Count intake enable/disable calls for debugging/verification
+    private int intakeEnableCount = 0;
+    private int intakeDisableCount = 0;
+    private int getIntakeTotalToggles() { return intakeEnableCount + intakeDisableCount; }
+
     final Hardware hardware = new Hardware();
 
     private PathBuilder pathBuilder;
@@ -88,6 +93,9 @@ public class AutoOpMode extends OpMode {
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", Math.toDegrees(follower.getPose().getHeading()));
         telemetry.addData("pattern", artifactPattern);
+        telemetry.addData("intake enables (spins)", intakeEnableCount);
+        telemetry.addData("intake disables", intakeDisableCount);
+        telemetry.addData("intake total toggles", getIntakeTotalToggles());
         telemetry.update();
     }
 
@@ -124,14 +132,16 @@ public class AutoOpMode extends OpMode {
         for (int i = 0; i < pickupPoseList.length; i++) {
             pathBuilder
                 .addPath(new BezierCurve(scorePose, pickupPoseList[i]))
-                .addParametricCallback(0.9, () -> {hardware.storage.enableIntake();})
+                .addParametricCallback(0.9, () -> {hardware.storage.enableIntake(); intakeEnableCount++;})
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPoseList[i].getHeading())
 
                 .addPath(new BezierLine(pickupPoseList[i], pickupEndPoseList[i]))
-                .addParametricCallback(0.9, () -> {hardware.storage.disableIntake();})
+                // moved disableIntake() off this segment so it doesn't stop during the pickup->end line
                 .setConstantHeadingInterpolation(Math.toRadians(180))
 
                 .addPath(new BezierCurve(pickupEndPoseList[i], scorePose))
+                // disable intake on the return curve (early in the return) so each pickup leg does enable->disable exactly once
+                .addParametricCallback(0.1, () -> {hardware.storage.disableIntake(); intakeDisableCount++;})
                 .setLinearHeadingInterpolation(pickupEndPoseList[i].getHeading(), scorePose.getHeading());
         }
         pickupAndScoreChain = pathBuilder.build();
