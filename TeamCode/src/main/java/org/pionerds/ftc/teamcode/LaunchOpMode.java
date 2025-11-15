@@ -2,7 +2,6 @@ package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
@@ -42,8 +41,8 @@ public class LaunchOpMode extends LinearOpMode {
                         (Math.round(distanceToBlueTarget.range * 100)) / 100
                 );
                 rangeToBlueTarget = (double) ((Math.round(
-                            distanceToBlueTarget.range * 100
-                        )) /
+                    distanceToBlueTarget.range * 100
+                )) /
                     100);
             }
 

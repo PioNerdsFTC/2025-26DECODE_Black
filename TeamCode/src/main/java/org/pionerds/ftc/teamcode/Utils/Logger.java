@@ -9,21 +9,30 @@ import java.util.ArrayList;
  */
 public class Logger {
 
+    // java 8 doesn't have tuples... We'll have to figure something out.
+    public static ArrayList<String> logs = new ArrayList<String>();
+
+    /**
+     * Log an error
+     */
+    public void error() {
+    }
+
+    /**
+     * Log a simple log message
+     */
+    public void info() {
+    }
+
+    /**
+     * Log a debug log message
+     */
+    public void debug() {
+    }
+
     public enum LogType {
         ERROR,
         INFO,
         DEBUG,
     }
-
-    // java 8 doesn't have tuples... We'll have to figure something out.
-    public static ArrayList<String> logs = new ArrayList<String>();
-
-    /** Log an error */
-    public void error() {}
-
-    /** Log a simple log message */
-    public void info() {}
-
-    /** Log a debug log message */
-    public void debug() {}
 }

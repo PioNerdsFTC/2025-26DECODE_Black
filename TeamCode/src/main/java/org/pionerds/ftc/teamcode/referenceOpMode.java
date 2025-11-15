@@ -15,6 +15,7 @@ public class referenceOpMode extends LinearOpMode {
         telemetry.addLine("Hello, PionerDS!");
         telemetry.update();
 
-        while (opModeIsActive()) {}
+        while (opModeIsActive()) {
+        }
     }
 }

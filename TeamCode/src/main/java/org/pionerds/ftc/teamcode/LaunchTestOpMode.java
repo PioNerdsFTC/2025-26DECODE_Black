@@ -14,9 +14,9 @@ public class LaunchTestOpMode extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
     final DriverControls driverControls1 = new LucasDriverControls(
-            "Lucas Schwietz",
-            true,
-            1.0f
+        "Lucas Schwietz",
+        true,
+        1.0f
     );
 
     @Override
@@ -49,8 +49,8 @@ public class LaunchTestOpMode extends LinearOpMode {
 
             //driverControls1.tickControls(gamepad1,hardware);
 
-            if(!changingVelocity){
-                if(gamepad1.dpad_up){
+            if (!changingVelocity) {
+                if (gamepad1.dpad_up) {
                     currentVelocity += 5.00;
                     changingVelocity = true;
                 } else if (gamepad1.dpad_down) {
@@ -61,9 +61,9 @@ public class LaunchTestOpMode extends LinearOpMode {
                 changingVelocity = false;
             }
 
-            telemetry.addLine("\nVelocity: "+currentVelocity);
-            telemetry.addLine("encoderReading0: "+hardware.launcher.launcher0.getVelocity());
-            telemetry.addLine("encoderReading1: "+hardware.launcher.launcher1.getVelocity());
+            telemetry.addLine("\nVelocity: " + currentVelocity);
+            telemetry.addLine("encoderReading0: " + hardware.launcher.launcher0.getVelocity());
+            telemetry.addLine("encoderReading1: " + hardware.launcher.launcher1.getVelocity());
             hardware.launcher.launcher0.setVelocity(currentVelocity);
             hardware.launcher.launcher1.setVelocity(currentVelocity);
             //hardware.launcher.setLauncherVelocity(currentVelocity);

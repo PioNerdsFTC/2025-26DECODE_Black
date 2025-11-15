@@ -6,6 +6,8 @@ package org.pionerds.ftc.teamcode.Utils;
  */
 public class Environment {
 
-    /** Whether the robot is competing, manages how errors are handled */
+    /**
+     * Whether the robot is competing, manages how errors are handled
+     */
     public static final boolean competing = false;
 }

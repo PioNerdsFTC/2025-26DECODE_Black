@@ -30,15 +30,15 @@ public final class Hardware {
     public Gyro gyro = new Gyro();
 
     public Telemetry telemetry = null;
-    private double maxDistanceLaunch;
-
     /**
      * Whether the hardware class is able to continue running.
      */
     public boolean continueRunning = true;
+    private double maxDistanceLaunch;
 
     /**
      * Use in Autonomous
+     *
      * @param hardwareMap
      * @param telemetry
      */
@@ -53,7 +53,7 @@ public final class Hardware {
             launcher.init(this);
             storage.init(this);
             gyro.init(this);
-            aimbot.init(this,telemetry,AprilTagNames.BlueTarget,AimbotMotorMovement.VELOCITY);
+            aimbot.init(this, telemetry, AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY);
             aimbot.setHardware(this);
 
         } catch (Exception e) {
@@ -64,6 +64,7 @@ public final class Hardware {
 
     /**
      * Use for TeleOp, where you define driver1 and driver2, which will tick gamepads.
+     *
      * @param hardwareMap
      * @param telemetry
      * @param driverControls1
@@ -80,7 +81,7 @@ public final class Hardware {
             this.telemetry = telemetry;
 
             mapping.init(this, hardwareMap);
-            drivetrain.init(this,telemetry);
+            drivetrain.init(this, telemetry);
             vision.init(this);
             launcher.init(this);
             storage.init(this);
@@ -96,27 +97,29 @@ public final class Hardware {
         }
     }
 
-    /** Runs for each iteration of the OpMode, may or may not be necessary */
+    /**
+     * Runs for each iteration of the OpMode, may or may not be necessary
+     */
     public void tick(Gamepad gamepad1, Gamepad gamepad2) {
         //try {
-            driverControls1.tickControls(gamepad1, this);
-            driverControls2.tickControls(gamepad2, this);
+        driverControls1.tickControls(gamepad1, this);
+        driverControls2.tickControls(gamepad2, this);
 
-            double[] angles = this.gyro.getAngles();
-            telemetry.addLine("Gyro:");
-            telemetry.addLine("Yaw: " + angles[0]);
-            // this.launcher.launcherButton(gamepad1);
+        double[] angles = this.gyro.getAngles();
+        telemetry.addLine("Gyro:");
+        telemetry.addLine("Yaw: " + angles[0]);
+        // this.launcher.launcherButton(gamepad1);
         //} catch (Exception e) {
         //    this.telemetry.addLine(e.getMessage());
         //    telemetry.update();
-            //if (!Environment.competing) {
-            //    telemetry.update();
-            //    this.continueRunning = false;
-            //}
+        //if (!Environment.competing) {
+        //    telemetry.update();
+        //    this.continueRunning = false;
+        //}
         //}
     }
 
-    public void addElapsedTime(ElapsedTime elapsedTime){
+    public void addElapsedTime(ElapsedTime elapsedTime) {
         this.elapsedTime = elapsedTime;
         ScheduleTask.initTime(elapsedTime);
     }
