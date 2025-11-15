@@ -75,6 +75,10 @@ public class Storage {
         }
     }
 
+    public void spinFeederManual(double pow){
+        feederServo.setPower(pow);
+    }
+
     /**
      * Stops the feeder mechanism and returns the bump-up servo to neutral position.
      */
@@ -409,6 +413,11 @@ public class Storage {
 
     public LazySusanPositions getCurrentSusanPositionEnum() {
         return currentSusanPositionEnum;
+    }
+
+    public void adjustLazySusan(double power) {
+        susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        susanMotorEx.setPower(power);
     }
 
 }
