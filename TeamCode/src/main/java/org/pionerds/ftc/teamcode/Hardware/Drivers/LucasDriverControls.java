@@ -6,6 +6,7 @@ import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Artifact;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
+import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
 public class LucasDriverControls extends DriverControls {
 
@@ -71,6 +72,7 @@ public class LucasDriverControls extends DriverControls {
         if (!resetGyroPressed && gamepad.dpad_up && gamepad.dpad_right) {
             resetGyroPressed = true;
             hardware.gyro.resetYaw();
+            DataStorage.storeAllAngles(new double[] {0.0,0.0,0.0});
 
         } else {
             resetGyroPressed = false;
