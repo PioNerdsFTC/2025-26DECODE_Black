@@ -122,7 +122,7 @@ public class PracticeOpMode extends LinearOpMode {
                 if (feederOn) {
                     hardware.storage.disableFeeder();
                 }
-                feederOn = !launcherOn;
+                feederOn = !feederOn;
                 changingFeederSpeed = true;
             } else if(!gamepad2.dpad_up) {
                 changingFeederSpeed = false;
