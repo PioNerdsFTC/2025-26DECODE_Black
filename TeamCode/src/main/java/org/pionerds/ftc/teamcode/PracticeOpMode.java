@@ -47,7 +47,9 @@ public class PracticeOpMode extends LinearOpMode {
         boolean changingPos = false;
         boolean changingLauncherSpeed = false;
         boolean changingIntakeSpeed = false;
+        boolean changingFeederSpeed = false;
         boolean launcherOn = false;
+        boolean feederOn = false;
         boolean intakeOn = false;
 
 
@@ -103,16 +105,27 @@ public class PracticeOpMode extends LinearOpMode {
             if(!changingLauncherSpeed && gamepad2.left_stick_button){
                 if(!launcherOn) {
                     hardware.launcher.setLauncherVelocity(1890);
-                    hardware.storage.enableFeederManual();
                 }
                 if(launcherOn) {
                     hardware.launcher.setLauncherVelocity(0);
-                    hardware.storage.disableFeeder();
                 }
                 launcherOn = !launcherOn;
                 changingLauncherSpeed = true;
             } else if(!gamepad2.left_stick_button) {
                 changingLauncherSpeed = false;
+            }
+
+            if(!changingFeederSpeed && gamepad2.dpad_up) {
+                if (!feederOn) {
+                    hardware.storage.enableFeederManual();
+                }
+                if (feederOn) {
+                    hardware.storage.disableFeeder();
+                }
+                feederOn = !launcherOn;
+                changingFeederSpeed = true;
+            } else if(!gamepad2.dpad_up) {
+                feederOn = false;
             }
 
             if(!changingIntakeSpeed && gamepad2.right_stick_button){
