@@ -138,7 +138,7 @@ public class AutoOpMode extends OpMode {
 
                 .addPath(new BezierLine(pickupPoseList[i], pickupEndPoseList[i]))
                 // moved disableIntake() off this segment so it doesn't stop during the pickup->end line
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
 
                 .addPath(new BezierCurve(pickupEndPoseList[i], scorePose))
                 // disable intake on the return curve (early in the return) so each pickup leg does enable->disable exactly once
