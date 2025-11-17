@@ -26,13 +26,13 @@ public class AutoOpMode extends OpMode {
     private final Pose startPose = new Pose(56, Constants.localizerConstants.robot_Width / 2, Math.toRadians(90)); // Start Pose of our robot.
     private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
     private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
-    private final Pose pickupPose1 = new Pose(48, 84, Math.toRadians(180));
-    private final Pose pickupPose2 = new Pose(48, 60, Math.toRadians(180));
-    private final Pose pickupPose3 = new Pose(48, 36, Math.toRadians(180));
-    private final Pose pickupEndPose1 = new Pose(32, 84, Math.toRadians(180));
-    private final Pose pickupEndPose2 = new Pose(32, 60, Math.toRadians(180));
-    private final Pose pickupEndPose3 = new Pose(32, 36, Math.toRadians(180));
-    private final Pose endPose = new Pose(38.75, 33.25, Math.toRadians(180));
+    private final Pose pickupPose1 = new Pose(48, 84, Math.toRadians(0));
+    private final Pose pickupPose2 = new Pose(48, 60, Math.toRadians(0));
+    private final Pose pickupPose3 = new Pose(48, 36, Math.toRadians(0));
+    private final Pose pickupEndPose1 = new Pose(32, 84, Math.toRadians(0));
+    private final Pose pickupEndPose2 = new Pose(32, 60, Math.toRadians(0));
+    private final Pose pickupEndPose3 = new Pose(32, 36, Math.toRadians(0));
+    private final Pose endPose = new Pose(38.75, 33.25, Math.toRadians(0));
     private final double pileYCoordOffset = 24;
   
     private boolean scanned = false;
