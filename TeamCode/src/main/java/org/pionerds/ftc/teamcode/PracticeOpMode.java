@@ -125,7 +125,7 @@ public class PracticeOpMode extends LinearOpMode {
                 feederOn = !launcherOn;
                 changingFeederSpeed = true;
             } else if(!gamepad2.dpad_up) {
-                feederOn = false;
+                changingFeederSpeed = false;
             }
 
             if(!changingIntakeSpeed && gamepad2.right_stick_button){

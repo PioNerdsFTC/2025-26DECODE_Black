@@ -47,6 +47,7 @@ public class AutoOpMode extends OpMode {
     final Hardware hardware = new Hardware();
 
     private PathBuilder pathBuilder;
+    private PathBuilder pathBuilder2;
     private PathChain startToScoreChain;
     private PathChain pickupAndScoreChain;
 
@@ -115,6 +116,7 @@ public class AutoOpMode extends OpMode {
         // Set up path following system with robot's hardware configuration
         follower = Constants.createFollower(hardwareMap);
         pathBuilder = new PathBuilder(follower);
+        pathBuilder2 = new PathBuilder(follower);
         follower.setStartingPose(startPose);
 
         hardware.init(hardwareMap, telemetry);
@@ -122,7 +124,7 @@ public class AutoOpMode extends OpMode {
         startToScoreChain = pathBuilder
             .addPath(new BezierLine(startPose, scanPose))
             .setConstantHeadingInterpolation(Math.toRadians(90))
-            .addParametricCallback(100, () -> {
+            .addParametricCallback(0.9, () -> {
                 scanned = true;
             })
             .addPath(new BezierCurve(scanPose, scorePose))
@@ -131,7 +133,7 @@ public class AutoOpMode extends OpMode {
 
         // Build pickup/score chain
         for (int i = 0; i < pickupPoseList.length; i++) {
-            pathBuilder
+            pathBuilder2
                 .addPath(new BezierCurve(scorePose, pickupPoseList[i]))
                 .addParametricCallback(0.9, () -> {hardware.storage.enableIntake(); intakeEnableCount++;})
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPoseList[i].getHeading())
@@ -145,7 +147,7 @@ public class AutoOpMode extends OpMode {
                 .addParametricCallback(0.1, () -> {hardware.storage.disableIntake(); intakeDisableCount++;})
                 .setLinearHeadingInterpolation(pickupEndPoseList[i].getHeading(), scorePose.getHeading());
         }
-        pickupAndScoreChain = pathBuilder.build();
+        pickupAndScoreChain = pathBuilder2.build();
         //TODO add lazy-susan code and launching code
     }
 
