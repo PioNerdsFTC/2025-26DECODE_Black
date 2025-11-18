@@ -17,7 +17,7 @@ import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
 import java.util.Arrays;
 
-@Autonomous(name = "AutoOpMode", group = "Examples")
+@Autonomous(name = "BlueAutoOpMode", group = "Examples")
 public class AutoOpMode extends OpMode {
 
     private Follower follower;
