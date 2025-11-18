@@ -26,13 +26,13 @@ public class AutoOpMode extends OpMode {
     private final Pose startPose = new Pose(56, Constants.localizerConstants.robot_Width / 2, Math.toRadians(90)); // Start Pose of our robot.
     private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
     private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
-    private final Pose pickupPose1 = new Pose(48, 84, Math.toRadians(180));
-    private final Pose pickupPose2 = new Pose(48, 60, Math.toRadians(180));
-    private final Pose pickupPose3 = new Pose(48, 36, Math.toRadians(180));
-    private final Pose pickupEndPose1 = new Pose(32, 84, Math.toRadians(180));
-    private final Pose pickupEndPose2 = new Pose(32, 60, Math.toRadians(180));
-    private final Pose pickupEndPose3 = new Pose(32, 36, Math.toRadians(180));
-    private final Pose endPose = new Pose(38.75, 33.25, Math.toRadians(180));
+    private final Pose pickupPose1 = new Pose(48, 84, Math.toRadians(0));
+    private final Pose pickupPose2 = new Pose(48, 60, Math.toRadians(0));
+    private final Pose pickupPose3 = new Pose(48, 36, Math.toRadians(0));
+    private final Pose pickupEndPose1 = new Pose(32, 84, Math.toRadians(0));
+    private final Pose pickupEndPose2 = new Pose(32, 60, Math.toRadians(0));
+    private final Pose pickupEndPose3 = new Pose(32, 36, Math.toRadians(0));
+    private final Pose endPose = new Pose(38.75, 33.25, Math.toRadians(0));
     private final double pileYCoordOffset = 24;
   
     private boolean scanned = false;
@@ -47,6 +47,7 @@ public class AutoOpMode extends OpMode {
     final Hardware hardware = new Hardware();
 
     private PathBuilder pathBuilder;
+    private PathBuilder pathBuilder2;
     private PathChain startToScoreChain;
     private PathChain pickupAndScoreChain;
 
@@ -115,6 +116,7 @@ public class AutoOpMode extends OpMode {
         // Set up path following system with robot's hardware configuration
         follower = Constants.createFollower(hardwareMap);
         pathBuilder = new PathBuilder(follower);
+        pathBuilder2 = new PathBuilder(follower);
         follower.setStartingPose(startPose);
 
         hardware.init(hardwareMap, telemetry);
@@ -122,7 +124,7 @@ public class AutoOpMode extends OpMode {
         startToScoreChain = pathBuilder
             .addPath(new BezierLine(startPose, scanPose))
             .setConstantHeadingInterpolation(Math.toRadians(90))
-            .addParametricCallback(100, () -> {
+            .addParametricCallback(0.9, () -> {
                 scanned = true;
             })
             .addPath(new BezierCurve(scanPose, scorePose))
@@ -131,21 +133,21 @@ public class AutoOpMode extends OpMode {
 
         // Build pickup/score chain
         for (int i = 0; i < pickupPoseList.length; i++) {
-            pathBuilder
+            pathBuilder2
                 .addPath(new BezierCurve(scorePose, pickupPoseList[i]))
                 .addParametricCallback(0.9, () -> {hardware.storage.enableIntake(); intakeEnableCount++;})
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPoseList[i].getHeading())
 
                 .addPath(new BezierLine(pickupPoseList[i], pickupEndPoseList[i]))
                 // moved disableIntake() off this segment so it doesn't stop during the pickup->end line
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
 
                 .addPath(new BezierCurve(pickupEndPoseList[i], scorePose))
                 // disable intake on the return curve (early in the return) so each pickup leg does enable->disable exactly once
                 .addParametricCallback(0.1, () -> {hardware.storage.disableIntake(); intakeDisableCount++;})
                 .setLinearHeadingInterpolation(pickupEndPoseList[i].getHeading(), scorePose.getHeading());
         }
-        pickupAndScoreChain = pathBuilder.build();
+        pickupAndScoreChain = pathBuilder2.build();
         //TODO add lazy-susan code and launching code
     }
 
