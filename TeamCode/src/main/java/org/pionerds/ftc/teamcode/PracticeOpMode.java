@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
+import org.pionerds.ftc.teamcode.Hardware.Drivers.ManualSusanOperatorControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
@@ -20,19 +21,15 @@ public class PracticeOpMode extends LinearOpMode {
         1.0f
     );
 
-    final DriverControls blankDriverControls = new DriverControls(
-            "Blank Man",
+    final ManualSusanOperatorControls driverControls2 = new ManualSusanOperatorControls(
+            "Lukie Pookie",
+            true,
             1.0f
-    ) {
-        @Override
-        public void tickControls(Gamepad gamepad, Hardware hardware) {
-            return;
-        }
-    };
+    );
 
     @Override
     public void runOpMode() throws InterruptedException {
-        hardware.init(hardwareMap, telemetry,driverControls1,blankDriverControls);
+        hardware.init(hardwareMap, telemetry,driverControls1,driverControls2);
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 

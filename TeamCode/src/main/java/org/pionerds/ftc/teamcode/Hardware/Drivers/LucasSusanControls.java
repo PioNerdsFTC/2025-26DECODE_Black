@@ -33,6 +33,8 @@ public class LucasSusanControls extends DriverControls {
     int ballsOnRamp = 0;                   // Counter for artifacts scored (used to determine next target)
     boolean stoppedAlready = true;
     boolean changingIntakeState = false;   // Tracks if any intake button is pressed (prevents multiple state changes)
+    boolean susanAdjusting = false;
+
 
     public LucasSusanControls(
         String driverName,
@@ -148,5 +150,21 @@ public class LucasSusanControls extends DriverControls {
         hardware.storage.printAlgorithmData(ballsOnRamp);
         hardware.vision.printTagDistanceToTelemetry(AprilTagNames.BlueTarget);
 
+
+        // Fine Susan Adjustment
+        if (Math.abs(gamepad.left_stick_x)>0.1) {
+            hardware.storage.adjustLazySusan(gamepad.left_stick_x);
+            susanAdjusting = true;
+        }
+        else {
+            susanAdjusting = false;
+        }
+
+        if (!susanAdjusting && !movingSusan) {
+            hardware.storage.stopSusan();
+        }
+        if(Math.abs(gamepad.left_stick_y)>0.5){
+            hardware.storage.enableIntakeManual(gamepad.left_stick_y);
+        }
     }
 }

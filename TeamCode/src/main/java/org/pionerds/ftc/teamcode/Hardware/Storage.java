@@ -74,6 +74,11 @@ public class Storage {
         }
     }
 
+
+    public void enableIntakeManual(double pow){
+        intakeMotorEx.setPower(pow);
+    }
+
     public void enableFeederManual(){
         if (!isInitialized) return;
         bumpUpServo.setPower(1);  // Lift artifact into feeding position
@@ -412,6 +417,11 @@ public class Storage {
 
     public LazySusanPositions getCurrentSusanPositionEnum() {
         return currentSusanPositionEnum;
+    }
+
+    public void adjustLazySusan(double power) {
+        susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        susanMotorEx.setPower(power);
     }
 
 }
