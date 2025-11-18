@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
+import org.pionerds.ftc.teamcode.Hardware.Drivers.ManualSusanOperatorControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
@@ -20,19 +21,15 @@ public class PracticeOpMode extends LinearOpMode {
         1.0f
     );
 
-    final DriverControls blankDriverControls = new DriverControls(
-            "Blank Man",
+    final ManualSusanOperatorControls driverControls2 = new ManualSusanOperatorControls(
+            "Lukie Pookie",
+            true,
             1.0f
-    ) {
-        @Override
-        public void tickControls(Gamepad gamepad, Hardware hardware) {
-            return;
-        }
-    };
+    );
 
     @Override
     public void runOpMode() throws InterruptedException {
-        hardware.init(hardwareMap, telemetry,driverControls1,blankDriverControls);
+        hardware.init(hardwareMap, telemetry,driverControls1,driverControls2);
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
@@ -44,11 +41,7 @@ public class PracticeOpMode extends LinearOpMode {
 
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
-        boolean changingPos = false;
-        boolean changingLauncherSpeed = false;
-        boolean changingIntakeSpeed = false;
-        boolean launcherOn = false;
-        boolean intakeOn = false;
+
 
 
         // Main loop!
@@ -64,69 +57,8 @@ public class PracticeOpMode extends LinearOpMode {
 
             //driverControls1.tickControls(gamepad1,hardware);
 
-            LazySusanPositions currentPos = hardware.storage.getCurrentSusanPositionEnum();
-
-            if (!changingPos) {
-                if (gamepad2.dpad_left) {
-                    hardware.storage.moveSusanTo(LazySusanPositions.INTAKE1);
-                } else if (gamepad2.dpad_down) {
-                    hardware.storage.moveSusanTo(LazySusanPositions.INTAKE2);
-                } else if (gamepad2.dpad_right) {
-                    hardware.storage.moveSusanTo(LazySusanPositions.INTAKE3);
-                } else if (gamepad2.x) {
-                    hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT1);
-                } else if (gamepad2.a) {
-                    hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT2);
-                } else if (gamepad2.b) {
-                    hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT3);
-                } else if (gamepad2.left_bumper) {
-                    for (int i = 0; i < LazySusanPositions.values().length; i++) {
-                        if (currentPos.equals(LazySusanPositions.values()[i])) {
-                            hardware.storage.moveSusanTo(LazySusanPositions.values()[(i - 1 + 6) % 6]);
-                        }
-                    }
-                } else if (gamepad2.right_bumper) {
-                    for (int i = 0; i < LazySusanPositions.values().length; i++) {
-                        if (currentPos.equals(LazySusanPositions.values()[i])) {
-                            hardware.storage.moveSusanTo(LazySusanPositions.values()[(i + 1) % 6]);
-                        }
-                    }
 
 
-                }
-
-            } else if (changingPos && !(gamepad2.dpad_left || gamepad2.dpad_down || gamepad2.dpad_right || gamepad2.x || gamepad2.a || gamepad2.b || gamepad2.left_bumper || gamepad2.right_bumper)) {
-                changingPos = false;
-            }
-
-
-            if(!changingLauncherSpeed && gamepad2.left_stick_button){
-                if(!launcherOn) {
-                    hardware.launcher.setLauncherVelocity(1890);
-                    hardware.storage.enableFeederManual();
-                }
-                if(launcherOn) {
-                    hardware.launcher.setLauncherVelocity(0);
-                    hardware.storage.disableFeeder();
-                }
-                launcherOn = !launcherOn;
-                changingLauncherSpeed = true;
-            } else if(!gamepad2.left_stick_button) {
-                changingLauncherSpeed = false;
-            }
-
-            if(!changingIntakeSpeed && gamepad2.right_stick_button){
-                if(!intakeOn) hardware.storage.enableIntake();
-                if(intakeOn) hardware.storage.disableIntake();
-                intakeOn = !intakeOn;
-                changingIntakeSpeed = true;
-            } else if(!gamepad2.right_stick_button){
-                changingIntakeSpeed = false;
-            }
-
-            telemetry.addLine("Current Pos: " + currentPos.name());
-            telemetry.addLine("Launcher: " + launcherOn);
-            telemetry.addLine("Intake: " + intakeOn);
             telemetry.update();
 
             sleep(1);

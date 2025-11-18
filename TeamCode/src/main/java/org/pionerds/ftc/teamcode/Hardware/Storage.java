@@ -75,7 +75,7 @@ public class Storage {
     }
 
 
-    public void enableintakeManual(double pow){
+    public void enableIntakeManual(double pow){
         intakeMotorEx.setPower(pow);
     }
 

@@ -164,7 +164,7 @@ public class LucasSusanControls extends DriverControls {
             hardware.storage.stopSusan();
         }
         if(Math.abs(gamepad.left_stick_y)>0.5){
-            hardware.storage.spinFeederManual(gamepad.left_stick_y);
+            hardware.storage.enableIntakeManual(gamepad.left_stick_y);
         }
     }
 }
