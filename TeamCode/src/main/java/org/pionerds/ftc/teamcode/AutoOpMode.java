@@ -46,11 +46,8 @@ public class AutoOpMode extends OpMode {
 
     final Hardware hardware = new Hardware();
 
-    private PathBuilder pathBuilder;
-    private PathBuilder pathBuilder2;
     private PathChain startToScoreChain;
     private PathChain pickupAndScoreChain;
-
 
     public enum State {
         START_TO_SCORE,
@@ -115,8 +112,8 @@ public class AutoOpMode extends OpMode {
 
         // Set up path following system with robot's hardware configuration
         follower = Constants.createFollower(hardwareMap);
-        pathBuilder = new PathBuilder(follower);
-        pathBuilder2 = new PathBuilder(follower);
+        PathBuilder pathBuilder = new PathBuilder(follower);
+        PathBuilder pathBuilder2 = new PathBuilder(follower);
         follower.setStartingPose(startPose);
 
         hardware.init(hardwareMap, telemetry);
@@ -175,7 +172,6 @@ public class AutoOpMode extends OpMode {
     @Override
     public void stop() {
     }
-
 
     public void autonomousPathUpdate() {
         switch (getPathState()) {
