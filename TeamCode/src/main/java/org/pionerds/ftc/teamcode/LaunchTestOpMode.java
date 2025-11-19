@@ -35,6 +35,8 @@ public class LaunchTestOpMode extends LinearOpMode {
         telemetry.update();
         boolean changingVelocity = false;
         double currentVelocity = 0.00;
+        boolean bumpUpOn = false;
+        boolean changingBumpUp = false;
 
         // Main loop!
         while (opModeIsActive()) {
@@ -60,6 +62,13 @@ public class LaunchTestOpMode extends LinearOpMode {
             } else if (!(gamepad1.dpad_up || gamepad1.dpad_down)) {
                 changingVelocity = false;
             }
+
+            if(!changingBumpUp && gamepad1.right_stick_button){
+                if(!bumpUpOn) hardware.storage.enableFeederManual();
+                if(bumpUpOn) hardware.storage.disableFeeder();
+                bumpUpOn = !bumpUpOn;
+                changingBumpUp = true;
+            } else if(!gamepad1.right_stick_button) changingBumpUp = false;
 
             telemetry.addLine("\nVelocity: " + currentVelocity);
             telemetry.addLine("encoderReading0: " + hardware.launcher.launcher0.getVelocity());
