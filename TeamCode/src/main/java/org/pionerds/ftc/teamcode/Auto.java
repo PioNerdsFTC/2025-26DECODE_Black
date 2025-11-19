@@ -8,17 +8,16 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Pathfinding.Constants;
 import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
 import java.util.Arrays;
 
-@Autonomous(name = "AutoOpMode", group = "Examples")
-public class AutoOpMode extends OpMode {
+public class Auto {
 
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
@@ -34,6 +33,9 @@ public class AutoOpMode extends OpMode {
     private final Pose pickupEndPose3 = new Pose(32, 36, Math.toRadians(0));
     private final Pose endPose = new Pose(38.75, 33.25, Math.toRadians(0));
     private final double pileYCoordOffset = 24;
+    private StartPosition startPosition;
+    private Telemetry telemetry;
+    private HardwareMap hardwareMap;
   
     private boolean scanned = false;
     private boolean pathStarted = false;
@@ -72,11 +74,16 @@ public class AutoOpMode extends OpMode {
         pathTimer.resetTimer();
     }
 
+    public Auto(StartPosition startPosition, Telemetry telemetry, HardwareMap hardwareMap) {
+        this.startPosition = startPosition;
+        this.telemetry = telemetry;
+        this.hardwareMap = hardwareMap;
+    }
+
     /**
      * Main loop - runs repeatedly during autonomous period.
      * Updates path following and executes state machine logic.
      */
-    @Override
     public void loop() {
         if (!scanned) {
             artifactPattern = Arrays.toString(hardware.vision.getArtifactPattern());
@@ -101,10 +108,7 @@ public class AutoOpMode extends OpMode {
         telemetry.update();
     }
 
-    /**
-     * Initialization method - called once when "INIT" is pressed.
-     */
-    @Override
+
     public void init() {
         // Initialize timing systems
         pathTimer = new Timer();
@@ -151,31 +155,10 @@ public class AutoOpMode extends OpMode {
         //TODO add lazy-susan code and launching code
     }
 
-    /**
-     * Called continuously after init while waiting for start.
-     * Currently unused but required by OpMode structure.
-     */
-    @Override
-    public void init_loop() {
-    }
-
-    /**
-     * Called once when "START" is pressed to begin autonomous.
-     */
-    @Override
     public void start() {
         opmodeTimer.resetTimer();
         setPathState(State.START_TO_SCORE);  // Begin with first state
     }
-
-    /**
-     * Called once when autonomous ends.
-     * Everything stops automatically, so no manual cleanup needed.
-     **/
-    @Override
-    public void stop() {
-    }
-
 
     public void autonomousPathUpdate() {
         switch (getPathState()) {
