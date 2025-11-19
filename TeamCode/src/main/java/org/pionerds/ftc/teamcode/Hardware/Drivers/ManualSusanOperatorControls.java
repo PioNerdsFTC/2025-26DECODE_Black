@@ -22,6 +22,8 @@ public class ManualSusanOperatorControls extends DriverControls {
     boolean changingIntakeSpeed = false;
     boolean launcherOn = false;
     boolean intakeOn = false;
+    boolean changingFeeder = false;
+    boolean feederOn = false;
 
     public ManualSusanOperatorControls(
             String driverName,
@@ -79,13 +81,19 @@ public class ManualSusanOperatorControls extends DriverControls {
 
         if(launcherOn) {
             hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(AprilTagNames.BlueTarget));
-            hardware.storage.enableFeederManual();
         }
         if(!launcherOn) {
             hardware.launcher.setLauncherVelocity(0);
-            hardware.storage.disableFeeder();
         }
 
+        if(!changingFeeder && gamepad.dpad_up){
+            if(!feederOn) hardware.storage.enableFeederManual();
+            if(feederOn) hardware.storage.disableFeeder();
+            feederOn = !feederOn;
+            changingFeeder = true;
+        } else if(!gamepad.dpad_up){
+            changingFeeder = false;
+        }
 
         if(!changingIntakeSpeed && gamepad.right_stick_button){
             if(!intakeOn) hardware.storage.enableIntake();
