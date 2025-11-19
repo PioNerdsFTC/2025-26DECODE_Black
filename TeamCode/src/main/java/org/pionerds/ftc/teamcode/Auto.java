@@ -22,7 +22,8 @@ public class Auto {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
 
-    private final Pose startPose = new Pose(56, Constants.localizerConstants.robot_Width / 2, Math.toRadians(90)); // Start Pose of our robot.
+    private final Pose startPose;
+    private final Pose endPose;
     private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
     private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
     private final Pose pickupPose1 = new Pose(48, 84, Math.toRadians(0));
@@ -31,11 +32,9 @@ public class Auto {
     private final Pose pickupEndPose1 = new Pose(32, 84, Math.toRadians(0));
     private final Pose pickupEndPose2 = new Pose(32, 60, Math.toRadians(0));
     private final Pose pickupEndPose3 = new Pose(32, 36, Math.toRadians(0));
-    private final Pose endPose = new Pose(38.75, 33.25, Math.toRadians(0));
     private final double pileYCoordOffset = 24;
-    private StartPosition startPosition;
-    private Telemetry telemetry;
-    private HardwareMap hardwareMap;
+    private final Telemetry telemetry;
+    private final HardwareMap hardwareMap;
   
     private boolean scanned = false;
     private boolean pathStarted = false;
@@ -74,8 +73,9 @@ public class Auto {
         pathTimer.resetTimer();
     }
 
-    public Auto(StartPosition startPosition, Telemetry telemetry, HardwareMap hardwareMap) {
-        this.startPosition = startPosition;
+    public Auto(Pose startPose, Pose endPose, Telemetry telemetry, HardwareMap hardwareMap) {
+        this.startPose = startPose;
+        this.endPose = endPose;
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
     }
@@ -186,6 +186,7 @@ public class Auto {
                 break;
 
             case PARKING:
+                //TODO: flush enemy gate before parking
                 if(!pathStarted && !follower.isBusy()) {
                     follower.followPath(new Path(new BezierLine(follower.getPose(), endPose)));
                     pathStarted = true;
