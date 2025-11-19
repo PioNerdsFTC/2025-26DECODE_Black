@@ -2,6 +2,7 @@ package org.pionerds.ftc.teamcode.Hardware.Drivers;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
@@ -69,20 +70,22 @@ public class ManualSusanOperatorControls extends DriverControls {
         }
 
 
-        if(!changingLauncherSpeed && gamepad.left_stick_button){
-            if(!launcherOn) {
-                hardware.launcher.setLauncherVelocity(1890);
-                hardware.storage.enableFeederManual();
-            }
-            if(launcherOn) {
-                hardware.launcher.setLauncherVelocity(0);
-                hardware.storage.disableFeeder();
-            }
+        if(!changingLauncherSpeed && gamepad.left_stick_button) {
             launcherOn = !launcherOn;
             changingLauncherSpeed = true;
         } else if(!gamepad.left_stick_button) {
             changingLauncherSpeed = false;
         }
+
+        if(launcherOn) {
+            hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(AprilTagNames.BlueTarget));
+            hardware.storage.enableFeederManual();
+        }
+        if(!launcherOn) {
+            hardware.launcher.setLauncherVelocity(0);
+            hardware.storage.disableFeeder();
+        }
+
 
         if(!changingIntakeSpeed && gamepad.right_stick_button){
             if(!intakeOn) hardware.storage.enableIntake();
@@ -109,5 +112,8 @@ public class ManualSusanOperatorControls extends DriverControls {
             intakeOn = true;
         }
 
+        hardware.telemetry.addLine("Current Pos: " + currentPos.name());
+        hardware.telemetry.addLine("Launcher: " + launcherOn);
+        hardware.telemetry.addLine("Intake: " + intakeOn);
     }
 }
