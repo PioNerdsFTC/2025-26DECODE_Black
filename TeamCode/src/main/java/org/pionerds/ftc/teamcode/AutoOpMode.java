@@ -8,7 +8,7 @@ public class AutoOpMode extends OpMode {
     private final Double robotWidth = 0.0;
     private final Double robotLength = 0.0;
 
-    private final Auto autoOpMode = new Auto(
+    private final Auto auto = new Auto(
             new Pose(88, robotLength / 2, 90),
             new Pose(38.75, 33.25, Math.toRadians(0)),
             this.telemetry,
@@ -17,11 +17,11 @@ public class AutoOpMode extends OpMode {
 
     @Override
     public void init() {
-        autoOpMode.init();
+        auto.init();
     }
 
     @Override
     public void loop() {
-        autoOpMode.loop();
+        auto.loop();
     }
 }
