@@ -72,6 +72,8 @@ public class Aimbot {
         return (hardware.vision.getPioNerdAprilTag(tagName).range() < maxLaunchDistanceCM);
     }
 
+    double lastValueVelocity = 0.00;
+
     /**
      * Calculates motor velocity based on distance to target.
      * Uses a linear relationship: velocity = range * 1.5
@@ -79,9 +81,20 @@ public class Aimbot {
      * @param range Distance to target in centimeters
      * @return Calculated motor velocity
      */
-    private double calculateMotorVelocity(double range) {
-        //return range * 1.5;
-        return 1890;
+    public double calculateMotorVelocity(double range) {
+        return range * 3.12539 + 1345.92151; // function from Desmos
+        //return 1890;
+    }
+
+    public double calculateMotorVelocity(AprilTagNames tagName) {
+        PioNerdAprilTag pioTag = hardware.vision.getPioNerdAprilTag(tagName);
+        if(pioTag != null) {
+            lastValueVelocity = pioTag.range() * 3.62152 + 1274.77641; // function from Desmos
+            return lastValueVelocity;
+        }
+        telemetry.addLine("CANNOT SEE TAG!!!!");
+        return lastValueVelocity;
+        //return 1890;
     }
 
     /**
