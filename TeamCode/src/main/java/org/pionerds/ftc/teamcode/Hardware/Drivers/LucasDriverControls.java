@@ -44,7 +44,7 @@ public class LucasDriverControls extends DriverControls {
 
         // Set Rotation Speed for Drivetrain
         setRotationSpeed(
-            gamepad.right_stick_x
+                (float)(Math.signum(gamepad.right_stick_x)*Math.pow(gamepad.right_stick_x,2))
         );
 
         // Set Speeds to the value or the capped value for the driver
