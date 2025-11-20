@@ -108,8 +108,8 @@ public class Drivetrain {
      * @param driverControls The driver controls object.
      */
     public void robotCentricDrive(DriverControls driverControls) {
-        double x = driverControls.getSpeedX();
-        double y = driverControls.getSpeedY();
+        double x = driverControls.getSpeedY();
+        double y = driverControls.getSpeedX();
 
         if (Math.abs(x) < 0.2 && Math.abs(y) < 0.2) {
             stopMotors();
