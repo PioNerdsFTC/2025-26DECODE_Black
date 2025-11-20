@@ -36,7 +36,7 @@ public class ManualSusanOperatorControls extends DriverControls {
     @Override
     public void tickControls(Gamepad gamepad, Hardware hardware) {
 
-        LazySusanPositions currentPos = hardware.storage.getCurrentSusanPositionEnum();
+        /*LazySusanPositions currentPos = hardware.storage.getCurrentSusanPositionEnum();
 
         if (!changingPos) {
             if (gamepad.dpad_left) {
@@ -70,7 +70,7 @@ public class ManualSusanOperatorControls extends DriverControls {
         } else if (changingPos && !(gamepad.dpad_left || gamepad.dpad_down || gamepad.dpad_right || gamepad.x || gamepad.a || gamepad.b || gamepad.left_bumper || gamepad.right_bumper)) {
             changingPos = false;
         }
-
+        */
 
         if(!changingLauncherSpeed && gamepad.left_stick_button) {
             launcherOn = !launcherOn;
@@ -107,12 +107,18 @@ public class ManualSusanOperatorControls extends DriverControls {
         if (Math.abs(gamepad.left_stick_x)>0.1) {
             hardware.storage.adjustLazySusan(gamepad.left_stick_x);
             susanAdjusting = true;
+        } else if(gamepad.dpad_left){
+            hardware.storage.adjustLazySusan(1);
+            susanAdjusting = true;
+        } else if(gamepad.dpad_right){
+            hardware.storage.adjustLazySusan(-1);
+            susanAdjusting = true;
         }
         else {
             susanAdjusting = false;
         }
 
-        if (!susanAdjusting && !movingSusan) {
+        if (!susanAdjusting) {
             hardware.storage.stopSusan();
         }
         if(Math.abs(gamepad.right_stick_y)>0.1){
@@ -120,7 +126,6 @@ public class ManualSusanOperatorControls extends DriverControls {
             intakeOn = true;
         }
 
-        hardware.telemetry.addLine("Current Pos: " + currentPos.name());
         hardware.telemetry.addLine("Launcher: " + launcherOn);
         hardware.telemetry.addLine("Intake: " + intakeOn);
     }
