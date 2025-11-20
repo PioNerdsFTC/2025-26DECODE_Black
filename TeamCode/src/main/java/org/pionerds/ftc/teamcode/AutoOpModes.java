@@ -10,7 +10,7 @@ public class AutoOpModes {
     @Autonomous(name = "Red Auto Near")
     public class RedNearAuto extends AutoOpMode {
         private final Auto auto = new Auto(
-            new Pose(88, robotLength / 2, 90),
+            new Pose(56, robotLength / 2, 90),
             new Pose(38.75, 33.25, Math.toRadians(0)),
             this.telemetry,
             this.hardwareMap
