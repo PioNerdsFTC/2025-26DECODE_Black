@@ -152,7 +152,6 @@ public class Auto {
                 .setLinearHeadingInterpolation(pickupEndPoseList[i].getHeading(), scorePose.getHeading());
         }
         pickupAndScoreChain = pathBuilder2.build();
-        //TODO add lazy-susan code and launching code
     }
 
     public void start() {
