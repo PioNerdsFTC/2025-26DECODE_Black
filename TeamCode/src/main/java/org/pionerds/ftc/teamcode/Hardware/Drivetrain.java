@@ -152,8 +152,8 @@ public class Drivetrain {
      * @param orientation    The orientation of the robot.
      */
     public void stickDrive(DriverControls driverControls, double orientation) {
-        double x = -driverControls.getSpeedX();
-        double y = -driverControls.getSpeedY();
+        double x = -driverControls.getSpeedY();
+        double y = driverControls.getSpeedX();
 
         double[] convertedAngle = convertOrientation(x, y, orientation);
 
