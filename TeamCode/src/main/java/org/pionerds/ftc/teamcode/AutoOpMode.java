@@ -1,28 +1,27 @@
 package org.pionerds.ftc.teamcode;
 
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-public class AutoOpMode extends OpMode {
+public abstract class AutoOpMode extends OpMode {
 
-    // Set these to your robot's actual dimensions (in inches)
-    private final Double robotWidth = 18.0;
-    private final Double robotLength = 18.0;
-
-    private final Auto auto = new Auto(
-            new Pose(88, robotLength / 2, Math.toRadians(90)),
-            new Pose(38.75, 33.25, Math.toRadians(0)),
-            this.telemetry,
-            this.hardwareMap
-    );
+    protected Auto auto;
 
     @Override
     public void init() {
-        auto.init();
+        // Auto will be initialized in subclasses
+    }
+
+    @Override
+    public void start() {
+        if (auto != null) {
+            auto.start();
+        }
     }
 
     @Override
     public void loop() {
-        auto.loop();
+        if (auto != null) {
+            auto.loop();
+        }
     }
 }
