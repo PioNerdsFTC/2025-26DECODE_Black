@@ -16,7 +16,9 @@ import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 import org.pionerds.ftc.teamcode.Pathfinding.Constants;
 import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Auto {
 
@@ -49,9 +51,9 @@ public class Auto {
     final Hardware hardware = new Hardware();
 
     private PathBuilder pathBuilder;
-    private PathBuilder pathBuilder2;
     private PathChain startToScoreChain;
-    private PathChain pickupAndScoreChain;
+    private List<PathChain> pickupAndScoreChains;
+    private int pickupCycle = 0;
 
 
     public enum State {
@@ -121,7 +123,7 @@ public class Auto {
         // Set up path following system with robot's hardware configuration
         follower = Constants.createFollower(hardwareMap);
         pathBuilder = new PathBuilder(follower);
-        pathBuilder2 = new PathBuilder(follower);
+        pickupAndScoreChains = new ArrayList<>();
         follower.setStartingPose(startPose);
 
         hardware.init(hardwareMap, telemetry);
@@ -138,7 +140,8 @@ public class Auto {
 
         // Build pickup/score chain
         for (int i = 0; i < pickupPoseList.length; i++) {
-            pathBuilder2
+            PathBuilder singlePickupPathBuilder = new PathBuilder(follower);
+            singlePickupPathBuilder
                 .addPath(new BezierCurve(scorePose, pickupPoseList[i]))
                 .addParametricCallback(0.9, () -> {hardware.storage.enableIntake(); intakeEnableCount++;})
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPoseList[i].getHeading())
@@ -160,8 +163,8 @@ public class Auto {
                     }
                 })
                 .setLinearHeadingInterpolation(pickupEndPoseList[i].getHeading(), scorePose.getHeading());
+            pickupAndScoreChains.add(singlePickupPathBuilder.build());
         }
-        pickupAndScoreChain = pathBuilder2.build();
     }
 
     public void launchBalls() throws InterruptedException {
@@ -211,11 +214,17 @@ public class Auto {
 
             case PICKUP_BALLS:
                 if (!pathStarted && !follower.isBusy()) {
-                    follower.followPath(pickupAndScoreChain);
-                    pathStarted = true;
+                    if (pickupCycle < pickupAndScoreChains.size()) {
+                        follower.followPath(pickupAndScoreChains.get(pickupCycle));
+                        pathStarted = true;
+                    } else {
+                        // All pickup cycles are done, move to parking
+                        setPathState(State.PARKING);
+                    }
                 }
                 else if (pathStarted && !follower.isBusy()) {
-                    setPathState(State.PARKING);
+                    // Current pickup cycle finished, prepare for the next one
+                    pickupCycle++;
                     pathStarted = false;
                 }
                 break;
