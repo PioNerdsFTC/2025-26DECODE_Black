@@ -9,7 +9,7 @@ public class AutoOpMode extends OpMode {
     private final Double robotLength = 0.0;
 
     private final Auto auto = new Auto(
-            new Pose(88, robotLength / 2, 90),
+            new Pose(88, robotLength / 2, Math.toRadians(90)),
             new Pose(38.75, 33.25, Math.toRadians(0)),
             this.telemetry,
             this.hardwareMap
