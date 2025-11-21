@@ -13,9 +13,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Constants {
 
     public static FollowerConstants followerConstants = new FollowerConstants()
-//        .forwardZeroPowerAcceleration(-58.206219180121224)
-//        .lateralZeroPowerAcceleration(-55.64415956334193)
-        .mass(8.2);
+        .forwardZeroPowerAcceleration(-58.206219180121224)
+        .lateralZeroPowerAcceleration(-55.64415956334193)
+        .mass(4.2);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
         .maxPower(1)
@@ -25,26 +25,26 @@ public class Constants {
         .rightRearMotorName("motor3")
         .leftRearMotorName("motor2")
         .leftFrontMotorName("motor1")
-        .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+        .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
         .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-        .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-        .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE);
+        .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+        .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
 
     public static DriveEncoderConstants localizerConstants =
         new DriveEncoderConstants()
-            .robotWidth(15)
-            .robotLength(11.825)
-            .forwardTicksToInches(0.007301349826240794)
-            .strafeTicksToInches(0.00741590883728377)
-            .turnTicksToInches(0.015268271207998244)
+            .robotWidth(11.5)
+            .robotLength(10.5)
+            .forwardTicksToInches(0.006425 / 2)
+            .strafeTicksToInches(0.0066 / 2)
+            .turnTicksToInches(0.006507362092869509)
             .rightFrontMotorName("motor0")
             .rightRearMotorName("motor3")
             .leftRearMotorName("motor2")
             .leftFrontMotorName("motor1")
-            .leftFrontEncoderDirection(Encoder.FORWARD)
+            .leftFrontEncoderDirection(Encoder.REVERSE)
             .leftRearEncoderDirection(Encoder.REVERSE)
-            .rightFrontEncoderDirection(Encoder.REVERSE)
-            .rightRearEncoderDirection(Encoder.REVERSE);
+            .rightFrontEncoderDirection(Encoder.FORWARD)
+            .rightRearEncoderDirection(Encoder.FORWARD);
 
     public static PathConstraints pathConstraints = new PathConstraints(
         0.99,
