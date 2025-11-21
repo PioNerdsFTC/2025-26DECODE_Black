@@ -5,8 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 public class AutoOpMode extends OpMode {
 
-    private final Double robotWidth = 0.0;
-    private final Double robotLength = 0.0;
+    // Set these to your robot's actual dimensions (in inches)
+    private final Double robotWidth = 18.0;
+    private final Double robotLength = 18.0;
 
     private final Auto auto = new Auto(
             new Pose(88, robotLength / 2, Math.toRadians(90)),
