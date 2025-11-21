@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.pionerds.ftc.teamcode.Pathfinding.Constants;
 
 public class AutoOpModes {
-    private static final Double robotLength = Constants.localizerConstants.robotLength;
+    private static final Double robotLength = 18.0;
 
     @Autonomous(name = "Red Auto Near")
     public static class RedNearAuto extends AutoOpMode {
@@ -40,7 +40,7 @@ public class AutoOpModes {
         @Override
         public void init() {
             auto = new Auto(
-                new Pose(88, robotLength / 2, 90),
+                new Pose(56, robotLength / 2, 90),
                 new Pose(105.25, 110.75, Math.toRadians(0)),
                 this.telemetry,
                 this.hardwareMap
