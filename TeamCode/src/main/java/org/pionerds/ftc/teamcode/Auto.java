@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
+import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 import org.pionerds.ftc.teamcode.Pathfinding.Constants;
 import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
@@ -149,11 +150,46 @@ public class Auto {
                 .addPath(new BezierCurve(pickupEndPoseList[i], scorePose))
                 // disable intake on the return curve (early in the return) so each pickup leg does enable->disable exactly once
                 .addParametricCallback(0.1, () -> {hardware.storage.disableIntake(); intakeDisableCount++;})
+                .addParametricCallback(0.9, () -> {
+                    try {
+                        launchBalls();
+                    } catch (InterruptedException e) {
+                        telemetry.addData("Error", "launchBalls was interrupted");
+                        telemetry.update();
+                        Thread.currentThread().interrupt();
+                    }
+                })
                 .setLinearHeadingInterpolation(pickupEndPoseList[i].getHeading(), scorePose.getHeading());
         }
         pickupAndScoreChain = pathBuilder2.build();
     }
 
+    public void launchBalls() throws InterruptedException {
+        follower.pausePathFollowing();
+
+        hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT1);
+        hardware.launcher.setLauncherPower(11.0);
+        Thread.sleep(1000L);
+        hardware.storage.enableFeeder();
+        Thread.sleep(2000);
+        hardware.storage.disableFeeder();
+
+        hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT2);
+        hardware.launcher.setLauncherPower(11.0);
+        Thread.sleep(1000L);
+        hardware.storage.enableFeeder();
+        Thread.sleep(2000);
+        hardware.storage.disableFeeder();
+
+        hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT3);
+        hardware.launcher.setLauncherPower(11.0);
+        Thread.sleep(1000L);
+        hardware.storage.enableFeeder();
+        Thread.sleep(2000);
+        hardware.storage.disableFeeder();
+
+        follower.resumePathFollowing();
+    }
     public void start() {
         opmodeTimer.resetTimer();
         setPathState(State.START_TO_SCORE);  // Begin with first state
