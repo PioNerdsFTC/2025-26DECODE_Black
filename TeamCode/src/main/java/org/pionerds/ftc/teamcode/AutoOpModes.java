@@ -40,7 +40,7 @@ public class AutoOpModes {
     @Autonomous(name = "Blue Auto Far")
     public class BlueFarAuto extends AutoOpMode {
         private final Auto auto = new Auto(
-            new Pose(26, 128, 144.046),
+            new Pose(26, 128, Math.toRadians(144.046)),
             new Pose(105.25, 110.75, Math.toRadians(0)),
             this.telemetry,
             this.hardwareMap
