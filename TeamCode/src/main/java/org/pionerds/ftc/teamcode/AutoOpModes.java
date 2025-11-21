@@ -18,7 +18,7 @@ public class AutoOpModes {
     }
 
     @Autonomous(name = "Red Auto Far")
-    public class RedFarAuto extends AutoOpMode {
+    public static class RedFarAuto extends AutoOpMode {
         private final Auto auto = new Auto(
             new Pose(118, 128, 35.954),
             new Pose(38.75, 33.25, Math.toRadians(0)),
