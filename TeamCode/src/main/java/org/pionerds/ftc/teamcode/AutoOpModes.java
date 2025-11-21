@@ -12,7 +12,7 @@ public class AutoOpModes {
         @Override
         public void init() {
             auto = new Auto(
-                new Pose(56, robotLength / 2, 90),
+                new Pose(56, robotLength / 2, Math.toRadians(90)),
                 new Pose(38.75, 33.25, Math.toRadians(0)),
                 this.telemetry,
                 this.hardwareMap
@@ -26,7 +26,7 @@ public class AutoOpModes {
         @Override
         public void init() {
             auto = new Auto(
-                new Pose(118, 128, 35.954),
+                new Pose(118, 128, Math.toRadians(35.954)),
                 new Pose(38.75, 33.25, Math.toRadians(0)),
                 this.telemetry,
                 this.hardwareMap
@@ -40,7 +40,7 @@ public class AutoOpModes {
         @Override
         public void init() {
             auto = new Auto(
-                new Pose(56, robotLength / 2, 90),
+                new Pose(56, robotLength / 2, Math.toRadians(90)),
                 new Pose(105.25, 110.75, Math.toRadians(0)),
                 this.telemetry,
                 this.hardwareMap
@@ -54,7 +54,7 @@ public class AutoOpModes {
         @Override
         public void init() {
             auto = new Auto(
-                new Pose(26, 128, Math.toRadians(144.046)),
+                new Pose(118, 128, Math.toRadians(144.046)),
                 new Pose(105.25, 110.75, Math.toRadians(0)),
                 this.telemetry,
                 this.hardwareMap
