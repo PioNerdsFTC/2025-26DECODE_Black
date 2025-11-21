@@ -32,8 +32,8 @@ public class Constants {
 
     public static DriveEncoderConstants localizerConstants =
         new DriveEncoderConstants()
-            .robotWidth(13)
-            .robotLength(13)
+            .robotWidth(15)
+            .robotLength(11.825)
             .forwardTicksToInches(0.007301349826240794)
             .strafeTicksToInches(0.007301349826240794)
             //.strafeTicksToInches(0.00741590883728377)
