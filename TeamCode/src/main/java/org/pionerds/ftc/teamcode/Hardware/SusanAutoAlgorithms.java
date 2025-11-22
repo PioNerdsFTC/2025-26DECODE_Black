@@ -89,12 +89,15 @@ public class SusanAutoAlgorithms {
         else {
             hardware.launcher.setLauncherVelocity(1000);
         }
+        hardware.storage.enableFeederManual();
+
         try {
             Thread.sleep(2000);
         }
         catch (Exception e) {
             Log.e("error","Insomnia");
         }
+        hardware.storage.disableFeeder();
         hardware.launcher.setLauncherVelocity(0);
     }
 
