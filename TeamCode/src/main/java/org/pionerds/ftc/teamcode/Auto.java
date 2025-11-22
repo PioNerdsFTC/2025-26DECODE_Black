@@ -170,23 +170,24 @@ public class Auto {
     public void launchBalls() throws InterruptedException {
         follower.pausePathFollowing();
 
+        hardware.storage.disableFeeder();
         hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT1);
-        hardware.launcher.setLauncherPower(11.0);
-        Thread.sleep(1000L);
+        hardware.launcher.setLauncherPower(0.5);
+        Thread.sleep(1000);
         hardware.storage.enableFeeder();
         Thread.sleep(2000);
         hardware.storage.disableFeeder();
 
         hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT2);
-        hardware.launcher.setLauncherPower(11.0);
-        Thread.sleep(1000L);
+        hardware.launcher.setLauncherPower(0.5);
+        Thread.sleep(1000);
         hardware.storage.enableFeeder();
         Thread.sleep(2000);
         hardware.storage.disableFeeder();
 
         hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT3);
-        hardware.launcher.setLauncherPower(11.0);
-        Thread.sleep(1000L);
+        hardware.launcher.setLauncherPower(0.5);
+        Thread.sleep(1000);
         hardware.storage.enableFeeder();
         Thread.sleep(2000);
         hardware.storage.disableFeeder();
