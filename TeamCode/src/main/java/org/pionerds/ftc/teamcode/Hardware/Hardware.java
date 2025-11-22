@@ -24,6 +24,7 @@ public final class Hardware {
     public Launcher launcher = new Launcher();
     public Storage storage = new Storage();
     public Aimbot aimbot = new Aimbot();
+    public Raiser raiser = new Raiser();
     public DriverControls driverControls1;
     public DriverControls driverControls2;
 
@@ -55,6 +56,8 @@ public final class Hardware {
             gyro.init(this);
             aimbot.init(this, telemetry, AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY);
             aimbot.setHardware(this);
+            raiser.init(this);
+
 
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());

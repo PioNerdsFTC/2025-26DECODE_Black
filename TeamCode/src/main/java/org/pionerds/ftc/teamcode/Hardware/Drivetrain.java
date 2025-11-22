@@ -3,17 +3,22 @@ package org.pionerds.ftc.teamcode.Hardware;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 
 public class Drivetrain {
 
-    private final DcMotor[] motors = {null, null, null, null}; //front right, front left, back left, back right
+    private final DcMotorEx[] motors = {null, null, null, null}; //front right, front left, back left, back right
     private final double[] motorSpeed = {0.0, 0.0, 0.0, 0.0};
     private final String[] motorNames = {"motor0", "motor1", "motor2", "motor3"};
     Hardware hardware = null;
     private Telemetry telemetry = null;
+
+    public DcMotorEx[] getMotors(){
+        return motors;
+    }
 
     public void init(Hardware hardware, Telemetry telemetry) {
         this.hardware = hardware;
