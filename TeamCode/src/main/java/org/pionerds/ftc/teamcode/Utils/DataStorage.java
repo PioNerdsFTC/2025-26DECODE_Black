@@ -2,7 +2,7 @@ package org.pionerds.ftc.teamcode.Utils;
 
 public class DataStorage {
 
-    static double[] angles = {0.0,0.,0.0}; //yaw, pitch, roll
+    static double[] angles = {0.0, 0., 0.0}; //yaw, pitch, roll
 
     public static double getStoredAngle(int index) {
         return angles[index];

@@ -6,22 +6,23 @@ import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Artifact;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
+import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
 public class LucasDriverControls extends DriverControls {
+
+    boolean resetGyroPressed = false;
 
     public LucasDriverControls(String driverName, boolean isDriver, float maxSpeed) {
         super(driverName, maxSpeed);
         this.setIsDriver(isDriver);
     }
 
-    boolean resetGyroPressed = false;
     /**
      * Ticked every loop in the TeleOp.
+     *
      * @param gamepad
      * @param hardware
-     *
-     * @Controls:
-     * Left_Bumper - 0.5 Speed Modifier <br>
+     * @Controls: Left_Bumper - 0.5 Speed Modifier <br>
      * A_Button - Feed Intake <br>
      * !(A_Button) - Contract Intake <br>
      * X_Button - Send PioNerdTag distance to Aimbot <br>
@@ -44,7 +45,7 @@ public class LucasDriverControls extends DriverControls {
 
         // Set Rotation Speed for Drivetrain
         setRotationSpeed(
-            gamepad.right_stick_x
+                (float)(Math.signum(gamepad.right_stick_x)*Math.pow(gamepad.right_stick_x,2))
         );
 
         // Set Speeds to the value or the capped value for the driver
@@ -71,6 +72,7 @@ public class LucasDriverControls extends DriverControls {
         if (!resetGyroPressed && gamepad.dpad_up && gamepad.dpad_right) {
             resetGyroPressed = true;
             hardware.gyro.resetYaw();
+            DataStorage.storeAllAngles(new double[] {0.0,0.0,0.0});
 
         } else {
             resetGyroPressed = false;

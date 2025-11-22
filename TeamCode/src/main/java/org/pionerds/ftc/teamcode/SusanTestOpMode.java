@@ -14,9 +14,9 @@ public class SusanTestOpMode extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
     final DriverControls driverControls1 = new LucasDriverControls(
-            "Lucas Schwietz",
-            true,
-            1.0f
+        "Lucas Schwietz",
+        true,
+        1.0f
     );
 
     @Override
@@ -49,8 +49,8 @@ public class SusanTestOpMode extends LinearOpMode {
 
             //driverControls1.tickControls(gamepad1,hardware);
 
-            if(!changingPower){
-                if(gamepad1.dpad_up){
+            if (!changingPower) {
+                if (gamepad1.dpad_up) {
                     currentPower += 0.1;
                     changingPower = true;
                 } else if (gamepad1.dpad_down) {
@@ -60,11 +60,11 @@ public class SusanTestOpMode extends LinearOpMode {
             } else if (!(gamepad1.dpad_up || gamepad1.dpad_down)) {
                 changingPower = false;
             }
-            if(gamepad1.b){
+            if (gamepad1.b) {
                 currentPower = 0;
             }
 
-            telemetry.addLine("\nPower: "+currentPower);
+            telemetry.addLine("\nPower: " + currentPower);
             hardware.storage.testRotateSusan(currentPower);
 
             telemetry.update();

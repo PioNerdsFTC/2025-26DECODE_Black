@@ -14,9 +14,9 @@ public class VelocityPosRecord extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
     final DriverControls driverControls1 = new LucasDriverControls(
-            "Lucas Schwietz",
-            true,
-            1.0f
+        "Lucas Schwietz",
+        true,
+        1.0f
     );
 
     @Override
@@ -35,6 +35,8 @@ public class VelocityPosRecord extends LinearOpMode {
         telemetry.update();
         boolean changingVelocity = false;
         double currentVelocity = 0.00;
+        boolean changingBumpUp = false;
+        boolean bumpUpOn = false;
 
         // Main loop!
         while (opModeIsActive()) {
@@ -49,24 +51,35 @@ public class VelocityPosRecord extends LinearOpMode {
 
             //driverControls1.tickControls(gamepad1,hardware);
 
-            if(!changingVelocity){
-                if(gamepad1.dpad_up){
-                    currentVelocity += 30;
+            if (!changingVelocity) {
+                if (gamepad1.dpad_up) {
+                    currentVelocity += 20;
                     changingVelocity = true;
                 } else if (gamepad1.dpad_down) {
-                    currentVelocity -= 30;
+                    currentVelocity -= 20;
                     changingVelocity = true;
                 }
             } else if (!(gamepad1.dpad_up || gamepad1.dpad_down)) {
                 changingVelocity = false;
             }
-            if(gamepad1.b){
+            if (gamepad1.b) {
                 currentVelocity = 0;
             }
 
-            telemetry.addLine("\nRequest Velocity: "+currentVelocity+"\n");
-            telemetry.addLine("\nCurrent Velocity0: "+hardware.launcher.launcher0.getVelocity());
-            telemetry.addLine("\nCurrent Velocity1: "+hardware.launcher.launcher1.getVelocity()+"\n");
+            if(!changingBumpUp && gamepad1.right_stick_button){
+                if(!bumpUpOn) hardware.storage.enableFeederManual();
+                if(bumpUpOn) hardware.storage.disableFeeder();
+                bumpUpOn = !bumpUpOn;
+                changingBumpUp = true;
+            } else if(!gamepad1.right_stick_button) changingBumpUp = false;
+
+            hardware.storage.adjustLazySusan(gamepad1.left_stick_x);
+
+            if(Math.abs(gamepad1.right_stick_y) > 0.1) hardware.storage.enableIntakeManual(gamepad1.right_stick_y);
+
+            telemetry.addLine("\nRequest Velocity: " + currentVelocity + "\n");
+            telemetry.addLine("\nCurrent Velocity0: " + hardware.launcher.launcher0.getVelocity());
+            telemetry.addLine("\nCurrent Velocity1: " + hardware.launcher.launcher1.getVelocity() + "\n");
             hardware.vision.printTagDistanceToTelemetry(AprilTagNames.BlueTarget);
             hardware.launcher.setLauncherVelocity(currentVelocity);
 

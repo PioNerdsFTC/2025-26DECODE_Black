@@ -15,17 +15,16 @@ import java.util.List;
 
 public class Vision {
 
+    private static final boolean USE_WEBCAM = true; // true for webcam, false for phone camera
     private final DistanceUnit DISTANCE_UNIT = DistanceUnit.CM;
     private final double MULTIPLY_TO_DISTANCE = 0.5;
-
+    Artifact[] artifactAlgorithm = new Artifact[3];
     private boolean obeliskIdentified = false;
-    private static final boolean USE_WEBCAM = true; // true for webcam, false for phone camera
     /**
      * The variable to store our instance of the AprilTag processor.
      */
     private AprilTagProcessor aprilTag;
     private Hardware hardware;
-
     /**
      * The variable to store our instance of the vision portal.
      */
@@ -37,6 +36,7 @@ public class Vision {
 
     /**
      * Initializes the AprilTag processor.
+     *
      * @param hardware The hardware instance to use.
      */
 
@@ -110,8 +110,8 @@ public class Vision {
         for (AprilTagDetection detection : currentDetections()) {
             if (
                 !(detection == null) &&
-                !(detection.metadata == null) &&
-                detection.metadata.name.equals(tagName.name())
+                    !(detection.metadata == null) &&
+                    detection.metadata.name.equals(tagName.name())
             ) {
                 return detection.ftcPose;
             }
@@ -121,14 +121,15 @@ public class Vision {
 
     /**
      * Initializes the AprilTag processor.
+     *
      * @param aprilTagName The name of the AprilTag to initialize.
      */
     public PioNerdAprilTag getPioNerdAprilTag(AprilTagNames aprilTagName) {
         for (AprilTagDetection detection : currentDetections()) {
             if (
                 !(detection == null) &&
-                !(detection.metadata == null) &&
-                detection.metadata.name.equals(aprilTagName.name())
+                    !(detection.metadata == null) &&
+                    detection.metadata.name.equals(aprilTagName.name())
             ) {
                 return new PioNerdAprilTag(detection); // Return the PioNerdAprilTag object.
             }
@@ -138,6 +139,7 @@ public class Vision {
 
     /**
      * Get current April Tag detections.
+     *
      * @return ArrayList of AprilTagDetection objects.
      */
 
@@ -150,12 +152,13 @@ public class Vision {
 
     /**
      * Get current April Tag metadata.
+     *
      * @return ArrayList of AprilTagMetadata objects.
      */
     public ArrayList<AprilTagMetadata> currentDetectionsMetadata() {
         ArrayList<AprilTagMetadata> detectionNames = new ArrayList<
             AprilTagMetadata
-        >();
+            >();
         List<AprilTagDetection> currentDetections = this.currentDetections();
 
         // iterate and get names
@@ -168,10 +171,9 @@ public class Vision {
         return detectionNames;
     }
 
-    Artifact[] artifactAlgorithm = new Artifact[3];
-
     /**
      * Get current artifact pattern.
+     *
      * @return Artifact[] array of artifact pattern.
      */
 
@@ -220,6 +222,7 @@ public class Vision {
 
     /**
      * Check if the obelisk is identified.
+     *
      * @return true if the obelisk is identified, false otherwise.
      */
 
@@ -229,6 +232,7 @@ public class Vision {
 
     /**
      * Control the vision portal.
+     *
      * @param command the command to execute.
      */
     public void controlVisionPortal(VisionCommands command) {
@@ -250,6 +254,7 @@ public class Vision {
 
     /**
      * Print the distance of the AprilTag to the telemetry.
+     *
      * @param aprilTag the AprilTag to print the distance of.
      */
     public void printTagDistanceToTelemetry(AprilTagNames aprilTag) {

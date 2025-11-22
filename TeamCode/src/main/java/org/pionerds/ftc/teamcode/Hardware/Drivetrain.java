@@ -3,19 +3,18 @@ package org.pionerds.ftc.teamcode.Hardware;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 
 public class Drivetrain {
 
+    private final DcMotorEx[] motors = {null, null, null, null}; //front right, front left, back left, back right
+    private final double[] motorSpeed = {0.0, 0.0, 0.0, 0.0};
+    private final String[] motorNames = {"motor0", "motor1", "motor2", "motor3"};
     Hardware hardware = null;
-
     private Telemetry telemetry = null;
-
-    private DcMotor[] motors = { null, null, null, null }; //front right, front left, back left, back right
-    private double[] motorSpeed = { 0.0, 0.0, 0.0, 0.0 };
-    private String[] motorNames = { "motor0", "motor1", "motor2", "motor3" };
 
     public void init(Hardware hardware, Telemetry telemetry) {
         this.hardware = hardware;
@@ -41,7 +40,7 @@ public class Drivetrain {
             motors[i].setPower(motorSpeed[i]);
             telemetry.addLine(
                 "Motor " +
-                    Integer.toString(i) +
+                    i +
                     " Pow: " +
                     (Math.round(motorSpeed[i] * 100) / 100.0)
             );
@@ -51,7 +50,7 @@ public class Drivetrain {
     /**
      * Scales the motor speeds to fit within the maximum power limit.
      *
-     * @param bumperTurning Whether the robot is turning with the bumper.
+     * @param bumperTurning  Whether the robot is turning with the bumper.
      * @param driverControls The driver controls.
      */
     public void scaleMotorsToFit(
@@ -105,11 +104,12 @@ public class Drivetrain {
 
     /**
      * Drives the robot with controls.
+     *
      * @param driverControls The driver controls object.
      */
     public void robotCentricDrive(DriverControls driverControls) {
-        double x = driverControls.getSpeedX();
-        double y = driverControls.getSpeedY();
+        double x = driverControls.getSpeedY();
+        double y = driverControls.getSpeedX();
 
         if (Math.abs(x) < 0.2 && Math.abs(y) < 0.2) {
             stopMotors();
@@ -123,9 +123,10 @@ public class Drivetrain {
 
     /**
      * Drives the robot with controls.
-     * @param driverControls The driver controls object.
+     *
+     * @param driverControls         The driver controls object.
      * @param hasDumbDrivePreference Whether to use dumb drive preference.
-     * @param bumperTurnPreferred Whether to prefer bumper turn.
+     * @param bumperTurnPreferred    Whether to prefer bumper turn.
      */
     public void driveWithControls(
         DriverControls driverControls,
@@ -146,12 +147,13 @@ public class Drivetrain {
 
     /**
      * Applies a drive to the drivetrain based on the speed and orientation.
+     *
      * @param driverControls The driver controls object.
-     * @param orientation The orientation of the robot.
+     * @param orientation    The orientation of the robot.
      */
     public void stickDrive(DriverControls driverControls, double orientation) {
-        double x = -driverControls.getSpeedX();
-        double y = -driverControls.getSpeedY();
+        double x = -driverControls.getSpeedY();
+        double y = driverControls.getSpeedX();
 
         double[] convertedAngle = convertOrientation(x, y, orientation);
 
@@ -175,6 +177,7 @@ public class Drivetrain {
 
     /**
      * Applies a turn to the drivetrain based on the rotation speed.
+     *
      * @param driverControls The driver controls object.
      */
     public void stickTurn(DriverControls driverControls) {
@@ -193,8 +196,9 @@ public class Drivetrain {
 
     /**
      * Converts the orientation of the stick to the robot's orientation.
-     * @param x The x-coordinate of the stick.
-     * @param y The y-coordinate of the stick.
+     *
+     * @param x           The x-coordinate of the stick.
+     * @param y           The y-coordinate of the stick.
      * @param orientation The orientation of the robot.
      * @return An array containing the converted x and y coordinates and the magnitude.
      */
@@ -213,6 +217,6 @@ public class Drivetrain {
         double return_x = Math.cos(finalAngle);
         double return_y = Math.sin(finalAngle);
 
-        return new double[] { -return_x, -return_y, mag };
+        return new double[]{-return_x, -return_y, mag};
     }
 }
