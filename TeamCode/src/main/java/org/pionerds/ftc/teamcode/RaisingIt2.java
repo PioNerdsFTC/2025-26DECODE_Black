@@ -38,12 +38,19 @@ public class RaisingIt2 extends LinearOpMode {
             motor.setVelocity(1000);
         }
 
-        while (motors[0].isBusy() || motors[1].isBusy() || motors[2].isBusy() || motors[3].isBusy()){
+        long startTime = System.currentTimeMillis();
+        long timeoutMillis = 5000; // 5 seconds timeout
+        while ((motors[0].isBusy() || motors[1].isBusy() || motors[2].isBusy() || motors[3].isBusy())
+                && (System.currentTimeMillis() - startTime < timeoutMillis)) {
             for (DcMotorEx motor : motors){
                 telemetry.addData(motor.getDeviceName() + " Position", motor.getCurrentPosition());
             }
+            telemetry.update();
         }
-
+        if (System.currentTimeMillis() - startTime >= timeoutMillis) {
+            telemetry.addLine("Timeout reached while waiting for motors to finish.");
+            telemetry.update();
+        }
         hardware.stop();
     }
 }
