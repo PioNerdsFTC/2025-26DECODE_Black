@@ -83,7 +83,7 @@ public class Storage {
 
     public void enableFeederManual(){
         if (!isInitialized) return;
-        tiltFeedServo.setPosition(0.4);
+        tiltFeedServo.setPosition(0);
         feederServo.setPower(0);  // Start feeding
     }
 
