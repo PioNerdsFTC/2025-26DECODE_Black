@@ -55,7 +55,8 @@ public class RaiserAutoRedFar extends LinearOpMode {
 
 // Step 1
         hardware.vision.getArtifactPattern();
-        hardware.raiser.driveByInches(72.00);
+        hardware.raiser.driveByInches(84.00);
+        hardware.vision.getArtifactPattern();
 
 // Step 2
         hardware.storage.disableFeeder();
