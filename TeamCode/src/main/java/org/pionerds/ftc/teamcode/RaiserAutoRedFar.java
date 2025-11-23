@@ -45,6 +45,27 @@ public class RaiserAutoRedFar extends LinearOpMode {
         telemetry.addLine("Ob Id: "+hardware.vision.getObeliskIdentified());
         hardware.sleep(1000);
 
+
+
+        // START AI CODE
+
+
+// FTC Autonomous Path - Generated Code
+// Robot Start: (72", 0") @ 0°
+
+// Step 1
+        hardware.vision.getArtifactPattern();
+        hardware.raiser.driveByInches(72.00);
+
+// Step 2
+        hardware.storage.disableFeeder();
+
+// Step 3
+        hardware.vision.getArtifactPattern();
+        hardware.raiser.driveByDegrees(-1 * 45.00);
+
+// Step 4
+
         telemetry.addLine("Getting pattern...");
         Artifact[] pattern = hardware.vision.getArtifactPattern();
         for(Artifact art : pattern){
@@ -87,24 +108,7 @@ public class RaiserAutoRedFar extends LinearOpMode {
         }
         telemetry.addLine("ob Id? "+hardware.vision.getObeliskIdentified());
         telemetry.update();
-        hardware.sleep(5000);
 
-        // START AI CODE
-
-
-// FTC Autonomous Path - Generated Code
-// Robot Start: (72", 0") @ 0°
-
-// Step 1
-        hardware.raiser.driveByInches(72.00);
-
-// Step 2
-        hardware.storage.disableFeeder();
-
-// Step 3
-        hardware.raiser.driveByDegrees(-1 * 45.00);
-
-// Step 4
         hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
 
 // Step 5
