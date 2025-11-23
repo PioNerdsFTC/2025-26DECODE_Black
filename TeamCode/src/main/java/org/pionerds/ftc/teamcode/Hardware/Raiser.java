@@ -70,6 +70,27 @@ public class Raiser {
         driveByInches(inches, 1000.00);
     }
 
+    public void driveByInchesRight(double inches, double velocity){
+        resetEncoders();
+        int position = (int) (inches * ticksPerInches);
+
+        setMotorPositions(position,false);
+        setMotorVelocities(velocity,false);
+        scaleMotorVelocities();
+
+        updateMotors();
+
+        while (motorsBusy()){
+            hardware.telemetry.addLine("waiting on motors for linear movement...");
+            hardware.telemetry.update();
+        } // halts thread until it gets to position
+
+    }
+
+    public void driveByInchesRight(double inches){
+        driveByInches(inches, 1000.00);
+    }
+
     public void driveByDegrees(double degrees, double velocity){
         resetEncoders();
         int position = (int) (degrees * ticksPerDegree);

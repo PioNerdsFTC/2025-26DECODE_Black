@@ -31,7 +31,7 @@ public class ArtifactPatternReadOpMode extends LinearOpMode {
         while (opModeIsActive()) {
 
             Artifact[] pattern = hardware.vision.getArtifactPattern();
-            telemetry.addLine(""+hardware.vision.getObeliskIdentified());
+            telemetry.addLine("scanned: "+hardware.vision.getObeliskIdentified());
 
             for(Artifact art : pattern){
                 telemetry.addLine("object: "+art.name());
