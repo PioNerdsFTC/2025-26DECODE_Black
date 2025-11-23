@@ -33,6 +33,7 @@ public class LucasDriverControlsRed extends DriverControls {
     public void tickControls(Gamepad gamepad, Hardware hardware) {
         // Resets
         setSpeedMultiplier(1.0f);
+        setRotationMultiplier(1.0f);
 
         // Left Bumper
         if (gamepad.left_bumper) {
