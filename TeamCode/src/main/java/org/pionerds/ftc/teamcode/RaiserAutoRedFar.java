@@ -102,7 +102,7 @@ public class RaiserAutoRedFar extends LinearOpMode {
         hardware.storage.disableFeeder();
 
 // Step 3
-        hardware.raiser.driveByDegrees(45.00);
+        hardware.raiser.driveByDegrees(-1 * 45.00);
 
         // Step 4
         hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
@@ -148,6 +148,9 @@ public class RaiserAutoRedFar extends LinearOpMode {
 
 // Step 17
         hardware.launcher.setLauncherVelocity(0);
+
+// Step 18
+        hardware.raiser.driveByInches(-63);
 
 
 
