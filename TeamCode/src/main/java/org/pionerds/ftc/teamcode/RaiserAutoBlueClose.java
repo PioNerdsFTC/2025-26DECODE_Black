@@ -41,6 +41,33 @@ public class RaiserAutoBlueClose extends LinearOpMode {
         hardware.storage.moveSusanTo(LazySusanPositions.INTAKE3);
         hardware.sleep(5000);*/
 
+        // START AI CODE
+
+
+        // FTC Autonomous Path - Generated Code
+// Robot Start: (12", 114") @ 120°
+
+// Step 1
+        hardware.raiser.driveByInches(45.00);
+        hardware.vision.getArtifactPattern();
+
+// Step 2
+        hardware.storage.disableFeeder();
+
+// Step 3
+        hardware.raiser.driveByDegrees(-1 * -120.00);
+        hardware.vision.getArtifactPattern();
+
+// Step 4
+        hardware.sleep(1000);
+
+// Step 5
+        hardware.raiser.driveByDegrees(-1 * -45.00);
+        hardware.vision.getArtifactPattern();
+
+// Step 6
+
+
         hardware.vision.getArtifactPattern();
         telemetry.addLine("Ob Id: "+hardware.vision.getObeliskIdentified());
         hardware.sleep(1000);
@@ -87,30 +114,8 @@ public class RaiserAutoBlueClose extends LinearOpMode {
         }
         telemetry.addLine("ob Id? "+hardware.vision.getObeliskIdentified());
         telemetry.update();
-        hardware.sleep(5000);
-
-        // START AI CODE
 
 
-        // FTC Autonomous Path - Generated Code
-// Robot Start: (12", 114") @ 120°
-
-// Step 1
-        hardware.raiser.driveByInches(45.00);
-
-// Step 2
-        hardware.storage.disableFeeder();
-
-// Step 3
-        hardware.raiser.driveByDegrees(-1 * -120.00);
-
-// Step 4
-        hardware.sleep(1000);
-
-// Step 5
-        hardware.raiser.driveByDegrees(-1 * -45.00);
-
-// Step 6
         hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
 
 // Step 7

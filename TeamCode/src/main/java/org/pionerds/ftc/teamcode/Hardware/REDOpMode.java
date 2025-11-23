@@ -1,5 +1,6 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -10,6 +11,7 @@ import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControlsRed;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.ManualSusanOperatorControls;
 
 @TeleOp(name = "RedOpMode")
+@Disabled
 public class REDOpMode extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
@@ -22,7 +24,8 @@ public class REDOpMode extends LinearOpMode {
     final ManualSusanOperatorControls driverControls2 = new ManualSusanOperatorControls(
             "Lukie Pookie",
             true,
-            1.0f
+            1.0f,
+            false
     );
 
     @Override
