@@ -186,7 +186,6 @@ public class Vision {
             ArrayList<AprilTagMetadata> currentDetectionMetadata =
                 currentDetectionsMetadata();
 
-            obeliskIdentified = true;
 
             for (AprilTagMetadata metadata : currentDetectionMetadata) {
                 switch (metadata.name) {
@@ -194,18 +193,21 @@ public class Vision {
                         artifactAlgorithm[0] = Artifact.GREEN;
                         artifactAlgorithm[1] = Artifact.PURPLE;
                         artifactAlgorithm[2] = Artifact.PURPLE;
+                        obeliskIdentified = true;
 
                         return artifactAlgorithm;
                     case "Obelisk_PGP":
                         artifactAlgorithm[0] = Artifact.PURPLE;
                         artifactAlgorithm[1] = Artifact.GREEN;
                         artifactAlgorithm[2] = Artifact.PURPLE;
+                        obeliskIdentified = true;
 
                         return artifactAlgorithm;
                     case "Obelisk_PPG":
                         artifactAlgorithm[0] = Artifact.PURPLE;
                         artifactAlgorithm[1] = Artifact.PURPLE;
                         artifactAlgorithm[2] = Artifact.GREEN;
+                        obeliskIdentified = true;
 
                         return artifactAlgorithm;
                     default:
