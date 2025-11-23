@@ -29,7 +29,8 @@ public class TuneRaiserOpMode extends LinearOpMode {
 
 
         //hardware.raiser.tune();
-        hardware.raiser.tuneRotation();
+        hardware.raiser.resetEncoders();
+        hardware.raiser.tuneSide();
 
 
         // Main loop!

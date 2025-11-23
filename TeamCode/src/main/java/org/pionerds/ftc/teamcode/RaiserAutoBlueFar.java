@@ -30,7 +30,7 @@ public class RaiserAutoBlueFar extends LinearOpMode {
         waitForStart(); // Wait for start!
 
 
-
+        hardware.vision.getArtifactPattern();
         ElapsedTime elapsedTime = new ElapsedTime();
         hardware.addElapsedTime(elapsedTime);
 
@@ -46,13 +46,13 @@ public class RaiserAutoBlueFar extends LinearOpMode {
 
         hardware.vision.getArtifactPattern();
         telemetry.addLine("Ob Id: "+hardware.vision.getObeliskIdentified());
+        hardware.sleep(1000);
 
         telemetry.addLine("Getting pattern...");
         Artifact[] pattern = hardware.vision.getArtifactPattern();
         for(Artifact art : pattern){
             telemetry.addLine("object: "+art.name());
         }
-        telemetry.update();
 
         LazySusanPositions[] inputEnums = new LazySusanPositions[]{LazySusanPositions.INTAKE1, LazySusanPositions.INTAKE2, LazySusanPositions.INTAKE3};
         LazySusanPositions[] outputEnums = new LazySusanPositions[]{LazySusanPositions.OUTPUT1, LazySusanPositions.OUTPUT2, LazySusanPositions.OUTPUT3};
@@ -88,6 +88,9 @@ public class RaiserAutoBlueFar extends LinearOpMode {
             telemetry.addLine(pattern[1].name());
             telemetry.addLine(pattern[2].name());
         }
+        telemetry.addLine("ob Id? "+hardware.vision.getObeliskIdentified());
+        telemetry.update();
+        hardware.sleep(5000);
 
         // START AI CODE
 
