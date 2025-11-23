@@ -49,7 +49,6 @@ public class PracticeOpMode extends LinearOpMode {
         while (opModeIsActive()) {
 
             hardware.tick(gamepad1,gamepad2);
-            if(gamepad2.right_bumper) hardware.raiser.rotateToTarget(AprilTagNames.BlueTarget);
 
             telemetry.update();
 
