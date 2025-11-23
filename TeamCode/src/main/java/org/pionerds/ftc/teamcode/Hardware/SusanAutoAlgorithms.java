@@ -7,6 +7,7 @@ public class SusanAutoAlgorithms {
 
     public void init(Hardware hardware){
         this.hardware = hardware;
+        hardware.storage.resetEncoderSusan();
     }
 
     public String aprilTagBallOrderFormatter() {
@@ -83,7 +84,7 @@ public class SusanAutoAlgorithms {
     }
 
     public void launchBall(AprilTagNames target) {
-        if(hardware.vision.getPioNerdAprilTag(target).getAprilTagDetection() != null){
+        if(hardware.vision.getPioNerdAprilTag(target) != null){
             hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
         }
         else {
@@ -92,13 +93,14 @@ public class SusanAutoAlgorithms {
         hardware.storage.enableFeederManual();
 
         try {
-            Thread.sleep(2000);
+            hardware.sleep(2000);
         }
         catch (Exception e) {
             Log.e("error","Insomnia");
         }
         hardware.storage.disableFeeder();
         hardware.launcher.setLauncherVelocity(0);
+        hardware.sleep(200);
     }
 
 

@@ -16,6 +16,10 @@ public class Drivetrain {
     Hardware hardware = null;
     private Telemetry telemetry = null;
 
+    public DcMotorEx[] getMotors(){
+        return motors;
+    }
+
     public void init(Hardware hardware, Telemetry telemetry) {
         this.hardware = hardware;
         this.telemetry = telemetry;
