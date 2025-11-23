@@ -9,6 +9,7 @@ import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
@@ -17,6 +18,7 @@ import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
 import java.util.Arrays;
 
+@Disabled
 @Autonomous(name = "AutoOpMode", group = "Examples")
 public class AutoOpMode extends OpMode {
 
@@ -72,10 +74,7 @@ public class AutoOpMode extends OpMode {
         pathTimer.resetTimer();
     }
 
-    /**
-     * Main loop - runs repeatedly during autonomous period.
-     * Updates path following and executes state machine logic.
-     */
+
     @Override
     public void loop() {
         if (!scanned) {

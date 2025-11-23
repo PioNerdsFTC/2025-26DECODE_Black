@@ -8,8 +8,8 @@ import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Artifact;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
-@TeleOp(name = "ArtifactPatternReadOpMode")
-public class ArtifactPatternReadOpMode extends LinearOpMode {
+@TeleOp(name = "ReadPatternOpMode")
+public class ReadPatternOpMode extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
 
