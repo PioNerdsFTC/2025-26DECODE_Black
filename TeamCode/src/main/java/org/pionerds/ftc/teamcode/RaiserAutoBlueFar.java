@@ -101,10 +101,10 @@ public class RaiserAutoBlueFar extends LinearOpMode {
         hardware.storage.disableFeeder();
 
 // Step 3
-        hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
-
-// Step 4
         hardware.raiser.driveByDegrees(-1 * -45.00);
+
+        // Step 4
+        hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
 
 // Step 5
         hardware.storage.moveSusanTo(selectedOutput[0]);
