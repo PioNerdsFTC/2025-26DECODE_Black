@@ -49,21 +49,21 @@ public class LucasDriverControlsRed extends DriverControls {
         // Set Speeds to the value or the capped value for the driver
         if (gamepad.left_stick_x < 0) {
             setSpeedX(
-                Math.max(-1*gamepad.left_stick_x, -getMaxSpeed()) * speedMultiplier
+                Math.max(-1*gamepad.left_stick_x, getMaxSpeed()) * speedMultiplier
             );
         } else {
             setSpeedX(
-                Math.min(-1*gamepad.left_stick_x, getMaxSpeed()) * speedMultiplier
+                Math.min(-1*gamepad.left_stick_x, -getMaxSpeed()) * speedMultiplier
             );
         }
 
         if (gamepad.left_stick_y < 0) {
             setSpeedY(
-                Math.max(-1*gamepad.left_stick_y, -getMaxSpeed()) * speedMultiplier
+                Math.max(-1*gamepad.left_stick_y, getMaxSpeed()) * speedMultiplier
             );
         } else {
             setSpeedY(
-                Math.min(-1*gamepad.left_stick_y, getMaxSpeed()) * speedMultiplier
+                Math.min(-1* gamepad.left_stick_y, -getMaxSpeed()) * speedMultiplier
             );
         }
 
