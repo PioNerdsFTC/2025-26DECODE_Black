@@ -149,6 +149,9 @@ public class RaiserAutoRedFar extends LinearOpMode {
 // Step 17
         hardware.launcher.setLauncherVelocity(0);
 
+// Step 18
+        hardware.raiser.driveByInches(-63);
+
 
 
         /// ////////////////////////////////////////
