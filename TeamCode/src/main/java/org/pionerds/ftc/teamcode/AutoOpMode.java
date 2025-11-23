@@ -12,11 +12,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.pionerds.ftc.teamcode.Hardware.Hardware;
-import org.pionerds.ftc.teamcode.Pathfinding.Constants;
-import org.pionerds.ftc.teamcode.Utils.DataStorage;
+public abstract class AutoOpMode extends OpMode {
 
-import java.util.Arrays;
+    protected Auto auto;
 
 @Disabled
 @Autonomous(name = "AutoOpMode", group = "Examples")
@@ -105,122 +103,20 @@ public class AutoOpMode extends OpMode {
      */
     @Override
     public void init() {
-        // Initialize timing systems
-        pathTimer = new Timer();
-        opmodeTimer = new Timer();
-        opmodeTimer.resetTimer();
-        Pose[] pickupPoseList = {pickupPose1, pickupPose2, pickupPose3};
-        Pose[] pickupEndPoseList = {pickupEndPose1, pickupEndPose2, pickupEndPose3};
-
-        // Set up path following system with robot's hardware configuration
-        follower = Constants.createFollower(hardwareMap);
-        pathBuilder = new PathBuilder(follower);
-        pathBuilder2 = new PathBuilder(follower);
-        follower.setStartingPose(startPose);
-
-        hardware.init(hardwareMap, telemetry);
-
-        startToScoreChain = pathBuilder
-            .addPath(new BezierLine(startPose, scanPose))
-            .setConstantHeadingInterpolation(Math.toRadians(90))
-            .addParametricCallback(0.9, () -> {
-                scanned = true;
-            })
-            .addPath(new BezierCurve(scanPose, scorePose))
-            .setLinearHeadingInterpolation(scanPose.getHeading(), scorePose.getHeading())
-            .build();
-
-        // Build pickup/score chain
-        for (int i = 0; i < pickupPoseList.length; i++) {
-            pathBuilder2
-                .addPath(new BezierCurve(scorePose, pickupPoseList[i]))
-                .addParametricCallback(0.9, () -> {hardware.storage.enableIntake(); intakeEnableCount++;})
-                .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPoseList[i].getHeading())
-
-                .addPath(new BezierLine(pickupPoseList[i], pickupEndPoseList[i]))
-                // moved disableIntake() off this segment so it doesn't stop during the pickup->end line
-                .setConstantHeadingInterpolation(Math.toRadians(0))
-
-                .addPath(new BezierCurve(pickupEndPoseList[i], scorePose))
-                // disable intake on the return curve (early in the return) so each pickup leg does enable->disable exactly once
-                .addParametricCallback(0.1, () -> {hardware.storage.disableIntake(); intakeDisableCount++;})
-                .setLinearHeadingInterpolation(pickupEndPoseList[i].getHeading(), scorePose.getHeading());
-        }
-        pickupAndScoreChain = pathBuilder2.build();
-        //TODO add lazy-susan code and launching code
+        // Auto will be initialized in subclasses
     }
 
-    /**
-     * Called continuously after init while waiting for start.
-     * Currently unused but required by OpMode structure.
-     */
-    @Override
-    public void init_loop() {
-    }
-
-    /**
-     * Called once when "START" is pressed to begin autonomous.
-     */
     @Override
     public void start() {
-        opmodeTimer.resetTimer();
-        setPathState(State.START_TO_SCORE);  // Begin with first state
-    }
-
-    /**
-     * Called once when autonomous ends.
-     * Everything stops automatically, so no manual cleanup needed.
-     **/
-    @Override
-    public void stop() {
-    }
-
-
-    public void autonomousPathUpdate() {
-        switch (getPathState()) {
-
-            case START_TO_SCORE:
-                if (!pathStarted && !follower.isBusy()) {
-                    follower.followPath(startToScoreChain, false);
-                    pathStarted = true;
-                }
-                else if (pathStarted && !follower.isBusy()) {
-                    setPathState(State.PICKUP_BALLS);
-                    pathStarted = false;
-                }
-                break;
-
-            case PICKUP_BALLS:
-                if (!pathStarted && !follower.isBusy()) {
-                    follower.followPath(pickupAndScoreChain);
-                    pathStarted = true;
-                }
-                else if (pathStarted && !follower.isBusy()) {
-                    setPathState(State.PARKING);
-                    pathStarted = false;
-                }
-                break;
-
-            case PARKING:
-                if(!pathStarted && !follower.isBusy()) {
-                    follower.followPath(new Path(new BezierLine(follower.getPose(), endPose)));
-                    pathStarted = true;
-                }
-                else if (pathStarted && !follower.isBusy()) {
-                    setPathState(State.DONE);
-                    pathStarted = false;
-                }
-                break;
-
-            case DONE:
-                if(!follower.isBusy()) {
-                    DataStorage.storeAngle(1, follower.getPose().getHeading());
-                }
-                break;
+        if (auto != null) {
+            auto.start();
         }
     }
 
-    private State getPathState() {
-        return pathState;
+    @Override
+    public void loop() {
+        if (auto != null) {
+            auto.loop();
+        }
     }
 }
