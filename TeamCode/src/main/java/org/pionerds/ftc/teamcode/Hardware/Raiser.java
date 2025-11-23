@@ -139,11 +139,11 @@ public class Raiser {
 
     private void setMotorVelocities(double velocity, boolean rotate, boolean right){
         int rotateFactor = (rotate ? 1 : -1);
-        int rightFactor = (right ? -1 : 1);
-        driveMotorVelocities[0] = rotateFactor*velocity;
-        driveMotorVelocities[1] = rightFactor*velocity;
-        driveMotorVelocities[2] = velocity;
-        driveMotorVelocities[3] = rightFactor*rotateFactor*velocity;
+        int rightFactor = (right ? 1 : -1);
+        driveMotorVelocities[0] = rightFactor*rotateFactor*velocity;
+        driveMotorVelocities[1] = velocity;
+        driveMotorVelocities[2] = rightFactor*velocity;
+        driveMotorVelocities[3] = rotateFactor*velocity;
     }
 
     private void setMotorPositions(int position, boolean rotate, boolean right){
