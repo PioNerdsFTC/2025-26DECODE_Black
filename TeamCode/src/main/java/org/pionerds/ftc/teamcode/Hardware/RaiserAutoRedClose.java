@@ -1,6 +1,7 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -12,6 +13,7 @@ import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
+@Disabled
 @Autonomous(name = "RaiserAutoRedClose")
 public class RaiserAutoRedClose extends LinearOpMode {
 
@@ -23,7 +25,7 @@ public class RaiserAutoRedClose extends LinearOpMode {
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
-        AprilTagNames target = AprilTagNames.BlueTarget;
+        AprilTagNames target = AprilTagNames.RedTarget;
         hardware.storage.resetEncoderSusan();
 
 
