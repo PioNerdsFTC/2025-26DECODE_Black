@@ -2,18 +2,15 @@ package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Artifact;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
-@Autonomous(name = "RaiserAutoBlueFar")
-public class RaiserAutoBlueFar extends LinearOpMode {
+@Autonomous(name = "RaiserAutoRedClose")
+public class RaiserAutoRedClose extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
 
@@ -96,57 +93,57 @@ public class RaiserAutoBlueFar extends LinearOpMode {
 
 
 // FTC Autonomous Path - Generated Code
-// Robot Start: (54", 0") @ 0°
+// Robot Start: (114", 114") @ -120°
 
 // Step 1
-        hardware.raiser.driveByInches(72.00);
+        hardware.raiser.driveByInches(30.00);
 
 // Step 2
-        hardware.storage.disableFeeder();
+        hardware.raiser.driveByDegrees(-1 * 120.00);
 
 // Step 3
-        hardware.raiser.driveByDegrees(-1 * -45.00);
+        hardware.sleep(1000);
 
 // Step 4
-        hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
+        hardware.raiser.driveByDegrees(-1 * 60.00);
 
 // Step 5
+        hardware.storage.disableFeeder();
+
+// Step 6
+        hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
+
+// Step 7
+        hardware.sleep(1500);
+
+// Step 8
         hardware.storage.moveSusanTo(selectedOutput[0]);
         hardware.sleep(1500);
 
-// Step 6
-        hardware.sleep(1500);
-
-// Step 7
+// Step 9
         hardware.storage.enableFeederManual();
 
-// Step 8
+// Step 10
         hardware.sleep(2000);
 
-// Step 9
+// Step 11
         hardware.storage.disableFeeder();
 
-// Step 10
+// Step 12
         hardware.storage.moveSusanTo(selectedOutput[1]);
         hardware.sleep(1500);
 
-// Step 11
-        hardware.sleep(1500);
-
-// Step 12
+// Step 13
         hardware.storage.enableFeederManual();
 
-// Step 13
+// Step 14
         hardware.sleep(2000);
 
-// Step 14
+// Step 15
         hardware.storage.disableFeeder();
 
-// Step 15
-        hardware.storage.moveSusanTo(selectedOutput[2]);
-        hardware.sleep(1500);
-
 // Step 16
+        hardware.storage.moveSusanTo(selectedOutput[2]);
         hardware.sleep(1500);
 
 // Step 17
@@ -159,10 +156,13 @@ public class RaiserAutoBlueFar extends LinearOpMode {
         hardware.storage.disableFeeder();
 
 // Step 20
-        hardware.launcher.setLauncherVelocity(0);
+        hardware.raiser.driveByDegrees(-1 * 165.00);
 
 // Step 21
-        hardware.raiser.driveByInches(-63.00);
+        hardware.raiser.driveByInches(81.00);
+
+// Step 22
+        hardware.raiser.driveByInches(6.00);
 
 
 
