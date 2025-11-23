@@ -131,7 +131,7 @@ public class Raiser {
             DcMotorEx motor = driveMotors[i];
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             motor.setTargetPosition(driveMotorPositions[i]);
-            motor.setTargetPositionTolerance(1);
+            motor.setTargetPositionTolerance(5);
             motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motor.setVelocity(driveMotorVelocities[i]);
         }

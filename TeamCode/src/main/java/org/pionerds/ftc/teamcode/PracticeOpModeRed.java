@@ -2,33 +2,29 @@ package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.ManualSusanOperatorControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
-import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
-import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
-@TeleOp(name = "PracticeOpTemplate")
-public class PracticeOpMode extends LinearOpMode {
+@TeleOp(name = "PracticeOpRed")
+public class PracticeOpModeRed extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
     final DriverControls driverControls1 = new LucasDriverControls(
         "Lucas Schwietz",
         true,
         1.0f,
-            false
+            true
     );
 
     final ManualSusanOperatorControls driverControls2 = new ManualSusanOperatorControls(
             "Lukie Pookie",
             true,
             1.0f,
-            false
+            true
     );
 
     @Override
