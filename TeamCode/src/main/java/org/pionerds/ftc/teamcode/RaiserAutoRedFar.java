@@ -13,8 +13,8 @@ import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
-@Autonomous(name = "RaiserAutoBlueFar")
-public class RaiserAutoBlueFar extends LinearOpMode {
+@Autonomous(name = "RaiserAutoRedFar")
+public class RaiserAutoRedFar extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
 

@@ -1,5 +1,5 @@
 
-package org.pionerds.ftc.teamcode;
+package org.pionerds.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -12,9 +12,10 @@ import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
+import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
-@Autonomous(name = "RaiserAutoBlueFar")
-public class RaiserAutoBlueFar extends LinearOpMode {
+@Autonomous(name = "GyroTransitionTestOpMode")
+public class GyroTransitionTestOpMode extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
 
@@ -37,7 +38,7 @@ public class RaiserAutoBlueFar extends LinearOpMode {
             sleep(1);
         }
 
-        double[] current_angles = hardware.gyo.getAngles();
+        double[] current_angles = hardware.gyro.getAngles();
         DataStorage.storeAllAngles(current_angles);
 
         hardware.stop();
