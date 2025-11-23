@@ -1,6 +1,7 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -12,10 +13,12 @@ import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
+@Disabled
 @Autonomous(name = "RaiserAutoBlueClose")
 public class RaiserAutoBlueClose extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
+
 
     @Override
     public void runOpMode() throws InterruptedException {
