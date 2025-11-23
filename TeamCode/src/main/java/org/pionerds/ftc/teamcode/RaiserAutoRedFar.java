@@ -20,7 +20,7 @@ public class RaiserAutoRedFar extends LinearOpMode {
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
-        AprilTagNames target = AprilTagNames.BlueTarget;
+        AprilTagNames target = AprilTagNames.RedTarget;
         hardware.storage.resetEncoderSusan();
 
 
