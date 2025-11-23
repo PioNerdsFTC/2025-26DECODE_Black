@@ -21,15 +21,22 @@ public class Raiser {
 
     public void tune(){
         resetEncoders();
-        setMotorPositions(3500,false);
-        setMotorVelocities(500,false);
+        setMotorPositions(3500,false,false);
+        setMotorVelocities(500,false,false);
+        updateMotors();
+    }
+
+    public void tuneSide(){
+        resetEncoders();
+        setMotorPositions(3500,false,true);
+        setMotorVelocities(500,false,true);
         updateMotors();
     }
 
     public void tuneRotation(){
         resetEncoders();
-        setMotorPositions(1000,true);
-        setMotorVelocities(500,true);
+        setMotorPositions(1000,true,false);
+        setMotorVelocities(500,true,false);
         updateMotors();
     }
 
@@ -53,8 +60,8 @@ public class Raiser {
         resetEncoders();
         int position = (int) (inches * ticksPerInches);
 
-        setMotorPositions(position,false);
-        setMotorVelocities(velocity,false);
+        setMotorPositions(position,false,false);
+        setMotorVelocities(velocity,false,false);
         scaleMotorVelocities();
 
         updateMotors();
@@ -74,8 +81,8 @@ public class Raiser {
         resetEncoders();
         int position = (int) (inches * ticksPerInches);
 
-        setMotorPositions(position,false);
-        setMotorVelocities(velocity,false);
+        setMotorPositions(position,false,true);
+        setMotorVelocities(velocity,false,true);
         scaleMotorVelocities();
 
         updateMotors();
@@ -88,15 +95,15 @@ public class Raiser {
     }
 
     public void driveByInchesRight(double inches){
-        driveByInches(inches, 1000.00);
+        driveByInchesRight(inches, 1000.00);
     }
 
     public void driveByDegrees(double degrees, double velocity){
         resetEncoders();
         int position = (int) (degrees * ticksPerDegree);
 
-        setMotorPositions(position,true);
-        setMotorVelocities(velocity,true);
+        setMotorPositions(position,true,false);
+        setMotorVelocities(velocity,true,false);
         scaleMotorVelocities();
 
         updateMotors();
@@ -130,21 +137,22 @@ public class Raiser {
         }
     }
 
-    private void setMotorVelocities(double velocity, boolean rotate){
+    private void setMotorVelocities(double velocity, boolean rotate, boolean right){
         int rotateFactor = (rotate ? 1 : -1);
+        int rightFactor = (right ? -1 : 1);
         driveMotorVelocities[0] = rotateFactor*velocity;
-        driveMotorVelocities[1] = velocity;
+        driveMotorVelocities[1] = rightFactor*velocity;
         driveMotorVelocities[2] = velocity;
-        driveMotorVelocities[3] = rotateFactor*velocity;
+        driveMotorVelocities[3] = rightFactor*rotateFactor*velocity;
     }
 
-    private void setMotorPositions(int position, boolean rotate){
+    private void setMotorPositions(int position, boolean rotate, boolean right){
         int rotateFactor = (rotate ? 1 : -1);
-
+        int rightFactor = (right ? -1 : 1);
         driveMotorPositions[0] = rotateFactor*position;
-        driveMotorPositions[1] = position;
+        driveMotorPositions[1] = rightFactor*position;
         driveMotorPositions[2] = position;
-        driveMotorPositions[3] = rotateFactor*position;
+        driveMotorPositions[3] = rightFactor*rotateFactor*position;
     }
 
     private void scaleMotorVelocities(){
