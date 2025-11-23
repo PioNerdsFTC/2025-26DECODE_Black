@@ -5,10 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
-import org.pionerds.ftc.teamcode.ScheduleTask;
-import org.pionerds.ftc.teamcode.Utils.Environment;
 
 /**
  * Class for all the hardware functions of the robot.

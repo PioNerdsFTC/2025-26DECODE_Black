@@ -1,5 +1,6 @@
 package org.pionerds.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -11,7 +12,7 @@ import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
-@TeleOp(name = "RaiserAutoBlueFar")
+@Autonomous(name = "RaiserAutoBlueFar")
 public class RaiserAutoBlueFar extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
