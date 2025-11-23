@@ -5,10 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
-import org.pionerds.ftc.teamcode.ScheduleTask;
-import org.pionerds.ftc.teamcode.Utils.Environment;
 
 /**
  * Class for all the hardware functions of the robot.
@@ -24,6 +21,8 @@ public final class Hardware {
     public Launcher launcher = new Launcher();
     public Storage storage = new Storage();
     public Aimbot aimbot = new Aimbot();
+    public Raiser raiser = new Raiser();
+    public SusanAutoAlgorithms susanAutoAlgorithms = new SusanAutoAlgorithms();
     public DriverControls driverControls1;
     public DriverControls driverControls2;
 
@@ -55,6 +54,10 @@ public final class Hardware {
             gyro.init(this);
             aimbot.init(this, telemetry, AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY);
             aimbot.setHardware(this);
+            raiser.init(this);
+            susanAutoAlgorithms.init(this);
+
+
 
         } catch (Exception e) {
             telemetry.addLine(e.getMessage());
@@ -122,6 +125,11 @@ public final class Hardware {
     public void addElapsedTime(ElapsedTime elapsedTime) {
         this.elapsedTime = elapsedTime;
         ScheduleTask.initTime(elapsedTime);
+    }
+
+    public void sleep(double milliseconds){
+        double startTime = elapsedTime.milliseconds();
+        while (elapsedTime.milliseconds() < startTime+milliseconds){}
     }
 
     public void stop() {

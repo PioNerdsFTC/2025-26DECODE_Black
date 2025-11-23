@@ -1,9 +1,7 @@
 package org.pionerds.ftc.teamcode.Hardware;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
-import org.pionerds.ftc.teamcode.ScheduleTask;
 
 /**
  * Aimbot class manages the automated launcher system for scoring artifacts.
