@@ -38,7 +38,7 @@ public class Auto {
     private final double pileYCoordOffset = 24;
     private final Telemetry telemetry;
     private final HardwareMap hardwareMap;
-  
+
     private boolean scanned = false;
     private boolean pathStarted = false;
     private String artifactPattern = "No scan attempt yet";
