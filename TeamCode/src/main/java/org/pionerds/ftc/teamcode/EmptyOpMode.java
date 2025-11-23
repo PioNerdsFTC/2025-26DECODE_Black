@@ -5,12 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
-@TeleOp(name = "TuneRaiserOpMode")
-public class TuneRaiserOpMode extends LinearOpMode {
+@TeleOp(name = "Empty")
+public class EmptyOpMode extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
 
@@ -20,23 +18,17 @@ public class TuneRaiserOpMode extends LinearOpMode {
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
+        AprilTagNames target = AprilTagNames.BlueTarget;
+
         waitForStart(); // Wait for start!
+
+
         ElapsedTime elapsedTime = new ElapsedTime();
         hardware.addElapsedTime(elapsedTime);
-
-        telemetry.addLine("Robot runtime started! (TeleOp)");
-        telemetry.update();
-
-
-        //hardware.raiser.tune();
-        hardware.raiser.tuneRotation();
-
 
         // Main loop!
         while (opModeIsActive()) {
 
-            hardware.raiser.tunePrint();
-            hardware.raiser.rotateToTarget(AprilTagNames.BlueTarget);
             telemetry.update();
 
             sleep(1);

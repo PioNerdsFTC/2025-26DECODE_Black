@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 public class Raiser {
     private final double ticksPerInches = (3500/93.75);
+    private final double ticksPerDegree = (1000/-127); //find
     private final double maxVelocity = 2500.00;
     private Hardware hardware;
     private DcMotorEx[] driveMotors;
@@ -20,8 +21,15 @@ public class Raiser {
 
     public void tune(){
         resetEncoders();
-        setMotorPositions(3500);
-        setMotorVelocities(500);
+        setMotorPositions(3500,false);
+        setMotorVelocities(500,false);
+        updateMotors();
+    }
+
+    public void tuneRotation(){
+        resetEncoders();
+        setMotorPositions(1000,true);
+        setMotorVelocities(500,true);
         updateMotors();
     }
 
@@ -41,18 +49,46 @@ public class Raiser {
         }
     }
 
-    public void driveByInches(double inches){
+    public void driveByInches(double inches, double velocity){
+        resetEncoders();
         int position = (int) (inches * ticksPerInches);
-        double velocity = 1000.00;
 
-        setMotorPositions(position);
-        setMotorVelocities(1000);
+        setMotorPositions(position,false);
+        setMotorVelocities(velocity,false);
         scaleMotorVelocities();
 
         updateMotors();
 
-        while (motorsBusy()){} // halts thread until it gets to position
+        while (motorsBusy()){
+            hardware.telemetry.addLine("waiting on motors for linear movement...");
+            hardware.telemetry.update();
+        } // halts thread until it gets to position
 
+    }
+
+    public void driveByInches(double inches){
+        driveByInches(inches, 1000.00);
+    }
+
+    public void driveByDegrees(double degrees, double velocity){
+        resetEncoders();
+        int position = (int) (degrees * ticksPerDegree);
+
+        setMotorPositions(position,true);
+        setMotorVelocities(velocity,true);
+        scaleMotorVelocities();
+
+        updateMotors();
+
+        while (motorsBusy()){
+            hardware.telemetry.addLine("waiting on motors for rotation...");
+            hardware.telemetry.update();
+        } // halts thread until it gets to position
+
+    }
+
+    public void driveByDegrees(double degrees){
+        driveByDegrees(degrees,1000.00);
     }
 
     private boolean motorsBusy(){
@@ -67,26 +103,30 @@ public class Raiser {
             DcMotorEx motor = driveMotors[i];
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             motor.setTargetPosition(driveMotorPositions[i]);
+            motor.setTargetPositionTolerance(1);
             motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motor.setVelocity(driveMotorVelocities[i]);
         }
     }
 
-    public void setMotorVelocities(double velocity){
-        driveMotorVelocities[0] = -velocity;
+    private void setMotorVelocities(double velocity, boolean rotate){
+        int rotateFactor = (rotate ? 1 : -1);
+        driveMotorVelocities[0] = rotateFactor*velocity;
         driveMotorVelocities[1] = velocity;
         driveMotorVelocities[2] = velocity;
-        driveMotorVelocities[3] = -velocity;
+        driveMotorVelocities[3] = rotateFactor*velocity;
     }
 
-    public void setMotorPositions(int position){
-        driveMotorPositions[0] = -position;
+    private void setMotorPositions(int position, boolean rotate){
+        int rotateFactor = (rotate ? 1 : -1);
+
+        driveMotorPositions[0] = rotateFactor*position;
         driveMotorPositions[1] = position;
         driveMotorPositions[2] = position;
-        driveMotorPositions[3] = -position;
+        driveMotorPositions[3] = rotateFactor*position;
     }
 
-    public void scaleMotorVelocities(){
+    private void scaleMotorVelocities(){
 
         double scaleToNumber = 0.00;
         boolean scale = false;
@@ -104,6 +144,18 @@ public class Raiser {
             for(int i = 0; i<driveMotorVelocities.length; i++){
                 driveMotorVelocities[i] = driveMotorVelocities[i] / scaleToNumber * maxVelocity;
             }
+        }
+    }
+
+    public void rotateToTarget(AprilTagNames tagName){
+        PioNerdAprilTag piotag = hardware.vision.getPioNerdAprilTag(tagName);
+        if(piotag != null){
+            double angle = piotag.bearing(2);
+            hardware.telemetry.addLine("TAG BEARING:\n"+angle);
+            hardware.telemetry.addLine("TAG RANGE:\n"+piotag.range(2));
+
+            driveByDegrees(-piotag.bearing(1));
+
         }
     }
 

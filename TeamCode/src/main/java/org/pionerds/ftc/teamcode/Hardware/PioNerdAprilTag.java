@@ -5,8 +5,6 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 public class PioNerdAprilTag {
 
     private final AprilTagDetection aprilTagDetection;
-    private final double MULTIPLY_TO_DISTANCE = 1; // what is this bruh
-
     public PioNerdAprilTag(AprilTagDetection aprilTagDetectionInput) {
         this.aprilTagDetection = aprilTagDetectionInput;
     }
@@ -16,14 +14,13 @@ public class PioNerdAprilTag {
     }
 
     public double x() {
-        return aprilTagDetection.ftcPose.x * MULTIPLY_TO_DISTANCE;
+        return aprilTagDetection.ftcPose.x;
     }
 
     public double x(int decimalPlaces) {
         return (
             Math.round(
                 aprilTagDetection.ftcPose.x *
-                    MULTIPLY_TO_DISTANCE *
                     Math.pow(10.0, decimalPlaces)
             ) /
                 Math.pow(10.0, decimalPlaces)
@@ -31,14 +28,13 @@ public class PioNerdAprilTag {
     }
 
     public double y() {
-        return aprilTagDetection.ftcPose.y * MULTIPLY_TO_DISTANCE;
+        return aprilTagDetection.ftcPose.y;
     }
 
     public double y(int decimalPlaces) {
         return (
             Math.round(
                 aprilTagDetection.ftcPose.y *
-                    MULTIPLY_TO_DISTANCE *
                     Math.pow(10.0, decimalPlaces)
             ) /
                 Math.pow(10.0, decimalPlaces)
@@ -46,14 +42,13 @@ public class PioNerdAprilTag {
     }
 
     public double z() {
-        return aprilTagDetection.ftcPose.z * MULTIPLY_TO_DISTANCE;
+        return aprilTagDetection.ftcPose.z;
     }
 
     public double z(int decimalPlaces) {
         return (
             Math.round(
                 aprilTagDetection.ftcPose.z *
-                    MULTIPLY_TO_DISTANCE *
                     Math.pow(10.0, decimalPlaces)
             ) /
                 Math.pow(10.0, decimalPlaces)
@@ -61,14 +56,25 @@ public class PioNerdAprilTag {
     }
 
     public double range() {
-        return aprilTagDetection.ftcPose.range * MULTIPLY_TO_DISTANCE;
+        return aprilTagDetection.ftcPose.range;
+    }
+    public double bearing() {
+        return aprilTagDetection.ftcPose.bearing;
     }
 
     public double range(int decimalPlaces) {
         return (
             Math.round(
                 aprilTagDetection.ftcPose.range *
-                    MULTIPLY_TO_DISTANCE *
+                    Math.pow(10.0, decimalPlaces)
+            ) /
+                Math.pow(10.0, decimalPlaces)
+        );
+    }
+    public double bearing(int decimalPlaces) {
+        return (
+            Math.round(
+                aprilTagDetection.ftcPose.bearing *
                     Math.pow(10.0, decimalPlaces)
             ) /
                 Math.pow(10.0, decimalPlaces)

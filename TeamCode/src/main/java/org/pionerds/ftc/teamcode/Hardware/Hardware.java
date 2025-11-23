@@ -25,6 +25,7 @@ public final class Hardware {
     public Storage storage = new Storage();
     public Aimbot aimbot = new Aimbot();
     public Raiser raiser = new Raiser();
+    public SusanAutoAlgorithms susanAutoAlgorithms = new SusanAutoAlgorithms();
     public DriverControls driverControls1;
     public DriverControls driverControls2;
 
@@ -57,6 +58,8 @@ public final class Hardware {
             aimbot.init(this, telemetry, AprilTagNames.BlueTarget, AimbotMotorMovement.VELOCITY);
             aimbot.setHardware(this);
             raiser.init(this);
+            susanAutoAlgorithms.init(this);
+
 
 
         } catch (Exception e) {
@@ -125,6 +128,11 @@ public final class Hardware {
     public void addElapsedTime(ElapsedTime elapsedTime) {
         this.elapsedTime = elapsedTime;
         ScheduleTask.initTime(elapsedTime);
+    }
+
+    public void sleep(double milliseconds){
+        double startTime = elapsedTime.milliseconds();
+        while (elapsedTime.milliseconds() < startTime+milliseconds){}
     }
 
     public void stop() {

@@ -171,6 +171,10 @@ public class Vision {
         return detectionNames;
     }
 
+    public Artifact[] getCachedValueStrict(){
+        return artifactAlgorithm;
+    }
+
     /**
      * Get current artifact pattern.
      *
