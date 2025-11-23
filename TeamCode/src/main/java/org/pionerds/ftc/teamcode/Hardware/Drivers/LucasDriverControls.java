@@ -11,10 +11,18 @@ import org.pionerds.ftc.teamcode.Utils.DataStorage;
 public class LucasDriverControls extends DriverControls {
 
     boolean resetGyroPressed = false;
+    int isRed;
 
     public LucasDriverControls(String driverName, boolean isDriver, float maxSpeed) {
         super(driverName, maxSpeed);
         this.setIsDriver(isDriver);
+        this.isRed = 1;
+    }
+
+    public LucasDriverControls(String driverName, boolean isDriver, float maxSpeed, boolean isRed) {
+        super(driverName, maxSpeed);
+        this.setIsDriver(isDriver);
+        this.isRed = (isRed ? -1 : 1);
     }
 
     /**
@@ -51,21 +59,21 @@ public class LucasDriverControls extends DriverControls {
         // Set Speeds to the value or the capped value for the driver
         if (gamepad.left_stick_x < 0) {
             setSpeedX(
-                Math.max(gamepad.left_stick_x, -getMaxSpeed()) * speedMultiplier
+                Math.max(gamepad.left_stick_x, -getMaxSpeed()) * speedMultiplier * isRed
             );
         } else {
             setSpeedX(
-                Math.min(gamepad.left_stick_x, getMaxSpeed()) * speedMultiplier
+                Math.min(gamepad.left_stick_x, getMaxSpeed()) * speedMultiplier * isRed
             );
         }
 
         if (gamepad.left_stick_y < 0) {
             setSpeedY(
-                Math.max(gamepad.left_stick_y, -getMaxSpeed()) * speedMultiplier
+                Math.max(gamepad.left_stick_y, -getMaxSpeed()) * speedMultiplier * isRed
             );
         } else {
             setSpeedY(
-                Math.min(gamepad.left_stick_y, getMaxSpeed()) * speedMultiplier
+                Math.min(gamepad.left_stick_y, getMaxSpeed()) * speedMultiplier * isRed
             );
         }
 

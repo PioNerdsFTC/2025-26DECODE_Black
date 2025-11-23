@@ -24,13 +24,16 @@ public class ManualSusanOperatorControls extends DriverControls {
     boolean intakeOn = false;
     boolean changingFeeder = false;
     boolean feederOn = false;
+    AprilTagNames targetName;
 
     public ManualSusanOperatorControls(
             String driverName,
             boolean isDriver,
-            float maxSpeed
+            float maxSpeed,
+            boolean isRed
     ) {
         super(driverName, maxSpeed);
+        targetName = (isRed ? AprilTagNames.RedTarget : AprilTagNames.BlueTarget);
     }
 
     @Override
@@ -80,7 +83,7 @@ public class ManualSusanOperatorControls extends DriverControls {
         }
 
         if(launcherOn) {
-            hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(AprilTagNames.BlueTarget));
+            hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(targetName));
         }
         if(!launcherOn) {
             hardware.launcher.setLauncherVelocity(0);
