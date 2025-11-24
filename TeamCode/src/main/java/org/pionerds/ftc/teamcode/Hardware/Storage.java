@@ -53,7 +53,7 @@ public class Storage {
             feederServo = bumpUpFeeder;
             tiltFeedServo = tempFeederTiltServo;
             susanMotorEx = susan;
-            susanMotorEx.setTargetPositionTolerance(0);  // Set precision for position control (within 1 tick)
+            susanMotorEx.setTargetPositionTolerance(3);  // Set precision for position control (within 1 tick)
             intakeMotorEx = intake;
             isInitialized = true;  // Mark system as ready
         } else {
@@ -426,6 +426,34 @@ public class Storage {
     public void adjustLazySusan(double power) {
         susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         susanMotorEx.setPower(power);
+    }
+
+    public void sendVelocitySusan(double velocity) {
+        susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        susanMotorEx.setPower(velocity);
+    }
+
+    public void waitForSusanRotation(){
+        while(susanMotorEx.isBusy()){
+        hardware.telemetry.addLine("Suzie Busy...");
+        hardware.telemetry.update();
+        }
+    }
+
+    public boolean isSusanBusy(){
+        return susanMotorEx.isBusy();
+    }
+
+    public boolean isIntakeState(){
+        if(currentSusanPositionEnum.equals(LazySusanPositions.INTAKE1) || currentSusanPositionEnum.equals(LazySusanPositions.INTAKE2) || currentSusanPositionEnum.equals(LazySusanPositions.INTAKE3)) return true;
+        return false;
+    }
+
+    public LazySusanPositions[] getIntakeArray(){
+        return new LazySusanPositions[]{LazySusanPositions.INTAKE1,LazySusanPositions.INTAKE2,LazySusanPositions.INTAKE3};
+    }
+    public LazySusanPositions[] getOutputArray(){
+        return new LazySusanPositions[]{LazySusanPositions.OUTPUT1,LazySusanPositions.OUTPUT2,LazySusanPositions.OUTPUT3};
     }
 
 }
