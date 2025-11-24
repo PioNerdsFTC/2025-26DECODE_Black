@@ -4,19 +4,32 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
+import org.pionerds.ftc.teamcode.Hardware.Drivers.ManualSusanOperatorControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
-@TeleOp(name = "TuneRaiserOpMode")
-public class TuneRaiserOpMode extends LinearOpMode {
+@TeleOp(name = "PracticeOpRed")
+public class PracticeOpModeRed extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
+    final DriverControls driverControls1 = new LucasDriverControls(
+        "Lucas Schwietz",
+        true,
+        1.0f,
+            true
+    );
+
+    final ManualSusanOperatorControls driverControls2 = new ManualSusanOperatorControls(
+            "Lukie Pookie",
+            true,
+            1.0f,
+            true
+    );
 
     @Override
     public void runOpMode() throws InterruptedException {
-        hardware.init(hardwareMap, telemetry);
+        hardware.init(hardwareMap, telemetry,driverControls1,driverControls2);
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
@@ -24,23 +37,17 @@ public class TuneRaiserOpMode extends LinearOpMode {
         ElapsedTime elapsedTime = new ElapsedTime();
         hardware.addElapsedTime(elapsedTime);
 
+        hardware.storage.resetEncoderSusan();
+
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
-
-
-        hardware.raiser.resetEncoders();
-        hardware.raiser.tune();
-        hardware.sleep(1000);
-        hardware.raiser.tuneSide();
-        hardware.sleep(1000);
-        hardware.raiser.tuneRotation();
 
 
         // Main loop!
         while (opModeIsActive()) {
 
-            hardware.raiser.tunePrint();
-            hardware.raiser.rotateToTarget(AprilTagNames.BlueTarget);
+            hardware.tick(gamepad1,gamepad2);
+
             telemetry.update();
 
             sleep(1);

@@ -44,6 +44,29 @@ public class RaiserAutoBlueFar extends LinearOpMode {
         hardware.storage.moveSusanTo(LazySusanPositions.INTAKE3);
         hardware.sleep(5000);*/
 
+
+
+        // START AI CODE
+
+
+// FTC Autonomous Path - Generated Code
+// Robot Start: (54", 0") @ 0°
+
+// Step 1
+        hardware.vision.getArtifactPattern();
+        hardware.raiser.driveByInches(84.00);
+        hardware.vision.getArtifactPattern();
+
+// Step 2
+        hardware.storage.disableFeeder();
+
+// Step 3
+        hardware.raiser.driveByDegrees(-1 * -45.00);
+        hardware.vision.getArtifactPattern();
+
+// Step 4
+
+
         hardware.vision.getArtifactPattern();
         telemetry.addLine("Ob Id: "+hardware.vision.getObeliskIdentified());
         hardware.sleep(1000);
@@ -90,23 +113,8 @@ public class RaiserAutoBlueFar extends LinearOpMode {
         }
         telemetry.addLine("ob Id? "+hardware.vision.getObeliskIdentified());
         telemetry.update();
-        hardware.sleep(5000);
 
-        // START AI CODE
 
-        // FTC Autonomous Path - Generated Code
-// Robot Start: (54", 0") @ 0°
-
-// Step 1
-        hardware.raiser.driveByInches(72.00);
-
-// Step 2
-        hardware.storage.disableFeeder();
-
-// Step 3
-        hardware.raiser.driveByDegrees(-1 * -45.00);
-
-        // Step 4
         hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
 
 // Step 5
@@ -114,45 +122,55 @@ public class RaiserAutoBlueFar extends LinearOpMode {
         hardware.sleep(1500);
 
 // Step 6
-        hardware.storage.enableFeederManual();
+        hardware.sleep(1500);
 
 // Step 7
-        hardware.sleep(2000);
+        hardware.storage.enableFeederManual();
 
 // Step 8
-        hardware.storage.disableFeeder();
+        hardware.sleep(2000);
 
 // Step 9
+        hardware.storage.disableFeeder();
+
+// Step 10
         hardware.storage.moveSusanTo(selectedOutput[1]);
         hardware.sleep(1500);
 
-// Step 10
-        hardware.storage.enableFeederManual();
-
 // Step 11
-        hardware.sleep(2000);
+        hardware.sleep(1500);
 
 // Step 12
-        hardware.storage.disableFeeder();
+        hardware.storage.enableFeederManual();
 
 // Step 13
+        hardware.sleep(2000);
+
+// Step 14
+        hardware.storage.disableFeeder();
+
+// Step 15
         hardware.storage.moveSusanTo(selectedOutput[2]);
         hardware.sleep(1500);
 
-// Step 14
-        hardware.storage.enableFeederManual();
-
-// Step 15
-        hardware.sleep(2000);
-
 // Step 16
-        hardware.storage.disableFeeder();
+        hardware.sleep(1500);
 
 // Step 17
-        hardware.launcher.setLauncherVelocity(0);
+        hardware.storage.enableFeederManual();
 
 // Step 18
-        hardware.raiser.driveByInches(-63);
+        hardware.sleep(2000);
+
+// Step 19
+        hardware.storage.disableFeeder();
+
+// Step 20
+        hardware.launcher.setLauncherVelocity(0);
+
+// Step 21
+        hardware.raiser.driveByInches(-63.00);
+
 
 
 

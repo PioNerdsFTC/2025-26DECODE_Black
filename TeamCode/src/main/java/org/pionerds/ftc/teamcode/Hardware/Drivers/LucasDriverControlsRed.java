@@ -2,27 +2,16 @@ package org.pionerds.ftc.teamcode.Hardware.Drivers;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
-import org.pionerds.ftc.teamcode.Hardware.Artifact;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
-import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
-public class LucasDriverControls extends DriverControls {
+public class LucasDriverControlsRed extends DriverControls {
 
     boolean resetGyroPressed = false;
-    int isRed;
 
-    public LucasDriverControls(String driverName, boolean isDriver, float maxSpeed) {
+    public LucasDriverControlsRed(String driverName, boolean isDriver, float maxSpeed) {
         super(driverName, maxSpeed);
         this.setIsDriver(isDriver);
-        this.isRed = 1;
-    }
-
-    public LucasDriverControls(String driverName, boolean isDriver, float maxSpeed, boolean isRed) {
-        super(driverName, maxSpeed);
-        this.setIsDriver(isDriver);
-        this.isRed = (isRed ? -1 : 1);
     }
 
     /**
@@ -44,6 +33,7 @@ public class LucasDriverControls extends DriverControls {
     public void tickControls(Gamepad gamepad, Hardware hardware) {
         // Resets
         setSpeedMultiplier(1.0f);
+        setRotationMultiplier(1.0f);
 
         // Left Bumper
         if (gamepad.left_bumper) {
@@ -59,21 +49,21 @@ public class LucasDriverControls extends DriverControls {
         // Set Speeds to the value or the capped value for the driver
         if (gamepad.left_stick_x < 0) {
             setSpeedX(
-                Math.max(gamepad.left_stick_x, -getMaxSpeed()) * speedMultiplier * isRed
+                Math.max(-1*gamepad.left_stick_x, getMaxSpeed()) * speedMultiplier
             );
         } else {
             setSpeedX(
-                Math.min(gamepad.left_stick_x, getMaxSpeed()) * speedMultiplier * isRed
+                Math.min(-1*gamepad.left_stick_x, -getMaxSpeed()) * speedMultiplier
             );
         }
 
         if (gamepad.left_stick_y < 0) {
             setSpeedY(
-                Math.max(gamepad.left_stick_y, -getMaxSpeed()) * speedMultiplier * isRed
+                Math.max(-1*gamepad.left_stick_y, getMaxSpeed()) * speedMultiplier
             );
         } else {
             setSpeedY(
-                Math.min(gamepad.left_stick_y, getMaxSpeed()) * speedMultiplier * isRed
+                Math.min(-1* gamepad.left_stick_y, -getMaxSpeed()) * speedMultiplier
             );
         }
 

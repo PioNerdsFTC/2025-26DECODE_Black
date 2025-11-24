@@ -1,16 +1,16 @@
-package org.pionerds.ftc.teamcode.Hardware;
+package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Artifact;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
+
+
 
 @Autonomous(name = "RaiserAutoRedClose")
 public class RaiserAutoRedClose extends LinearOpMode {
@@ -23,14 +23,14 @@ public class RaiserAutoRedClose extends LinearOpMode {
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
-        AprilTagNames target = AprilTagNames.BlueTarget;
+        AprilTagNames target = AprilTagNames.RedTarget;
         hardware.storage.resetEncoderSusan();
 
 
         waitForStart(); // Wait for start!
 
 
-
+        hardware.vision.getArtifactPattern();
         ElapsedTime elapsedTime = new ElapsedTime();
         hardware.addElapsedTime(elapsedTime);
 
@@ -48,27 +48,39 @@ public class RaiserAutoRedClose extends LinearOpMode {
 
         // START AI CODE
 
+
 // FTC Autonomous Path - Generated Code
 // Robot Start: (114", 114") @ -120°
 
 // Step 1
+        hardware.vision.getArtifactPattern();
         hardware.raiser.driveByInches(30.00);
 
 // Step 2
+        hardware.vision.getArtifactPattern();
         hardware.raiser.driveByDegrees(-1 * 120.00);
 
 // Step 3
         hardware.sleep(1000);
 
+// Step 4
+        hardware.vision.getArtifactPattern();
+        hardware.raiser.driveByDegrees(-1 * 60.00);
+
+// Step 5
+        hardware.storage.disableFeeder();
+
+// Step 6
+
         hardware.vision.getArtifactPattern();
         telemetry.addLine("Ob Id: "+hardware.vision.getObeliskIdentified());
+        hardware.sleep(1000);
 
         telemetry.addLine("Getting pattern...");
         Artifact[] pattern = hardware.vision.getArtifactPattern();
         for(Artifact art : pattern){
             telemetry.addLine("object: "+art.name());
         }
-        telemetry.update();
 
         LazySusanPositions[] inputEnums = new LazySusanPositions[]{LazySusanPositions.INTAKE1, LazySusanPositions.INTAKE2, LazySusanPositions.INTAKE3};
         LazySusanPositions[] outputEnums = new LazySusanPositions[]{LazySusanPositions.OUTPUT1, LazySusanPositions.OUTPUT2, LazySusanPositions.OUTPUT3};
@@ -104,15 +116,10 @@ public class RaiserAutoRedClose extends LinearOpMode {
             telemetry.addLine(pattern[1].name());
             telemetry.addLine(pattern[2].name());
         }
+        telemetry.addLine("ob Id? "+hardware.vision.getObeliskIdentified());
+        telemetry.update();
 
 
-// Step 4
-        hardware.raiser.driveByDegrees(-1 * 60.00);
-
-// Step 5
-        hardware.storage.disableFeeder();
-
-// Step 6
         hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
 
 // Step 7
@@ -123,7 +130,7 @@ public class RaiserAutoRedClose extends LinearOpMode {
         hardware.sleep(1500);
 
 // Step 9
-        hardware.launcher.setLauncherVelocity(0);
+        hardware.storage.enableFeederManual();
 
 // Step 10
         hardware.sleep(2000);
@@ -136,7 +143,7 @@ public class RaiserAutoRedClose extends LinearOpMode {
         hardware.sleep(1500);
 
 // Step 13
-        hardware.launcher.setLauncherVelocity(0);
+        hardware.storage.enableFeederManual();
 
 // Step 14
         hardware.sleep(2000);
@@ -149,7 +156,7 @@ public class RaiserAutoRedClose extends LinearOpMode {
         hardware.sleep(1500);
 
 // Step 17
-        hardware.launcher.setLauncherVelocity(0);
+        hardware.storage.enableFeederManual();
 
 // Step 18
         hardware.sleep(2000);
@@ -168,7 +175,8 @@ public class RaiserAutoRedClose extends LinearOpMode {
 
 
 
-        ///z ////////////////////////////////////////
+
+        /// ////////////////////////////////////////
 
 
         // Main loop!
