@@ -445,8 +445,7 @@ public class Storage {
     }
 
     public boolean isIntakeState(){
-        if(currentSusanPositionEnum.equals(LazySusanPositions.INTAKE1) || currentSusanPositionEnum.equals(LazySusanPositions.INTAKE2) || currentSusanPositionEnum.equals(LazySusanPositions.INTAKE3)) return true;
-        return false;
+        return currentSusanPositionEnum.equals(LazySusanPositions.INTAKE1) || currentSusanPositionEnum.equals(LazySusanPositions.INTAKE2) || currentSusanPositionEnum.equals(LazySusanPositions.INTAKE3);
     }
 
     public LazySusanPositions[] getIntakeArray(){
