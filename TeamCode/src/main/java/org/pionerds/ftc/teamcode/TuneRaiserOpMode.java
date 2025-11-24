@@ -28,9 +28,12 @@ public class TuneRaiserOpMode extends LinearOpMode {
         telemetry.update();
 
 
-        //hardware.raiser.tune();
         hardware.raiser.resetEncoders();
+        hardware.raiser.tune();
+        hardware.sleep(1000);
         hardware.raiser.tuneSide();
+        hardware.sleep(1000);
+        hardware.raiser.tuneRotation();
 
 
         // Main loop!

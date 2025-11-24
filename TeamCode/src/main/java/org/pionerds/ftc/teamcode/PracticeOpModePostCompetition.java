@@ -2,19 +2,15 @@ package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.ManualSusanOperatorControls;
+import org.pionerds.ftc.teamcode.Hardware.Drivers.PostCompetitionSusanControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
-import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
-import org.pionerds.ftc.teamcode.Hardware.PioNerdAprilTag;
 
-@TeleOp(name = "PracticeOpTemplate")
-public class PracticeOpMode extends LinearOpMode {
+@TeleOp(name = "PracticeOpPostCompetition")
+public class PracticeOpModePostCompetition extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
     final DriverControls driverControls1 = new LucasDriverControls(
@@ -24,11 +20,11 @@ public class PracticeOpMode extends LinearOpMode {
             false
     );
 
-    final ManualSusanOperatorControls driverControls2 = new ManualSusanOperatorControls(
+    final PostCompetitionSusanControls driverControls2 = new PostCompetitionSusanControls(
             "Lukie Pookie",
-            true,
             1.0f,
-            false
+            false,
+            true
     );
 
     @Override
@@ -42,6 +38,7 @@ public class PracticeOpMode extends LinearOpMode {
         hardware.addElapsedTime(elapsedTime);
 
         hardware.storage.resetEncoderSusan();
+        hardware.storage.disableFeeder();
 
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
