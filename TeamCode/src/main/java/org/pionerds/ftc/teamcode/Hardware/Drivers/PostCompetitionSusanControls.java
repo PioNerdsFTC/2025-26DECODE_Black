@@ -175,7 +175,7 @@ public class PostCompetitionSusanControls extends DriverControls {
             hardware.telemetry.addLine("Launcher 1.c == "+hardware.launcher.launcher1.getCurrent(CurrentUnit.AMPS)+" AMPS");
             hardware.telemetry.addLine("==========   Feeder System   ==========");
             hardware.telemetry.addLine("feederOn == "+isFeederOn);
-            hardware.telemetry.addLine("togglingFeeder == "+isTogglingLauncher);
+            hardware.telemetry.addLine("togglingFeeder == "+isTogglingFeeder);
             hardware.telemetry.addLine("==========   Intake System   ==========");
             hardware.telemetry.addLine("intakeOn == "+isIntakeOn);
             hardware.telemetry.addLine("intakeIn == "+isIntakeIn);
