@@ -28,7 +28,7 @@ public class Auto {
     private final Pose startPose;
     private final Pose endPose;
     private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
-    private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
+    private final Pose scorePose;
     private final Pose pickupPose1 = new Pose(48, 84, Math.toRadians(0));
     private final Pose pickupPose2 = new Pose(48, 60, Math.toRadians(0));
     private final Pose pickupPose3 = new Pose(48, 36, Math.toRadians(0));
@@ -76,8 +76,9 @@ public class Auto {
         pathTimer.resetTimer();
     }
 
-    public Auto(Pose startPose, Pose endPose, Telemetry telemetry, HardwareMap hardwareMap) {
+    public Auto(Pose startPose, Pose scorePose, Pose endPose, Telemetry telemetry, HardwareMap hardwareMap) {
         this.startPose = startPose;
+        this.scorePose = scorePose;
         this.endPose = endPose;
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
