@@ -13,8 +13,8 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 public class Storage {
     private final int susanVelocityRequest = 300;  // Requested velocity for susan motor
-    private final int gearRatio = 3;       // Gear ratio: (90/30) = 3:1
-    private final int TPR = 288 * gearRatio; // Ticks per revolution after gearing (288 * 3 = 864)
+    private final double gearRatio = (17/9);       // Gear ratio: (17/9) = 3:1
+    private final int TPR = (int) (560 * gearRatio); // Ticks per revolution before gearing (288 TPR FOR CORE HEX MOTOR | 560 TPR for HD HEX MOTOR)
     private final Artifact[] inventory = new Artifact[]{Artifact.EMPTY, Artifact.EMPTY, Artifact.EMPTY};  // Stores what artifact is in each of 3 storage slots
     private Hardware hardware;
     // Servos and motors for storage mechanism
@@ -154,6 +154,12 @@ public class Storage {
             hardware.telemetry.addLine("Error updating inventory: " + e.getMessage());
         }
     }
+    private final int INTAKE2_OFFSET = (int) ((1.0/3.0 * 360) * ((TPR)/360));
+    private final int INTAKE3_OFFSET = (int) ((2.0/3.0 * 360) * ((TPR)/360));
+    private final int OUTPUT1_OFFSET = (int) (((180 - (0) * 360)) * ((TPR)/360));
+    private final int OUTPUT2_OFFSET = (int) (((180 + (1.0/3.0) * 360)) * ((TPR)/360));
+    private final int OUTPUT3_OFFSET = (int) (((180 - (1.0/3.0) * 360)) * ((TPR)/360));
+
 
     /**
      * Rotates the lazy susan to a specified position using the shortest path.
@@ -176,23 +182,22 @@ public class Storage {
         // OUTPUT positions are at 60°, 180°, and 300°
         switch (susanPosition) {
             case INTAKE2:
-                tickOffset = 96; // ((1/3 * 360)*(TPR/360)) = 96 ticks (120 degrees)
+                tickOffset = INTAKE2_OFFSET; // ((1/3 * 360)*((360-TPR)/360)) = 96 ticks (120 degrees)
                 break;
             case INTAKE3:
-                tickOffset = 192; // ((2/3 * 360)*(TPR/360)) = 192 ticks (240 degrees)
+                tickOffset = INTAKE3_OFFSET; // ((2/3 * 360)*((360-TPR)/360)) = 192 ticks (240 degrees)
                 break;
             case OUTPUT1:
-                tickOffset = 144; // (((180 - (0) * 360))*(TPR/360)) = 144 ticks (180 degrees)
+                tickOffset = OUTPUT1_OFFSET; // (((180 - (0) * 360))*((360-TPR)/360)) = 144 ticks (180 degrees)
                 break;
             case OUTPUT2:
-                tickOffset = 240; // (((180 + (1/3) * 360))*(tpr/360)) = 240 ticks (300 degrees)
+                tickOffset = OUTPUT2_OFFSET; // (((180 + (1/3) * 360))*((360-TPR)/360)) = 240 ticks (300 degrees)
                 break;
             case OUTPUT3:
-                tickOffset = 48; // (((180 - (1/3) * 360))*(TPR/360)) = 48 ticks (60 degrees)
+                tickOffset = OUTPUT3_OFFSET; // (((180 - (1/3) * 360))*((360-TPR)/360)) = 48 ticks (60 degrees)
                 break;
         }
         currentSusanPositionEnum = susanPosition;  // Update tracked position
-        tickOffset *= gearRatio;  // Apply gear ratio to get actual motor ticks
 
         // Calculate three possible target positions (previous, current, and next revolution)
         int currentRevolutionTick = revolutions * TPR + tickOffset;      // Target in current revolution
@@ -201,24 +206,24 @@ public class Storage {
 
         // Calculate distances to each possible target
         int distanceBetweenNowAndCurrent = Math.abs(
-            currentRevolutionTick - currentPos
+                currentRevolutionTick - currentPos
         );
         int distanceBetweenNowAndPrevious = Math.abs(
-            lessRevolutionTick - currentPos
+                lessRevolutionTick - currentPos
         );
         int distanceBetweenNowAndNext = Math.abs(
-            moreRevolutionTick - currentPos
+                moreRevolutionTick - currentPos
         );
 
         // Choose the closest target (shortest rotation path)
         if (
-            distanceBetweenNowAndPrevious <= distanceBetweenNowAndCurrent &&
-                distanceBetweenNowAndPrevious <= distanceBetweenNowAndNext
+                distanceBetweenNowAndPrevious <= distanceBetweenNowAndCurrent &&
+                        distanceBetweenNowAndPrevious <= distanceBetweenNowAndNext
         ) {
             susanTargetTicks = lessRevolutionTick;
         } else if (
-            distanceBetweenNowAndCurrent <= distanceBetweenNowAndPrevious &&
-                distanceBetweenNowAndCurrent <= distanceBetweenNowAndNext
+                distanceBetweenNowAndCurrent <= distanceBetweenNowAndPrevious &&
+                        distanceBetweenNowAndCurrent <= distanceBetweenNowAndNext
         ) {
             susanTargetTicks = currentRevolutionTick;
         } else {
@@ -228,7 +233,7 @@ public class Storage {
         // Output debugging information to telemetry
         hardware.telemetry.addLine("\n\n");
         hardware.telemetry.addLine(
-            "susanPosition: " + susanMotorEx.getCurrentPosition()
+                "susanPosition: " + susanMotorEx.getCurrentPosition()
         );
         hardware.telemetry.addLine("susanTarget: " + susanTargetTicks);
         hardware.telemetry.addLine("susanRunMode: " + susanMotorEx.getMode());
@@ -303,7 +308,7 @@ public class Storage {
         if (!output) finalPos = "INPUT1";
 
         String[] positions =
-            {"OUTPUT1", "OUTPUT2", "OUTPUT3"};  // Output positions correspond to inventory indices
+                {"OUTPUT1", "OUTPUT2", "OUTPUT3"};  // Output positions correspond to inventory indices
         if (!output) positions = new String[]{"INPUT1", "INPUT2", "INPUT3"};
 
         // Extract the numeric index from the position name (e.g., "OUTPUT1" -> 0, "INTAKE2" -> 1)
@@ -435,8 +440,8 @@ public class Storage {
 
     public void waitForSusanRotation(){
         while(susanMotorEx.isBusy()){
-        hardware.telemetry.addLine("Suzie Busy...");
-        hardware.telemetry.update();
+            hardware.telemetry.addLine("Suzie Busy...");
+            hardware.telemetry.update();
         }
     }
 
