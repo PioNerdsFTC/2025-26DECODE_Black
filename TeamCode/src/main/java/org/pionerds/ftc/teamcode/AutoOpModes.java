@@ -14,7 +14,7 @@ public class AutoOpModes {
                 new Pose(56, robotLength / 2, Math.toRadians(90)),
                 new Pose(144-48, 110, Math.toRadians(35.954)),
                 new Pose(39.03125,  34.28125, Math.toRadians(0)),
-                false,
+                true,
                 this.telemetry,
                 this.hardwareMap
             );
