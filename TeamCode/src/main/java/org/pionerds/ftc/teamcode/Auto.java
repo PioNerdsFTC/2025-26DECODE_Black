@@ -173,25 +173,24 @@ public class Auto {
 
         hardware.storage.disableFeeder();
         hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT1);
-        hardware.launcher.setLauncherPower(0.5);
-        Thread.sleep(1000);
+        hardware.launcher.setLauncherVelocity(1000);
+        hardware.sleep(3000);
         hardware.storage.enableFeeder();
-        Thread.sleep(2000);
+        hardware.sleep(5000);
         hardware.storage.disableFeeder();
 
         hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT2);
-        hardware.launcher.setLauncherPower(0.5);
-        Thread.sleep(1000);
+        hardware.sleep(3000);
         hardware.storage.enableFeeder();
-        Thread.sleep(2000);
+        hardware.sleep(5000);
         hardware.storage.disableFeeder();
 
         hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT3);
-        hardware.launcher.setLauncherPower(0.5);
-        Thread.sleep(1000);
+        hardware.sleep(3000);
         hardware.storage.enableFeeder();
-        Thread.sleep(2000);
+        hardware.sleep(5000);
         hardware.storage.disableFeeder();
+        hardware.launcher.stopLaunchers();
 
         follower.resumePathFollowing();
     }
