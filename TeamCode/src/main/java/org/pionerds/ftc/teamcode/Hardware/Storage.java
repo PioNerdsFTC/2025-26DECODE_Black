@@ -154,11 +154,11 @@ public class Storage {
             hardware.telemetry.addLine("Error updating inventory: " + e.getMessage());
         }
     }
-    private final int INTAKE2_OFFSET = ((1/3 * 360)*((TPR)/360));
-    private final int INTAKE3_OFFSET = ((2/3 * 360)*((TPR)/360));
-    private final int OUTPUT1_OFFSET = (((180 - (0) * 360))*((TPR)/360));
-    private final int OUTPUT2_OFFSET = (((180 + (1/3) * 360))*((TPR)/360));
-    private final int OUTPUT3_OFFSET = (((180 - (1/3) * 360))*((TPR)/360));
+    private final int INTAKE2_OFFSET = (int) ((1.0/3.0 * 360) * ((TPR)/360));
+    private final int INTAKE3_OFFSET = (int) ((2.0/3.0 * 360) * ((TPR)/360));
+    private final int OUTPUT1_OFFSET = (int) (((180 - (0) * 360)) * ((TPR)/360));
+    private final int OUTPUT2_OFFSET = (int) (((180 + (1.0/3.0) * 360)) * ((TPR)/360));
+    private final int OUTPUT3_OFFSET = (int) (((180 - (1.0/3.0) * 360)) * ((TPR)/360));
 
 
     /**
