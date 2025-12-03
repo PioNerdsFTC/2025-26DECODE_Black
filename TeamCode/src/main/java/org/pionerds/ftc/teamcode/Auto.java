@@ -27,14 +27,14 @@ public class Auto {
 
     private final Pose startPose;
     private final Pose endPose;
-    private final Pose scanPose = new Pose(56, 80, Math.toRadians(90));
-    private final Pose scorePose = new Pose(48, 110, Math.toRadians(144.046));
-    private final Pose pickupPose1 = new Pose(48, 84, Math.toRadians(0));
-    private final Pose pickupPose2 = new Pose(48, 60, Math.toRadians(0));
-    private final Pose pickupPose3 = new Pose(48, 36, Math.toRadians(0));
-    private final Pose pickupEndPose1 = new Pose(32, 84, Math.toRadians(0));
-    private final Pose pickupEndPose2 = new Pose(32, 60, Math.toRadians(0));
-    private final Pose pickupEndPose3 = new Pose(32, 36, Math.toRadians(0));
+    private final Pose scorePose;
+    private final Pose scanPose;
+    private final Pose pickupPose1;
+    private final Pose pickupPose2;
+    private final Pose pickupPose3;
+    private final Pose pickupEndPose1;
+    private final Pose pickupEndPose2;
+    private final Pose pickupEndPose3;
     private final double pileYCoordOffset = 24;
     private final Telemetry telemetry;
     private final HardwareMap hardwareMap;
@@ -76,11 +76,32 @@ public class Auto {
         pathTimer.resetTimer();
     }
 
-    public Auto(Pose startPose, Pose endPose, Telemetry telemetry, HardwareMap hardwareMap) {
+    public Auto(Pose startPose, Pose scorePose, Pose endPose, Boolean red, Telemetry telemetry, HardwareMap hardwareMap) {
         this.startPose = startPose;
+        this.scorePose = scorePose;
         this.endPose = endPose;
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
+
+        double pickupX = 48.0;
+        double pickupEndX = 32.0;
+        double scanX = 56.0;
+        double pickupAngle = 180;
+
+        if(red){
+            pickupX = 144.0 - 48.0;
+            pickupEndX = 144.0 - 32.0;
+            scanX = 144.0 - 56.0;
+            pickupAngle = 0;
+        }
+
+        this.scanPose = new Pose(scanX, 80, Math.toRadians(90));
+        this.pickupPose1 = new Pose(pickupX, 84, Math.toRadians(pickupAngle));
+        this.pickupPose2 = new Pose(pickupX, 60, Math.toRadians(pickupAngle));
+        this.pickupPose3 = new Pose(pickupX, 36, Math.toRadians(pickupAngle));
+        this.pickupEndPose1 = new Pose(pickupEndX, 84, Math.toRadians(pickupAngle));
+        this.pickupEndPose2 = new Pose(pickupEndX, 60, Math.toRadians(pickupAngle));
+        this.pickupEndPose3 = new Pose(pickupEndX, 36, Math.toRadians(pickupAngle));
     }
 
     /**
@@ -172,25 +193,24 @@ public class Auto {
 
         hardware.storage.disableFeeder();
         hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT1);
-        hardware.launcher.setLauncherPower(0.5);
-        Thread.sleep(1000);
+        hardware.launcher.setLauncherVelocity(1000);
+        hardware.sleep(3000);
         hardware.storage.enableFeeder();
-        Thread.sleep(2000);
+        hardware.sleep(5000);
         hardware.storage.disableFeeder();
 
         hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT2);
-        hardware.launcher.setLauncherPower(0.5);
-        Thread.sleep(1000);
+        hardware.sleep(3000);
         hardware.storage.enableFeeder();
-        Thread.sleep(2000);
+        hardware.sleep(5000);
         hardware.storage.disableFeeder();
 
         hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT3);
-        hardware.launcher.setLauncherPower(0.5);
-        Thread.sleep(1000);
+        hardware.sleep(3000);
         hardware.storage.enableFeeder();
-        Thread.sleep(2000);
+        hardware.sleep(5000);
         hardware.storage.disableFeeder();
+        hardware.launcher.stopLaunchers();
 
         follower.resumePathFollowing();
     }
