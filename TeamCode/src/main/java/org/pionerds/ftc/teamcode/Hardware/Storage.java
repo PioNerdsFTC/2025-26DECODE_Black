@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 /**
  * Storage class manages the robot's lazy susan mechanism, intake system, and artifact inventory.
  * The lazy susan is a rotating platform with 6 positions (3 INTAKE positions and 3 OUTPUT positions)
@@ -14,7 +16,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Storage {
     private final int susanVelocityRequest = 300;  // Requested velocity for susan motor
     private final double gearRatio = (17/9);       // Gear ratio: (17/9) = 3:1
-    private final int TPR = (int) (560 * gearRatio); // Ticks per revolution before gearing (288 TPR FOR CORE HEX MOTOR | 560 TPR for HD HEX MOTOR)
+    private final double TPR = (560 * gearRatio); // Ticks per revolution before gearing (288 TPR FOR CORE HEX MOTOR | 560 TPR for HD HEX MOTOR)
     private final Artifact[] inventory = new Artifact[]{Artifact.EMPTY, Artifact.EMPTY, Artifact.EMPTY};  // Stores what artifact is in each of 3 storage slots
     private Hardware hardware;
     // Servos and motors for storage mechanism
@@ -154,11 +156,11 @@ public class Storage {
             hardware.telemetry.addLine("Error updating inventory: " + e.getMessage());
         }
     }
-    private final int INTAKE2_OFFSET = (int) ((1.0/3.0 * 360) * ((TPR)/360));
-    private final int INTAKE3_OFFSET = (int) ((2.0/3.0 * 360) * ((TPR)/360));
-    private final int OUTPUT1_OFFSET = (int) (((180 - (0) * 360)) * ((TPR)/360));
-    private final int OUTPUT2_OFFSET = (int) (((180 + (1.0/3.0) * 360)) * ((TPR)/360));
-    private final int OUTPUT3_OFFSET = (int) (((180 - (1.0/3.0) * 360)) * ((TPR)/360));
+    private final int INTAKE2_OFFSET = (int) ((1.0/3.0 * 360) * ((TPR)/180));
+    private final int INTAKE3_OFFSET = (int) ((2.0/3.0 * 360) * ((TPR)/180));
+    private final int OUTPUT1_OFFSET = (int) (((180 - (0) * 360)) * ((TPR)/180));
+    private final int OUTPUT2_OFFSET = (int) (((180 + (1.0/3.0) * 360)) * ((TPR)/180));
+    private final int OUTPUT3_OFFSET = (int) (((180 - (1.0/3.0) * 360)) * ((TPR)/180));
 
 
     /**
@@ -174,7 +176,7 @@ public class Storage {
 
         int tickOffset = 0; // default: ((0 * 360)*(TPR/360)) = 0
         int currentPos = susanMotorEx.getCurrentPosition();
-        int revolutions = currentPos / TPR; // Current full revolution count (integer division truncates)
+        int revolutions = currentPos / ((int) TPR); // Current full revolution count (integer division truncates)
 
         // Calculate tick offset for each position within a revolution
         // The lazy susan has 6 positions spaced around a circle:
@@ -200,9 +202,9 @@ public class Storage {
         currentSusanPositionEnum = susanPosition;  // Update tracked position
 
         // Calculate three possible target positions (previous, current, and next revolution)
-        int currentRevolutionTick = revolutions * TPR + tickOffset;      // Target in current revolution
-        int lessRevolutionTick = currentRevolutionTick - TPR;            // Target in previous revolution
-        int moreRevolutionTick = currentRevolutionTick + TPR;            // Target in next revolution
+        int currentRevolutionTick = revolutions * ((int)TPR) + tickOffset;      // Target in current revolution
+        int lessRevolutionTick = currentRevolutionTick - (int)TPR;            // Target in previous revolution
+        int moreRevolutionTick = currentRevolutionTick + (int)TPR;            // Target in next revolution
 
         // Calculate distances to each possible target
         int distanceBetweenNowAndCurrent = Math.abs(
@@ -239,6 +241,19 @@ public class Storage {
         hardware.telemetry.addLine("susanRunMode: " + susanMotorEx.getMode());
 
         updateSusan();  // Apply the new target position
+    }
+
+    public void setMotorBrakeBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior){
+        susanMotorEx.setZeroPowerBehavior(zeroPowerBehavior);
+    }
+
+    public void printSusanOffsets(){
+        hardware.telemetry.addLine("I1 == "+ 0 +" ticks");
+        hardware.telemetry.addLine("I2 == "+ INTAKE2_OFFSET +" ticks");
+        hardware.telemetry.addLine("I3 == "+ INTAKE3_OFFSET +" ticks");
+        hardware.telemetry.addLine("O1 == "+ OUTPUT1_OFFSET +" ticks");
+        hardware.telemetry.addLine("O2 == "+ OUTPUT2_OFFSET +" ticks");
+        hardware.telemetry.addLine("O3 == "+ OUTPUT3_OFFSET +" ticks");
     }
 
     /**
@@ -381,6 +396,20 @@ public class Storage {
         if (!isInitialized) return;
         susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         susanMotorEx.setPower(power);
+    }
+
+    public void testRotateSusanVelocity(double velocity) {
+        if (!isInitialized) return;
+        susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        susanMotorEx.setVelocity(velocity);
+    }
+
+    public double currentSusanVelocity(){
+        return susanMotorEx.getVelocity();
+    }
+
+    public double susanAmperage(){
+        return susanMotorEx.getCurrent(CurrentUnit.AMPS);
     }
 
     /**
