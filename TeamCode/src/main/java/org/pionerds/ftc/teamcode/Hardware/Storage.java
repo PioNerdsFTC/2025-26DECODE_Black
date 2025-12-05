@@ -204,37 +204,32 @@ public class Storage {
         }
         currentSusanPositionEnum = susanPosition;  // Update tracked position
 
-        boolean isIterating = true;
-        int revs = 0;
-        int doneRevsPositive = 0;
-        int distanceIteration = Integer.MAX_VALUE;
 
-        // Positive iteration
-        while(isIterating){
-            int nextIteration = Math.abs((int)(currentPos - (TPR * revs) + tickOffset));
-            if(distanceIteration <= nextIteration){
-                distanceIteration = nextIteration;
-                revs++;
-            }
-            isIterating = false;
-        }
+        int[] tickOptions = new int[3];
+        tickOptions[0] = (revolutions - 1) * (int) TPR + tickOffset; // One revolution less
+        tickOptions[1] = (revolutions) * (int) TPR + tickOffset;     // Current revolution
+        tickOptions[2] = (revolutions + 1) * (int) TPR + tickOffset; // One revolution more
 
-        // Negative iteration
-        isIterating = true;
-        doneRevsPositive = revs;
-        revs = 0;
+        int[] distancesAway = new int[3];
+        distancesAway[0] = Math.abs(tickOptions[0] - currentPos);
+        distancesAway[1] = Math.abs(tickOptions[1] - currentPos);
+        distancesAway[2] = Math.abs(tickOptions[2] - currentPos);
 
-        while(isIterating){
-            int nextIteration = Math.abs((int)(currentPos - (TPR * revs) + tickOffset));
-            if(distanceIteration <= nextIteration){
-                distanceIteration = nextIteration;
-                revs--;
-            }
-            isIterating = false;
-            if(revs == 0) revs = doneRevsPositive;
-        }
+        /*System.out.println("Previous Rev: "+(revolutions-1)+" revs\nTickOption: "+tickOptions[0]
+        +" ticks\nDistance Away: "+distancesAway[0]+" ticks");
+        System.out.println("\nCurrent Rev: "+(revolutions)+" revs\nTickOption: "+tickOptions[1]+
+        " ticks\nDistance Away: "+distancesAway[1]+" ticks");
+        System.out.println("\nNext Rev: "+(revolutions+1)+" revs\nTickOption: "+tickOptions[2]+
+        " ticks\nDistance Away: "+distancesAway[2]+" ticks");*/
 
-        susanTargetTicks = (int)(revs*TPR)+tickOffset;
+        // Find the option with the smallest distance
+
+        int minDistance = Math.min(distancesAway[0], Math.min(distancesAway[1], distancesAway[2]));
+        susanTargetTicks = (distancesAway[0] == minDistance) ? tickOptions[0]
+                : (distancesAway[1] == minDistance) ? tickOptions[1]
+                : tickOptions[2];
+
+
 
         // Output debugging information to telemetry
         hardware.telemetry.addLine("\n\n");
