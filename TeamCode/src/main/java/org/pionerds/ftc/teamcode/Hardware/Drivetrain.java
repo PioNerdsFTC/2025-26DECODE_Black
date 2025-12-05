@@ -33,7 +33,7 @@ public class Drivetrain {
             );
         }
 
-        motors[2].setDirection(Direction.REVERSE);
+        //motors[2].setDirection(Direction.REVERSE);
     }
 
     /**
