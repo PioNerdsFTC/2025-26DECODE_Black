@@ -22,21 +22,21 @@ public class Raiser {
     public void tune(){
         resetEncoders();
         setMotorPositions(3500,false,false);
-        setMotorVelocities(500,false,false);
+        setMotorVelocities(300,false,false);
         updateMotors();
     }
 
     public void tuneSide(){
         resetEncoders();
         setMotorPositions(3500,false,true);
-        setMotorVelocities(500,false,true);
+        setMotorVelocities(300,false,true);
         updateMotors();
     }
 
     public void tuneRotation(){
         resetEncoders();
         setMotorPositions(1000,true,false);
-        setMotorVelocities(500,true,false);
+        setMotorVelocities(300,true,false);
         updateMotors();
     }
 
@@ -74,7 +74,7 @@ public class Raiser {
     }
 
     public void driveByInches(double inches){
-        driveByInches(inches, 1000.00);
+        driveByInches(inches, 300.00);
     }
 
     public void driveByInchesRight(double inches, double velocity){
@@ -95,7 +95,7 @@ public class Raiser {
     }
 
     public void driveByInchesRight(double inches){
-        driveByInchesRight(inches, 1000.00);
+        driveByInchesRight(inches, 300.00);
     }
 
     public void driveByDegrees(double degrees, double velocity){
