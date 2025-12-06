@@ -34,6 +34,7 @@ public class RaiserBlueClose extends OpMode {
         telemetry.update();
 
         hardware.raiser.driveByInches(-36,-0.3);
+        hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
     }
 
     @Override
