@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
+import java.lang.annotation.Target;
+
 @Autonomous(name = "RaiserBlueClose")
 public class RaiserBlueClose extends OpMode {
 
@@ -34,7 +36,12 @@ public class RaiserBlueClose extends OpMode {
         telemetry.update();
 
         hardware.raiser.driveByInches(-36,-0.3);
-        hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
+
+        if(hardware.vision.getPioNerdAprilTag(target).getAprilTagDetection() != null) {
+            hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
+        } else {
+            hardware.launcher.setLauncherVelocity(1800);
+        }
     }
 
     @Override
