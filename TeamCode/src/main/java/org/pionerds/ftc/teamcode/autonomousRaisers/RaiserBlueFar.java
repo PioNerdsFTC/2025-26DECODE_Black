@@ -33,13 +33,6 @@ public class RaiserBlueFar extends OpMode {
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
 
-        /*hardware.storage.moveSusanTo(LazySusanPositions.INTAKE1);
-        hardware.sleep(5000);
-        hardware.storage.moveSusanTo(LazySusanPositions.INTAKE2);
-        hardware.sleep(5000);
-        hardware.storage.moveSusanTo(LazySusanPositions.INTAKE3);
-        hardware.sleep(5000);*/
-
 
         // START AI CODE
 
