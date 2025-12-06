@@ -69,4 +69,14 @@ public class AutoOpModes {
             auto.init();
         }
     }
+
+
+    @Autonomous(name = "Blank Auto")
+    public static class BlankAuto extends AutoOpMode {
+        @Override
+        public void init() {
+            auto.pureInit(hardwareMap,telemetry);
+
+        }
+    }
 }
