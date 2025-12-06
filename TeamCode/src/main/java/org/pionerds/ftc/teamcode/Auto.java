@@ -121,7 +121,7 @@ public class Auto {
 
         // These loop the movements of the robot, these must be called continuously in order to work
         follower.update();
-        follower.setPose(follower.getPose().setHeading(hardwareMap.gyroSensor.get("imu").getHeading()));
+        follower.setPose(follower.getPose().setHeading(hardware.gyro.getAngles()[0]));
 
         // Feedback to Driver Hub for debugging
         telemetry.addData("path state", this.getPathState().toString());
