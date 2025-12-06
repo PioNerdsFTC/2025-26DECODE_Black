@@ -74,7 +74,7 @@ public class Raiser {
     }
 
     public void driveByInches(double inches){
-        driveByInches(inches, 300.00);
+        driveByInches(inches, 500.00);
     }
 
     public void driveByInchesRight(double inches, double velocity){
@@ -95,7 +95,7 @@ public class Raiser {
     }
 
     public void driveByInchesRight(double inches){
-        driveByInchesRight(inches, 300.00);
+        driveByInchesRight(inches, 500.00);
     }
 
     public void driveByDegrees(double degrees, double velocity){

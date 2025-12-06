@@ -3,6 +3,7 @@ package org.pionerds.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
@@ -13,23 +14,24 @@ import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
 
 @Autonomous(name = "RaiserAutoRedClose")
-public class RaiserAutoRedClose extends LinearOpMode {
+public class RaiserAutoRedClose extends OpMode {
 
     final Hardware hardware = new Hardware();
+    AprilTagNames target;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void init() {
         hardware.init(hardwareMap, telemetry);
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
-        AprilTagNames target = AprilTagNames.RedTarget;
+        target = AprilTagNames.RedTarget;
         hardware.storage.resetEncoderSusan();
 
+    }
 
-        waitForStart(); // Wait for start!
-
-
+    @Override
+    public void start() {
         hardware.vision.getArtifactPattern();
         ElapsedTime elapsedTime = new ElapsedTime();
         hardware.addElapsedTime(elapsedTime);
@@ -43,7 +45,6 @@ public class RaiserAutoRedClose extends LinearOpMode {
         hardware.sleep(5000);
         hardware.storage.moveSusanTo(LazySusanPositions.INTAKE3);
         hardware.sleep(5000);*/
-
 
 
         // START AI CODE
@@ -73,39 +74,39 @@ public class RaiserAutoRedClose extends LinearOpMode {
 // Step 6
 
         hardware.vision.getArtifactPattern();
-        telemetry.addLine("Ob Id: "+hardware.vision.getObeliskIdentified());
+        telemetry.addLine("Ob Id: " + hardware.vision.getObeliskIdentified());
         hardware.sleep(1000);
 
         telemetry.addLine("Getting pattern...");
         Artifact[] pattern = hardware.vision.getArtifactPattern();
-        for(Artifact art : pattern){
-            telemetry.addLine("object: "+art.name());
+        for (Artifact art : pattern) {
+            telemetry.addLine("object: " + art.name());
         }
 
         LazySusanPositions[] inputEnums = new LazySusanPositions[]{LazySusanPositions.INTAKE1, LazySusanPositions.INTAKE2, LazySusanPositions.INTAKE3};
         LazySusanPositions[] outputEnums = new LazySusanPositions[]{LazySusanPositions.OUTPUT1, LazySusanPositions.OUTPUT2, LazySusanPositions.OUTPUT3};
 
         // pattern specific
-        LazySusanPositions[] intake_GPP = {inputEnums[0],inputEnums[1],inputEnums[2]};
-        LazySusanPositions[] intake_PGP = {inputEnums[1],inputEnums[0],inputEnums[2]};
-        LazySusanPositions[] intake_PPG = {inputEnums[1],inputEnums[2],inputEnums[0]};
+        LazySusanPositions[] intake_GPP = {inputEnums[0], inputEnums[1], inputEnums[2]};
+        LazySusanPositions[] intake_PGP = {inputEnums[1], inputEnums[0], inputEnums[2]};
+        LazySusanPositions[] intake_PPG = {inputEnums[1], inputEnums[2], inputEnums[0]};
 
-        LazySusanPositions[] output_GPP = {outputEnums[0],outputEnums[1],outputEnums[2]};
-        LazySusanPositions[] output_PGP = {outputEnums[1],outputEnums[0],outputEnums[2]};
-        LazySusanPositions[] output_PPG = {outputEnums[1],outputEnums[2],outputEnums[0]};
+        LazySusanPositions[] output_GPP = {outputEnums[0], outputEnums[1], outputEnums[2]};
+        LazySusanPositions[] output_PGP = {outputEnums[1], outputEnums[0], outputEnums[2]};
+        LazySusanPositions[] output_PPG = {outputEnums[1], outputEnums[2], outputEnums[0]};
 
         LazySusanPositions[] selectedIntake = intake_GPP;
         LazySusanPositions[] selectedOutput = output_GPP;
 
-        if(pattern[0].equals(Artifact.GREEN) && pattern[1].equals(Artifact.PURPLE) && pattern[2].equals(Artifact.PURPLE)){
+        if (pattern[0].equals(Artifact.GREEN) && pattern[1].equals(Artifact.PURPLE) && pattern[2].equals(Artifact.PURPLE)) {
             selectedIntake = intake_GPP;
             selectedOutput = output_GPP;
             telemetry.addLine("PATTERN IS GPP");
-        } else if(pattern[0].equals(Artifact.PURPLE) && pattern[1].equals(Artifact.GREEN) && pattern[2].equals(Artifact.PURPLE)){
+        } else if (pattern[0].equals(Artifact.PURPLE) && pattern[1].equals(Artifact.GREEN) && pattern[2].equals(Artifact.PURPLE)) {
             selectedIntake = intake_PGP;
             selectedOutput = output_PGP;
             telemetry.addLine("PATTERN IS PGP");
-        } else if(pattern[0].equals(Artifact.PURPLE) && pattern[1].equals(Artifact.PURPLE) && pattern[2].equals(Artifact.GREEN)){
+        } else if (pattern[0].equals(Artifact.PURPLE) && pattern[1].equals(Artifact.PURPLE) && pattern[2].equals(Artifact.GREEN)) {
             selectedIntake = intake_PPG;
             selectedOutput = output_PPG;
             telemetry.addLine("PATTERN IS PPG");
@@ -116,7 +117,7 @@ public class RaiserAutoRedClose extends LinearOpMode {
             telemetry.addLine(pattern[1].name());
             telemetry.addLine(pattern[2].name());
         }
-        telemetry.addLine("ob Id? "+hardware.vision.getObeliskIdentified());
+        telemetry.addLine("ob Id? " + hardware.vision.getObeliskIdentified());
         telemetry.update();
 
 
@@ -174,20 +175,16 @@ public class RaiserAutoRedClose extends LinearOpMode {
         hardware.raiser.driveByInches(6.00);
 
 
+    }
 
+    @Override
+    public void loop() {
 
-        /// ////////////////////////////////////////
+    }
 
-
-        // Main loop!
-        while (opModeIsActive()) {
-
-            hardware.raiser.tunePrint();
-            telemetry.update();
-
-            sleep(1);
-        }
-
+    @Override
+    public void stop() {
         hardware.stop();
+        super.stop();
     }
 }
