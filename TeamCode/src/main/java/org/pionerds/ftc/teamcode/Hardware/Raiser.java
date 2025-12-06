@@ -77,6 +77,23 @@ public class Raiser {
             hardware.telemetry.addLine("Heading Gyro: "+intendedHeadingDegree);
             hardware.telemetry.addLine("Difference Angle: "+getAngleDifference());
 
+            hardware.telemetry.addLine("\n");
+
+            hardware.telemetry.addLine("Intended Driving Velocities:");
+            hardware.telemetry.addLine("Motor0: "+((int)(driveMotorDesiredVelocities[0]/10))*100);
+            hardware.telemetry.addLine("Motor1: "+((int)(driveMotorDesiredVelocities[1]/10))*100);
+            hardware.telemetry.addLine("Motor2: "+((int)(driveMotorDesiredVelocities[2]/10))*100);
+            hardware.telemetry.addLine("Motor3: "+((int)(driveMotorDesiredVelocities[3]/10))*100);
+
+            hardware.telemetry.addLine("\n");
+
+            hardware.telemetry.addLine("Set Driving Velocities:");
+            hardware.telemetry.addLine("Motor0: "+((int)(driveMotorVelocities[0]/10))*100);
+            hardware.telemetry.addLine("Motor1: "+((int)(driveMotorVelocities[1]/10))*100);
+            hardware.telemetry.addLine("Motor2: "+((int)(driveMotorVelocities[2]/10))*100);
+            hardware.telemetry.addLine("Motor3: "+((int)(driveMotorVelocities[3]/10))*100);
+
+            hardware.telemetry.addLine("\nwaiting on motors for linear movement...");
             hardware.telemetry.addLine("waiting on motors for linear movement...");
             hardware.telemetry.update();
         } // halts thread until it gets to position
