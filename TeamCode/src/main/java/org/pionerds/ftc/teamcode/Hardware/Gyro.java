@@ -37,7 +37,7 @@ public class Gyro {
     }
 
     public double getHeading() {
-        return Math.toRadians(this.gyro.getRobotYawPitchRollAngles().getYaw());
+        return Math.toRadians(this.gyro.getRobotYawPitchRollAngles().getYaw() + 90);
     }
 
     /**
