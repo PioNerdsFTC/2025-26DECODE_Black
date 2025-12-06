@@ -122,7 +122,7 @@ public class Raiser {
 
         updateMotorsPower();
 
-        while (motorsBusy()){
+        while (motorsBusy() && hardware.continueRunning){
             hardware.telemetry.addLine("waiting on motors for linear movement and correcting...");
             hardware.telemetry.update();
         } // halts thread until it gets to position
@@ -149,7 +149,7 @@ public class Raiser {
 
         updateMotorsPower();
 
-        while (motorsBusy()){
+        while (motorsBusy() && hardware.continueRunning){
             hardware.telemetry.addLine("waiting on motors for rotation...");
             hardware.telemetry.update();
         } // halts thread until it gets to position
