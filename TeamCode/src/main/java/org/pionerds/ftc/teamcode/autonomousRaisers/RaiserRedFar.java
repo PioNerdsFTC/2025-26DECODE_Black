@@ -35,7 +35,8 @@ public class RaiserRedFar extends OpMode {
 
 
         hardware.raiser.driveByInches(96,0.3);
-        hardware.raiser.driveByDegrees(-15, 0.3);
+        hardware.raiser.driveByDegrees(-105, 0.3);
+        hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
 
     }
 
