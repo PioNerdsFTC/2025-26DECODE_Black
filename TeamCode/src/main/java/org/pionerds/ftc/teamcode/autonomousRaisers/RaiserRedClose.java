@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
-@Autonomous(name = "RaiserBlueFar")
+@Autonomous(name = "RaiserRedClose")
 public class RaiserRedClose extends OpMode {
 
     final Hardware hardware = new Hardware();
