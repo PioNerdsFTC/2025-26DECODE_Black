@@ -12,6 +12,7 @@ import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
 @Autonomous(name = "RaiserAutoBlueClose")
+@Disabled
 public class RaiserAutoBlueClose extends OpMode {
 
     final Hardware hardware = new Hardware();

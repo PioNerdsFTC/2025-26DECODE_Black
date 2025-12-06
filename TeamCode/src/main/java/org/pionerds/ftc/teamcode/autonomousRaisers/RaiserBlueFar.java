@@ -37,7 +37,15 @@ public class RaiserBlueFar extends OpMode {
         // START AI CODE
 
 
-        hardware.raiser.driveByInches(96,0.3);
+        hardware.raiser.driveByInches(84,0.3);
+
+        hardware.raiser.driveByDegrees(30,0.3);
+
+        if(hardware.vision.getPioNerdAprilTag(target) != null){
+            hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
+        } else {
+            hardware.launcher.setLauncherVelocity(1800);
+        }
 
 
     }

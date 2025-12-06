@@ -36,7 +36,11 @@ public class RaiserRedFar extends OpMode {
 
         hardware.raiser.driveByInches(84,0.3);
         hardware.raiser.driveByDegrees(-60, 0.3);
-        hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
+        if(hardware.vision.getPioNerdAprilTag(target) != null) {
+            hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
+        } else {
+            hardware.launcher.setLauncherVelocity(1800);
+        }
 
     }
 

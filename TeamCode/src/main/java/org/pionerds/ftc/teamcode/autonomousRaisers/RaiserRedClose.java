@@ -34,7 +34,12 @@ public class RaiserRedClose extends OpMode {
 
         hardware.raiser.driveByInches(-36,-0.3);
 
-        hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
+        if(hardware.vision.getPioNerdAprilTag(target) != null){
+            hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
+        } else {
+            hardware.launcher.setLauncherVelocity(1800);
+        }
+
     }
 
     @Override
