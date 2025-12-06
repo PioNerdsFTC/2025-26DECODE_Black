@@ -35,6 +35,7 @@ public class RaiserRedFar extends OpMode {
 
 
         hardware.raiser.driveByInches(96,0.3);
+        hardware.raiser.driveByDegrees(-15, 0.3);
 
     }
 
