@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
-@Autonomous(name = "RaiserBlueFar")
+@Autonomous(name = "RaiserRedFar")
 public class RaiserRedFar extends OpMode {
 
     final Hardware hardware = new Hardware();
@@ -19,7 +19,7 @@ public class RaiserRedFar extends OpMode {
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
-        target = AprilTagNames.BlueTarget;
+        target = AprilTagNames.RedTarget;
         hardware.storage.resetEncoderSusan();
 
     }
@@ -34,11 +34,7 @@ public class RaiserRedFar extends OpMode {
         telemetry.update();
 
 
-        // START AI CODE
-
-
         hardware.raiser.driveByInches(96,0.3);
-
 
     }
 
