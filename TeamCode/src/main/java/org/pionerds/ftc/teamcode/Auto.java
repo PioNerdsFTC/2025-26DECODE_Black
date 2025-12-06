@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.ImuOrientationOnRobot;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.pionerds.ftc.teamcode.Hardware.Gyro;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 import org.pionerds.ftc.teamcode.Pathfinding.Constants;
@@ -276,5 +277,11 @@ public class Auto {
 
     private State getPathState() {
         return pathState;
+    }
+
+    public void pureInit(HardwareMap hardwaremap, Telemetry telemetry) {
+        hardware.init(hardwaremap,telemetry);
+        hardware.sleep(10000);
+        DataStorage.storeAllAngles(hardware.gyro.getAngles());
     }
 }
