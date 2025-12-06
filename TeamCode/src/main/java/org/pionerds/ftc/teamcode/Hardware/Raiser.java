@@ -102,7 +102,6 @@ public class Raiser {
             hardware.telemetry.addLine("Motor3: "+driveMotorPositions[3]);
 
             hardware.telemetry.addLine("\nwaiting on motors for linear movement...");
-            hardware.telemetry.addLine("waiting on motors for linear movement...");
             hardware.telemetry.update();
         } // halts thread until it gets to position
 
