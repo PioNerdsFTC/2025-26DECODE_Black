@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
+import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
 @Autonomous(name = "RaiserRedFar")
 public class RaiserRedFar extends OpMode {
@@ -34,6 +35,7 @@ public class RaiserRedFar extends OpMode {
         telemetry.update();
 
 
+        hardware.storage.disableFeeder();
         hardware.raiser.driveByInches(84,0.3);
         hardware.raiser.driveByDegrees(-60, 0.3);
         if(hardware.vision.getPioNerdAprilTag(target) != null) {
@@ -42,6 +44,25 @@ public class RaiserRedFar extends OpMode {
             hardware.launcher.setLauncherVelocity(1800);
         }
 
+        hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT1);
+        hardware.sleep(1500);
+        hardware.storage.enableFeederManual();
+        hardware.sleep(1500);
+        hardware.storage.disableFeeder();
+
+        hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT2);
+        hardware.sleep(1500);
+        hardware.storage.enableFeederManual();
+        hardware.sleep(1500);
+        hardware.storage.disableFeeder();
+
+        hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT3);
+        hardware.sleep(1500);
+        hardware.storage.enableFeederManual();
+        hardware.sleep(1500);
+        hardware.storage.disableFeeder();
+
+        hardware.storage.moveSusanTo(LazySusanPositions.INTAKE1);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
+import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
 @Autonomous(name = "RaiserRedClose")
 public class RaiserRedClose extends OpMode {
@@ -32,6 +33,7 @@ public class RaiserRedClose extends OpMode {
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
 
+        hardware.storage.disableFeeder();
         hardware.raiser.driveByInches(-36,-0.3);
 
         if(hardware.vision.getPioNerdAprilTag(target) != null){
@@ -39,6 +41,26 @@ public class RaiserRedClose extends OpMode {
         } else {
             hardware.launcher.setLauncherVelocity(1800);
         }
+
+        hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT1);
+        hardware.sleep(1500);
+        hardware.storage.enableFeederManual();
+        hardware.sleep(1500);
+        hardware.storage.disableFeeder();
+
+        hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT2);
+        hardware.sleep(1500);
+        hardware.storage.enableFeederManual();
+        hardware.sleep(1500);
+        hardware.storage.disableFeeder();
+
+        hardware.storage.moveSusanTo(LazySusanPositions.OUTPUT3);
+        hardware.sleep(1500);
+        hardware.storage.enableFeederManual();
+        hardware.sleep(1500);
+        hardware.storage.disableFeeder();
+
+        hardware.storage.moveSusanTo(LazySusanPositions.INTAKE1);
 
     }
 
