@@ -16,6 +16,8 @@ public class Raiser {
     private int[] driveMotorPositions = {0,0,0,0};
     private double intendedHeadingDegree = 0.00;
 
+    private double leftCorrectConstant = 0.04;
+
     public void init(Hardware hardware){
         this.hardware = hardware;
         this.driveMotors = hardware.drivetrain.getMotors();
@@ -64,19 +66,21 @@ public class Raiser {
 
         setMotorPositions(position,false,false);
         setMotorVelocities(velocity,false,false);
+        driveMotorVelocities[1] += leftCorrectConstant;
+        driveMotorVelocities[2] += leftCorrectConstant;
         scaleMotorPowers();
 
-        driveMotorVelocities = new double[]{-0.3,0.3,0.3,-0.3};
+        //driveMotorVelocities = new double[]{-0.3,0.3,0.3,-0.3};
 
         updateMotorsPower();
 
         while (motorsBusy()){
-            forwardCorrectionTick((0.05)*(getAngleDifference()));
-            scaleMotorPowers();
+            //forwardCorrectionTick((-0.05)*(getAngleDifference()));
+            //scaleMotorPowers();
 
-            driveMotorVelocities = new double[]{-0.3,0.3,0.3,-0.3};
+            //driveMotorVelocities = new double[]{-0.3,0.3,0.3,-0.3};
 
-            updateMotorsPower();
+            //updateMotorsPower();
 
             hardware.telemetry.addLine("Robot Gyro: "+hardware.gyro.getAngles()[0]);
             hardware.telemetry.addLine("Heading Gyro: "+intendedHeadingDegree);
@@ -113,7 +117,7 @@ public class Raiser {
     }
 
     public void driveByInches(double inches){
-        driveByInches(inches, 500.00);
+        driveByInches(inches, 0.3);
     }
 
     public void driveByInchesRight(double inches, double velocity){
@@ -207,6 +211,9 @@ public class Raiser {
             driveMotorDesiredVelocities[1] = velocity;
             driveMotorDesiredVelocities[2] = rightFactor * velocity;
             driveMotorDesiredVelocities[3] = rotateFactor * velocity;
+            for(int j = 0; j<4; j++){
+                driveMotorVelocities[j] = Math.abs(driveMotorDesiredVelocities[j]);
+            }
         } else {
             driveMotorVelocities[0] = rightFactor * rotateFactor * velocity;
             driveMotorVelocities[1] = velocity;
