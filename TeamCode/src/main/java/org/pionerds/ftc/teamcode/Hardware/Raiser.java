@@ -156,10 +156,17 @@ public class Raiser {
     private void setMotorVelocities(double velocity, boolean rotate, boolean right){
         int rotateFactor = (rotate ? 1 : -1);
         int rightFactor = (right ? 1 : -1);
-        driveMotorDesiredVelocities[0] = rightFactor*rotateFactor*velocity;
-        driveMotorDesiredVelocities[1] = velocity;
-        driveMotorDesiredVelocities[2] = rightFactor*velocity;
-        driveMotorDesiredVelocities[3] = rotateFactor*velocity;
+        if(!rotate) {
+            driveMotorDesiredVelocities[0] = rightFactor * rotateFactor * velocity;
+            driveMotorDesiredVelocities[1] = velocity;
+            driveMotorDesiredVelocities[2] = rightFactor * velocity;
+            driveMotorDesiredVelocities[3] = rotateFactor * velocity;
+        } else {
+            driveMotorVelocities[0] = rightFactor * rotateFactor * velocity;
+            driveMotorVelocities[1] = velocity;
+            driveMotorVelocities[2] = rightFactor * velocity;
+            driveMotorVelocities[3] = rotateFactor * velocity;
+        }
     }
 
     private void forwardCorrectionTick(double endBringer){
