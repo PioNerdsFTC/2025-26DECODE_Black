@@ -9,6 +9,8 @@ import com.pedropathing.paths.PathBuilder;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.ImuOrientationOnRobot;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
@@ -119,6 +121,7 @@ public class Auto {
 
         // These loop the movements of the robot, these must be called continuously in order to work
         follower.update();
+        follower.setPose(follower.getPose().setHeading(hardwareMap.gyroSensor.get("imu").getHeading()));
 
         // Feedback to Driver Hub for debugging
         telemetry.addData("path state", this.getPathState().toString());
@@ -149,6 +152,7 @@ public class Auto {
 
         hardware.init(hardwareMap, telemetry);
 
+
         startToScoreChain = pathBuilder
             .addPath(new BezierLine(startPose, scanPose))
             .setConstantHeadingInterpolation(Math.toRadians(90))
@@ -164,7 +168,7 @@ public class Auto {
             PathBuilder singlePickupPathBuilder = new PathBuilder(follower);
             singlePickupPathBuilder
                 .addPath(new BezierCurve(scorePose, pickupPoseList[i]))
-                .addParametricCallback(0.9, () -> {hardware.storage.enableIntake(); intakeEnableCount++;})
+//                .addParametricCallback(0.9, () -> {hardware.storage.enableIntake(); intakeEnableCount++;})
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickupPoseList[i].getHeading())
 
                 .addPath(new BezierLine(pickupPoseList[i], pickupEndPoseList[i]))
@@ -173,16 +177,16 @@ public class Auto {
 
                 .addPath(new BezierCurve(pickupEndPoseList[i], scorePose))
                 // disable intake on the return curve (early in the return) so each pickup leg does enable->disable exactly once
-                .addParametricCallback(0.1, () -> {hardware.storage.disableIntake(); intakeDisableCount++;})
-                .addParametricCallback(0.9, () -> {
-                    try {
-                        launchBalls();
-                    } catch (InterruptedException e) {
-                        telemetry.addData("Error", "launchBalls was interrupted");
-                        telemetry.update();
-                        Thread.currentThread().interrupt();
-                    }
-                })
+//                .addParametricCallback(0.1, () -> {hardware.storage.disableIntake(); intakeDisableCount++;})
+//                .addParametricCallback(0.9, () -> {
+//                    try {
+//                        launchBalls();
+//                    } catch (InterruptedException e) {
+//                        telemetry.addData("Error", "launchBalls was interrupted");
+//                        telemetry.update();
+//                        Thread.currentThread().interrupt();
+//                    }
+//                })
                 .setLinearHeadingInterpolation(pickupEndPoseList[i].getHeading(), scorePose.getHeading());
             pickupAndScoreChains.add(singlePickupPathBuilder.build());
         }
