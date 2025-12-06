@@ -66,11 +66,16 @@ public class Raiser {
         setMotorVelocities(velocity,false,false);
         scaleMotorPowers();
 
+        driveMotorVelocities = new double[]{-0.3,0.3,0.3,-0.3};
+
         updateMotorsPower();
 
         while (motorsBusy()){
             forwardCorrectionTick((0.05)*(getAngleDifference()));
             scaleMotorPowers();
+
+            driveMotorVelocities = new double[]{-0.3,0.3,0.3,-0.3};
+
             updateMotorsPower();
 
             hardware.telemetry.addLine("Robot Gyro: "+hardware.gyro.getAngles()[0]);
@@ -176,13 +181,20 @@ public class Raiser {
             motor.setVelocity(driveMotorVelocities[i]);
         }
     }
-    private void updateMotorsPower(){
+
+    private void updatePositions(){
         for(int i=0; i<driveMotors.length; i++){
             DcMotorEx motor = driveMotors[i];
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             motor.setTargetPosition(driveMotorPositions[i]);
             motor.setTargetPositionTolerance(5);
             motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+    }
+
+    private void updateMotorsPower(){
+        for(int i=0; i<driveMotors.length; i++){
+            DcMotorEx motor = driveMotors[i];
             motor.setPower(driveMotorVelocities[i]);
         }
     }
@@ -217,6 +229,7 @@ public class Raiser {
         driveMotorPositions[1] = position;
         driveMotorPositions[2] = rightFactor*position;
         driveMotorPositions[3] = rotateFactor*position;
+        updatePositions();
     }
 
     private void scaleMotorVelocities(){
