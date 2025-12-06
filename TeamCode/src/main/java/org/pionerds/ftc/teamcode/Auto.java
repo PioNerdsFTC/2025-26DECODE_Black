@@ -152,7 +152,6 @@ public class Auto {
 
         hardware.init(hardwareMap, telemetry);
 
-
         startToScoreChain = pathBuilder
             .addPath(new BezierLine(startPose, scanPose))
             .setConstantHeadingInterpolation(Math.toRadians(90))
