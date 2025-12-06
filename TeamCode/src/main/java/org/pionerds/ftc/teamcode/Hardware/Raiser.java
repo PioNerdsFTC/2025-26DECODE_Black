@@ -93,6 +93,14 @@ public class Raiser {
             hardware.telemetry.addLine("Motor2: "+driveMotorVelocities[2]);
             hardware.telemetry.addLine("Motor3: "+driveMotorVelocities[3]);
 
+            hardware.telemetry.addLine("\n");
+
+            hardware.telemetry.addLine("Set Driving Positions:");
+            hardware.telemetry.addLine("Motor0: "+driveMotorPositions[0]);
+            hardware.telemetry.addLine("Motor1: "+driveMotorPositions[1]);
+            hardware.telemetry.addLine("Motor2: "+driveMotorPositions[2]);
+            hardware.telemetry.addLine("Motor3: "+driveMotorPositions[3]);
+
             hardware.telemetry.addLine("\nwaiting on motors for linear movement...");
             hardware.telemetry.addLine("waiting on motors for linear movement...");
             hardware.telemetry.update();
