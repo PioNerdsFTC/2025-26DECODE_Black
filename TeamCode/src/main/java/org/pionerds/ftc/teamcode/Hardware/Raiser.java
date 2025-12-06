@@ -12,6 +12,7 @@ public class Raiser {
     private Hardware hardware;
     private DcMotorEx[] driveMotors;
     private double[] driveMotorVelocities = {0.00,0.00,0.00,0.00};
+    private double[] driveMotorDesiredVelocities = {0.00,0.00,0.00,0.00};
     private int[] driveMotorPositions = {0,0,0,0};
     private double intendedHeadingDegree = 0.00;
 
@@ -155,17 +156,17 @@ public class Raiser {
     private void setMotorVelocities(double velocity, boolean rotate, boolean right){
         int rotateFactor = (rotate ? 1 : -1);
         int rightFactor = (right ? 1 : -1);
-        driveMotorVelocities[0] = rightFactor*rotateFactor*velocity;
-        driveMotorVelocities[1] = velocity;
-        driveMotorVelocities[2] = rightFactor*velocity;
-        driveMotorVelocities[3] = rotateFactor*velocity;
+        driveMotorDesiredVelocities[0] = rightFactor*rotateFactor*velocity;
+        driveMotorDesiredVelocities[1] = velocity;
+        driveMotorDesiredVelocities[2] = rightFactor*velocity;
+        driveMotorDesiredVelocities[3] = rotateFactor*velocity;
     }
 
     private void forwardCorrectionTick(double endBringer){
-        driveMotorVelocities[0] -= endBringer;
-        driveMotorVelocities[1] += endBringer;
-        driveMotorVelocities[2] -= endBringer;
-        driveMotorVelocities[3] += endBringer;
+        driveMotorVelocities[0] = driveMotorDesiredVelocities[0] - endBringer;
+        driveMotorVelocities[1] = driveMotorDesiredVelocities[0] + endBringer;
+        driveMotorVelocities[2] = driveMotorDesiredVelocities[0] - endBringer;
+        driveMotorVelocities[3] = driveMotorDesiredVelocities[0] + endBringer;
     }
 
     private void setMotorPositions(int position, boolean rotate, boolean right){
