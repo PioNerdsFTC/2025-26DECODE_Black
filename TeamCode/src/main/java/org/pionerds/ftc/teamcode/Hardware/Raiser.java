@@ -13,6 +13,7 @@ public class Raiser {
     private DcMotorEx[] driveMotors;
     private double[] driveMotorVelocities = {0.00,0.00,0.00,0.00};
     private int[] driveMotorPositions = {0,0,0,0};
+    private double intendedHeadingDegree = 0.00;
 
     public void init(Hardware hardware){
         this.hardware = hardware;
@@ -67,6 +68,14 @@ public class Raiser {
         updateMotors();
 
         while (motorsBusy()){
+            forwardCorrectionTick((0.25*Math.signum(getAngleDifference())*(Math.pow(getAngleDifference(),2)/180.0)));
+            scaleMotorVelocities();
+            updateMotors();
+
+            hardware.telemetry.addLine("Robot Gyro: "+hardware.gyro.getAngles()[0]);
+            hardware.telemetry.addLine("Heading Gyro: "+intendedHeadingDegree);
+            hardware.telemetry.addLine("Difference Angle: "+getAngleDifference());
+
             hardware.telemetry.addLine("waiting on motors for linear movement...");
             hardware.telemetry.update();
         } // halts thread until it gets to position
@@ -88,7 +97,7 @@ public class Raiser {
         updateMotors();
 
         while (motorsBusy()){
-            hardware.telemetry.addLine("waiting on motors for linear movement...");
+            hardware.telemetry.addLine("waiting on motors for linear movement and correcting...");
             hardware.telemetry.update();
         } // halts thread until it gets to position
 
@@ -98,6 +107,10 @@ public class Raiser {
         driveByInchesRight(inches, 500.00);
     }
 
+    private double getAngleDifference(){
+        return hardware.gyro.getAngles()[0]-intendedHeadingDegree;
+    }
+
     public void driveByDegrees(double degrees, double velocity){
         resetEncoders();
         int position = (int) (degrees * ticksPerDegree);
@@ -105,6 +118,8 @@ public class Raiser {
         setMotorPositions(position,true,false);
         setMotorVelocities(velocity,true,false);
         scaleMotorVelocities();
+
+        intendedHeadingDegree += degrees;
 
         updateMotors();
 
@@ -144,6 +159,13 @@ public class Raiser {
         driveMotorVelocities[1] = velocity;
         driveMotorVelocities[2] = rightFactor*velocity;
         driveMotorVelocities[3] = rotateFactor*velocity;
+    }
+
+    private void forwardCorrectionTick(double endBringer){
+        driveMotorVelocities[0] -= endBringer;
+        driveMotorVelocities[1] += endBringer;
+        driveMotorVelocities[2] -= endBringer;
+        driveMotorVelocities[3] += endBringer;
     }
 
     private void setMotorPositions(int position, boolean rotate, boolean right){
