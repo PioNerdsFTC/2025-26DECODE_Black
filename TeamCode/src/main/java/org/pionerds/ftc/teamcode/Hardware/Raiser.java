@@ -88,10 +88,10 @@ public class Raiser {
             hardware.telemetry.addLine("\n");
 
             hardware.telemetry.addLine("Set Driving Velocities:");
-            hardware.telemetry.addLine("Motor0: "+((int)(driveMotorVelocities[0]/10))*100);
-            hardware.telemetry.addLine("Motor1: "+((int)(driveMotorVelocities[1]/10))*100);
-            hardware.telemetry.addLine("Motor2: "+((int)(driveMotorVelocities[2]/10))*100);
-            hardware.telemetry.addLine("Motor3: "+((int)(driveMotorVelocities[3]/10))*100);
+            hardware.telemetry.addLine("Motor0: "+((int)(driveMotorVelocities[0])));
+            hardware.telemetry.addLine("Motor1: "+((int)(driveMotorVelocities[1])));
+            hardware.telemetry.addLine("Motor2: "+((int)(driveMotorVelocities[2])));
+            hardware.telemetry.addLine("Motor3: "+((int)(driveMotorVelocities[3])));
 
             hardware.telemetry.addLine("\nwaiting on motors for linear movement...");
             hardware.telemetry.addLine("waiting on motors for linear movement...");
