@@ -64,13 +64,13 @@ public class Raiser {
 
         setMotorPositions(position,false,false);
         setMotorVelocities(velocity,false,false);
-        scaleMotorVelocities();
+        scaleMotorPowers();
 
         updateMotorsPower();
 
         while (motorsBusy()){
             forwardCorrectionTick((0.05)*(getAngleDifference()));
-            scaleMotorVelocities();
+            scaleMotorPowers();
             updateMotorsPower();
 
             hardware.telemetry.addLine("Robot Gyro: "+hardware.gyro.getAngles()[0]);
@@ -110,7 +110,7 @@ public class Raiser {
 
         setMotorPositions(position,false,true);
         setMotorVelocities(velocity,false,true);
-        scaleMotorVelocities();
+        scaleMotorPowers();
 
         updateMotorsPower();
 
@@ -135,7 +135,7 @@ public class Raiser {
 
         setMotorPositions(position,true,false);
         setMotorVelocities(velocity,true,false);
-        scaleMotorVelocities();
+        scaleMotorPowers();
 
         intendedHeadingDegree += degrees;
 
@@ -239,7 +239,7 @@ public class Raiser {
         boolean scale = false;
 
         for(double num: driveMotorVelocities){
-            if(num > maxVelocity) {
+            if(num > 1) {
                 scale = true;
                 if (num > scaleToNumber) {
                     scaleToNumber = num;
@@ -249,7 +249,7 @@ public class Raiser {
 
         if(scale){
             for(int i = 0; i<driveMotorVelocities.length; i++){
-                driveMotorVelocities[i] = driveMotorVelocities[i] / scaleToNumber * maxVelocity;
+                driveMotorVelocities[i] = driveMotorVelocities[i] / scaleToNumber * 1;
             }
         }
     }
