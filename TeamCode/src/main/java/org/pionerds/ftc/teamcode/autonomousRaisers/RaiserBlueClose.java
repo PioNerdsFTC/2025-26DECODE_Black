@@ -33,7 +33,7 @@ public class RaiserBlueClose extends OpMode {
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
 
-        hardware.raiser.driveByInches(-24,-0.3);
+        hardware.raiser.driveByInches(-36,-0.3);
     }
 
     @Override
