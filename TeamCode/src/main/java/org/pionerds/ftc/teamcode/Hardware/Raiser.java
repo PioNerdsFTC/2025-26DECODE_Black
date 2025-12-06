@@ -82,7 +82,7 @@ public class Raiser {
 
             //updateMotorsPower();
 
-            hardware.telemetry.addLine("Robot Gyro: "+hardware.gyro.getAngles()[0]);
+            /*hardware.telemetry.addLine("Robot Gyro: "+hardware.gyro.getAngles()[0]);
             hardware.telemetry.addLine("Heading Gyro: "+intendedHeadingDegree);
             hardware.telemetry.addLine("Difference Angle: "+getAngleDifference());
 
@@ -109,6 +109,7 @@ public class Raiser {
             hardware.telemetry.addLine("Motor1: "+driveMotorPositions[1]);
             hardware.telemetry.addLine("Motor2: "+driveMotorPositions[2]);
             hardware.telemetry.addLine("Motor3: "+driveMotorPositions[3]);
+            */
 
             hardware.telemetry.addLine("\nwaiting on motors for linear movement...");
             hardware.telemetry.update();

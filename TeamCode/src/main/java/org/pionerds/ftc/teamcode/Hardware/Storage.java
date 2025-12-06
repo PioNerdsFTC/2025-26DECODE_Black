@@ -134,6 +134,13 @@ public class Storage {
         intakeMotorEx.setPower(0);
     }
 
+    public void susanToTickPos(int pos, double velocity){
+        susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        susanMotorEx.setTargetPosition(pos);
+        susanMotorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        susanMotorEx.setVelocity(velocity);
+    }
+
     /**
      * Stops the intake motor and updates the inventory with the collected artifact.
      * Uses the current lazy susan position to determine which slot to update.
