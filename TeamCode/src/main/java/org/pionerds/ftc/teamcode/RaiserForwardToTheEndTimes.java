@@ -46,7 +46,7 @@ public class RaiserForwardToTheEndTimes extends OpMode {
         // START AI CODE
 
 
-        hardware.raiser.driveByInches(73,400);
+        hardware.raiser.driveByInches(73,0.3);
 
 
     }
