@@ -25,21 +25,21 @@ public class Raiser {
         resetEncoders();
         setMotorPositions(3500,false,false);
         setMotorVelocities(300,false,false);
-        updateMotors();
+        updateMotorsPower();
     }
 
     public void tuneSide(){
         resetEncoders();
         setMotorPositions(3500,false,true);
         setMotorVelocities(300,false,true);
-        updateMotors();
+        updateMotorsPower();
     }
 
     public void tuneRotation(){
         resetEncoders();
         setMotorPositions(1000,true,false);
         setMotorVelocities(300,true,false);
-        updateMotors();
+        updateMotorsPower();
     }
 
     public void tunePrint(){
@@ -66,12 +66,12 @@ public class Raiser {
         setMotorVelocities(velocity,false,false);
         scaleMotorVelocities();
 
-        updateMotors();
+        updateMotorsPower();
 
         while (motorsBusy()){
-            forwardCorrectionTick((0.25*Math.signum(getAngleDifference())*(Math.pow(getAngleDifference(),2)/180.0)));
+            forwardCorrectionTick((0.05)*(getAngleDifference()));
             scaleMotorVelocities();
-            updateMotors();
+            updateMotorsPower();
 
             hardware.telemetry.addLine("Robot Gyro: "+hardware.gyro.getAngles()[0]);
             hardware.telemetry.addLine("Heading Gyro: "+intendedHeadingDegree);
@@ -112,7 +112,7 @@ public class Raiser {
         setMotorVelocities(velocity,false,true);
         scaleMotorVelocities();
 
-        updateMotors();
+        updateMotorsPower();
 
         while (motorsBusy()){
             hardware.telemetry.addLine("waiting on motors for linear movement and correcting...");
@@ -139,7 +139,7 @@ public class Raiser {
 
         intendedHeadingDegree += degrees;
 
-        updateMotors();
+        updateMotorsPower();
 
         while (motorsBusy()){
             hardware.telemetry.addLine("waiting on motors for rotation...");
@@ -167,6 +167,16 @@ public class Raiser {
             motor.setTargetPositionTolerance(5);
             motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motor.setVelocity(driveMotorVelocities[i]);
+        }
+    }
+    private void updateMotorsPower(){
+        for(int i=0; i<driveMotors.length; i++){
+            DcMotorEx motor = driveMotors[i];
+            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motor.setTargetPosition(driveMotorPositions[i]);
+            motor.setTargetPositionTolerance(5);
+            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motor.setPower(driveMotorVelocities[i]);
         }
     }
 
@@ -204,6 +214,27 @@ public class Raiser {
 
     private void scaleMotorVelocities(){
 
+        double scaleToNumber = 0.00;
+        boolean scale = false;
+
+        for(double num: driveMotorVelocities){
+            if(num > maxVelocity) {
+                scale = true;
+                if (num > scaleToNumber) {
+                    scaleToNumber = num;
+                }
+            }
+        }
+
+        if(scale){
+            for(int i = 0; i<driveMotorVelocities.length; i++){
+                driveMotorVelocities[i] = driveMotorVelocities[i] / scaleToNumber * maxVelocity;
+            }
+        }
+    }
+
+
+    private void scaleMotorPowers(){
         double scaleToNumber = 0.00;
         boolean scale = false;
 
