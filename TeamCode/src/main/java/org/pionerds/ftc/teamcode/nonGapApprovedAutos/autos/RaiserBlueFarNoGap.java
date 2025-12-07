@@ -39,9 +39,12 @@ public class RaiserBlueFarNoGap extends OpMode {
         // START AI CODE
 
         hardware.storage.disableFeeder();
+        hardware.vision.getArtifactPattern();
         hardware.raiser.driveByInches(84,0.3);
+        hardware.vision.getArtifactPattern();
 
         hardware.raiser.driveByDegrees(30,0.3);
+        hardware.vision.getArtifactPattern();
 
         if(hardware.vision.getPioNerdAprilTag(target) != null){
             hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(target));
@@ -54,6 +57,7 @@ public class RaiserBlueFarNoGap extends OpMode {
         LazySusanPositions[] selectedOutput = selectedIntakeOutput[1];
 
         // Lazy Susan Launching
+        hardware.storage.enableIntakeManual(1);
         hardware.storage.moveSusanTo(selectedOutput[0]);
         hardware.sleep(1500);
         hardware.storage.enableFeederManual();
