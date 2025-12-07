@@ -104,11 +104,16 @@ public class PostCompetitionSusanControls extends DriverControls {
 
 
         // Enable/Disable Launcher with Left Bumper Toggle Press
-        if(gamepad.left_bumper && !isTogglingLauncher){
+        if(gamepad.left_bumper && !isTogglingLauncher && !(gamepad.right_stick_button || gamepad.left_stick_button)){
             if(isLauncherOn) hardware.launcher.setLauncherVelocity(0);
             isLauncherOn = !isLauncherOn;
             isTogglingLauncher = true;
         } else if(!gamepad.left_bumper) isTogglingLauncher = false;
+
+        if(gamepad.right_stick_button || gamepad.left_stick_button) {
+            isLauncherOn = false;
+            hardware.launcher.setLauncherVelocity(1500);
+        }
 
         if(isLauncherOn) hardware.launcher.setLauncherVelocity(hardware.aimbot.calculateMotorVelocity(targetName));
 
