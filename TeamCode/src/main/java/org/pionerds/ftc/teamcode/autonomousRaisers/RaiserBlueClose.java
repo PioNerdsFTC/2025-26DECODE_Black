@@ -11,7 +11,7 @@ import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
 import java.lang.annotation.Target;
 
-@Autonomous(name = "RaiserBlueClose")
+@Autonomous(name = "RaiserBlueClose",group = "Maple Grove Competition",preselectTeleOp = "PracticeOpPostCompetitionBlue")
 public class RaiserBlueClose extends OpMode {
 
     final Hardware hardware = new Hardware();
@@ -64,10 +64,10 @@ public class RaiserBlueClose extends OpMode {
         hardware.sleep(1500);
         hardware.storage.enableFeederManual();
         hardware.sleep(1500);
+
         hardware.storage.disableFeeder();
-
         hardware.storage.moveSusanTo(LazySusanPositions.INTAKE1);
-
+        hardware.launcher.setLauncherVelocity(0);
 
     }
 

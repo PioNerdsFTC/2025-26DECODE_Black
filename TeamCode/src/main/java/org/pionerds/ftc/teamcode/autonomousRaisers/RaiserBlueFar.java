@@ -9,7 +9,7 @@ import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
-@Autonomous(name = "RaiserBlueFar")
+@Autonomous(name = "RaiserBlueFar",group = "Maple Grove Competition",preselectTeleOp = "PracticeOpPostCompetitionBlue")
 public class RaiserBlueFar extends OpMode {
 
     final Hardware hardware = new Hardware();
@@ -66,9 +66,10 @@ public class RaiserBlueFar extends OpMode {
         hardware.sleep(1500);
         hardware.storage.enableFeederManual();
         hardware.sleep(1500);
-        hardware.storage.disableFeeder();
 
+        hardware.storage.disableFeeder();
         hardware.storage.moveSusanTo(LazySusanPositions.INTAKE1);
+        hardware.launcher.setLauncherVelocity(0);
 
     }
 

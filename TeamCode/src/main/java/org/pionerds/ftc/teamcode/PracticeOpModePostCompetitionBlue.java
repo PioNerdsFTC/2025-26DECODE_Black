@@ -10,7 +10,7 @@ import org.pionerds.ftc.teamcode.Hardware.Drivers.PostCompetitionSusanControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
 @TeleOp(name = "PracticeOpPostCompetitionBlue")
-public class PracticeOpModePostCompetition extends LinearOpMode {
+public class PracticeOpModePostCompetitionBlue extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
     final DriverControls driverControls1 = new LucasDriverControls(

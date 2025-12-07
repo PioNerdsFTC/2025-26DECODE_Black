@@ -13,7 +13,7 @@ import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
 
 
-@Autonomous(name = "RaiserAutoRedClose")
+@Autonomous(name="RaiserAutoRedClose", group="Maple Grove Competition", preselectTeleOp="RedOpPostCompetition")
 @Disabled
 public class RaiserAutoRedClose extends OpMode {
 
