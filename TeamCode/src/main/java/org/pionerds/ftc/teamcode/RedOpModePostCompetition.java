@@ -1,31 +1,30 @@
-package org.pionerds.ftc.teamcode.Hardware;
+package org.pionerds.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControlsRed;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.ManualSusanOperatorControls;
+import org.pionerds.ftc.teamcode.Hardware.Drivers.PostCompetitionSusanControls;
+import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
-@TeleOp(name = "RedOpMode")
-@Disabled
-public class REDOpMode extends LinearOpMode {
+@TeleOp(name = "RedOpPostCompetition")
+public class RedOpModePostCompetition extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
-    final DriverControls driverControls1 = new LucasDriverControlsRed(
-        "Lucas Schwietz",
-        true,
-        1.0f
-    );
-
-    final ManualSusanOperatorControls driverControls2 = new ManualSusanOperatorControls(
-            "Lukie Pookie",
+    final DriverControls driverControls1 = new LucasDriverControls(
+            "Lucas Schwietz",
             true,
             1.0f,
-            false
+            true
+    );
+
+    final PostCompetitionSusanControls driverControls2 = new PostCompetitionSusanControls(
+            "Lukie Pookie",
+            1.0f,
+            true,
+            true
     );
 
     @Override
@@ -39,6 +38,7 @@ public class REDOpMode extends LinearOpMode {
         hardware.addElapsedTime(elapsedTime);
 
         hardware.storage.resetEncoderSusan();
+        hardware.storage.disableFeeder();
 
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
@@ -48,7 +48,6 @@ public class REDOpMode extends LinearOpMode {
         while (opModeIsActive()) {
 
             hardware.tick(gamepad1,gamepad2);
-            if(gamepad2.right_bumper) hardware.raiser.rotateToTarget(AprilTagNames.BlueTarget);
 
             telemetry.update();
 

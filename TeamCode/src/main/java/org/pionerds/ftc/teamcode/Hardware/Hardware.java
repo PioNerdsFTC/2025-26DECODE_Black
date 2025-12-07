@@ -129,7 +129,7 @@ public final class Hardware {
 
     public void sleep(double milliseconds){
         double startTime = elapsedTime.milliseconds();
-        while (elapsedTime.milliseconds() < startTime+milliseconds){}
+        while (elapsedTime.milliseconds() < startTime+milliseconds && continueRunning){}
     }
 
     public void stop() {

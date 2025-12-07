@@ -2,7 +2,6 @@ package org.pionerds.ftc.teamcode;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.pionerds.ftc.teamcode.Pathfinding.Constants;
 
 public class AutoOpModes {
     private static final Double robotLength = 18.0;
@@ -12,8 +11,10 @@ public class AutoOpModes {
         @Override
         public void init() {
             auto = new Auto(
-                new Pose(56, robotLength / 2, Math.toRadians(90)),
-                new Pose(105.25, 110.75, Math.toRadians(0)),
+                new Pose(88, robotLength / 2, Math.toRadians(90)),
+                new Pose(144-48, 110, Math.toRadians(35.954)),
+                new Pose(39.03125,  34.28125, Math.toRadians(0)),
+                true,
                 this.telemetry,
                 this.hardwareMap
             );
@@ -27,7 +28,9 @@ public class AutoOpModes {
         public void init() {
             auto = new Auto(
                 new Pose(118, 128, Math.toRadians(35.954)),
-                new Pose(105.25, 110.75, Math.toRadians(0)),
+                new Pose(144-48, 110, Math.toRadians(35.954)),
+                new Pose(39.03125,  34.28125, Math.toRadians(0)),
+                true,
                 this.telemetry,
                 this.hardwareMap
             );
@@ -41,7 +44,9 @@ public class AutoOpModes {
         public void init() {
             auto = new Auto(
                 new Pose(56, robotLength / 2, Math.toRadians(90)),
-                new Pose(105.25, 110.75, Math.toRadians(0)),
+                new Pose(48, 110, Math.toRadians(144.046)),
+                new Pose(104.96875,  34.28125, Math.toRadians(0)),
+                false,
                 this.telemetry,
                 this.hardwareMap
             );
@@ -55,11 +60,23 @@ public class AutoOpModes {
         public void init() {
             auto = new Auto(
                 new Pose(118, 128, Math.toRadians(144.046)),
-                new Pose(105.25, 110.75, Math.toRadians(0)),
+                new Pose(48, 110, Math.toRadians(144.046)),
+                new Pose(104.96875,  34.28125, Math.toRadians(0)),
+                false,
                 this.telemetry,
                 this.hardwareMap
             );
             auto.init();
+        }
+    }
+
+
+    @Autonomous(name = "Blank Auto")
+    public static class BlankAuto extends AutoOpMode {
+        @Override
+        public void init() {
+            auto.pureInit(hardwareMap,telemetry);
+
         }
     }
 }

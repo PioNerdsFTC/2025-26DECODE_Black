@@ -1,39 +1,34 @@
-package org.pionerds.ftc.teamcode.Hardware;
+package org.pionerds.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Artifact;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
 
-@Disabled
-@Autonomous(name = "AutoGOFORWARD")
-public class AutoGOFORWARD extends LinearOpMode {
+@Autonomous(name = "RaiserForwardToTheEndTimes")
+public class RaiserForwardToTheEndTimes extends OpMode {
 
     final Hardware hardware = new Hardware();
-
+    AprilTagNames target;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void init() {
         hardware.init(hardwareMap, telemetry);
         telemetry.addLine("Robot initialized! (TeleOp)");
         telemetry.update();
 
-        AprilTagNames target = AprilTagNames.BlueTarget;
+        target = AprilTagNames.BlueTarget;
         hardware.storage.resetEncoderSusan();
 
+    }
 
-        waitForStart(); // Wait for start!
-
-
-
+    @Override
+    public void start() {
+        hardware.vision.getArtifactPattern();
         ElapsedTime elapsedTime = new ElapsedTime();
         hardware.addElapsedTime(elapsedTime);
 
@@ -48,26 +43,22 @@ public class AutoGOFORWARD extends LinearOpMode {
         hardware.sleep(5000);*/
 
 
-
         // START AI CODE
 
-// FTC Autonomous Path - Generated Code
-// Robot Start: (12", 114") @ 120°
 
-// Step 1
-        hardware.raiser.driveByInches(70.00);
-      ///z ////////////////////////////////////////
+        hardware.raiser.driveByInches(96,0.3);
 
 
-        // Main loop!
-        while (opModeIsActive()) {
+    }
 
-            hardware.raiser.tunePrint();
-            telemetry.update();
+    @Override
+    public void loop() {
 
-            sleep(1);
-        }
+    }
 
+    @Override
+    public void stop() {
         hardware.stop();
+        super.stop();
     }
 }

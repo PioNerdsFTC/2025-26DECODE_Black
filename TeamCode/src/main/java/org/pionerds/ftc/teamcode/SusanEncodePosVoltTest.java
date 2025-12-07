@@ -4,13 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
-@TeleOp(name = "SusanTest")
-public class SusanTestOpMode extends LinearOpMode {
+@TeleOp(name = "SusanEncodePosVoltTest")
+public class SusanEncodePosVoltTest extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
     final DriverControls driverControls1 = new LucasDriverControls(
@@ -34,7 +33,7 @@ public class SusanTestOpMode extends LinearOpMode {
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();
         boolean changingPower = false;
-        double currentPower = 0.00;
+        double currentPos = 0.00;
 
         // Main loop!
         while (opModeIsActive()) {
@@ -51,27 +50,24 @@ public class SusanTestOpMode extends LinearOpMode {
 
             if (!changingPower) {
                 if (gamepad1.dpad_up) {
-                    currentPower += 0.1;
+                    currentPos += 5;
+                    hardware.storage.susanToTickPos((int)currentPos,100);
                     changingPower = true;
                 } else if (gamepad1.dpad_down) {
-                    currentPower -= 0.1;
+                    currentPos -= 5;
+                    hardware.storage.susanToTickPos((int)currentPos,100);
                     changingPower = true;
                 }
             } else if (!(gamepad1.dpad_up || gamepad1.dpad_down)) {
                 changingPower = false;
             }
             if (gamepad1.b) {
-                currentPower = 0;
+                currentPos = 0;
             }
 
-            if(gamepad1.a){
-                hardware.storage.enableIntakeManual(1);
-            } else if(gamepad1.b){
-                hardware.storage.enableIntakeManual(-1);
-            }
-
-            telemetry.addLine("\nPower: " + currentPower);
-            hardware.storage.testRotateSusan(currentPower);
+            telemetry.addLine("\nPosition: " + currentPos);
+            telemetry.addLine("\nCURRENT Pos: " + hardware.storage.getSusanCurrentTicks());
+            telemetry.addLine("\nCurrent: " + hardware.storage.susanAmperage()+"A");
 
             telemetry.update();
 

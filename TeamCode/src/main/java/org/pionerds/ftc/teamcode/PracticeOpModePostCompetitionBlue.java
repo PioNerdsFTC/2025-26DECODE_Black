@@ -6,24 +6,24 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
-import org.pionerds.ftc.teamcode.Hardware.Drivers.ManualSusanOperatorControls;
+import org.pionerds.ftc.teamcode.Hardware.Drivers.PostCompetitionSusanControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
-@TeleOp(name = "PracticeOpRed")
-public class PracticeOpModeRed extends LinearOpMode {
+@TeleOp(name = "PracticeOpPostCompetitionBlue")
+public class PracticeOpModePostCompetitionBlue extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
     final DriverControls driverControls1 = new LucasDriverControls(
         "Lucas Schwietz",
         true,
         1.0f,
-            true
+            false
     );
 
-    final ManualSusanOperatorControls driverControls2 = new ManualSusanOperatorControls(
+    final PostCompetitionSusanControls driverControls2 = new PostCompetitionSusanControls(
             "Lukie Pookie",
-            true,
             1.0f,
+            false,
             true
     );
 
@@ -38,6 +38,7 @@ public class PracticeOpModeRed extends LinearOpMode {
         hardware.addElapsedTime(elapsedTime);
 
         hardware.storage.resetEncoderSusan();
+        hardware.storage.disableFeeder();
 
         telemetry.addLine("Robot runtime started! (TeleOp)");
         telemetry.update();

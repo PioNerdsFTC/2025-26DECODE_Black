@@ -4,13 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.DriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Drivers.LucasDriverControls;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 
-@TeleOp(name = "SusanTest")
-public class SusanTestOpMode extends LinearOpMode {
+@TeleOp(name = "SusanVelocityTest")
+public class SusanVelocityTest extends LinearOpMode {
 
     final Hardware hardware = new Hardware();
     final DriverControls driverControls1 = new LucasDriverControls(
@@ -51,10 +50,10 @@ public class SusanTestOpMode extends LinearOpMode {
 
             if (!changingPower) {
                 if (gamepad1.dpad_up) {
-                    currentPower += 0.1;
+                    currentPower += 10;
                     changingPower = true;
                 } else if (gamepad1.dpad_down) {
-                    currentPower -= 0.1;
+                    currentPower -= 10;
                     changingPower = true;
                 }
             } else if (!(gamepad1.dpad_up || gamepad1.dpad_down)) {
@@ -64,14 +63,10 @@ public class SusanTestOpMode extends LinearOpMode {
                 currentPower = 0;
             }
 
-            if(gamepad1.a){
-                hardware.storage.enableIntakeManual(1);
-            } else if(gamepad1.b){
-                hardware.storage.enableIntakeManual(-1);
-            }
-
-            telemetry.addLine("\nPower: " + currentPower);
-            hardware.storage.testRotateSusan(currentPower);
+            telemetry.addLine("\nVelocity: " + currentPower);
+            telemetry.addLine("\nCURRENT Vel: " + hardware.storage.currentSusanVelocity());
+            telemetry.addLine("\nCurrent: " + hardware.storage.susanAmperage()+"A");
+            hardware.storage.testRotateSusanVelocity(currentPower);
 
             telemetry.update();
 
