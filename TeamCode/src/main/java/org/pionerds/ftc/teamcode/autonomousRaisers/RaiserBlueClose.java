@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.pionerds.ftc.teamcode.Hardware.AprilTagNames;
 import org.pionerds.ftc.teamcode.Hardware.Hardware;
 import org.pionerds.ftc.teamcode.Hardware.LazySusanPositions;
+import org.pionerds.ftc.teamcode.Utils.DataStorage;
 
 import java.lang.annotation.Target;
 
@@ -77,6 +78,7 @@ public class RaiserBlueClose extends OpMode {
 
     @Override
     public void stop() {
+        DataStorage.storeAngle(0, hardware.gyro.getHeading());
         hardware.stop();
         super.stop();
     }
