@@ -43,7 +43,7 @@ public class RaiserBlueFarNoGap extends OpMode {
         hardware.raiser.driveByInches(84,0.3);
         hardware.vision.getArtifactPattern();
 
-        hardware.raiser.driveByDegrees(30,0.3);
+        hardware.raiser.driveByDegrees(50,0.3);
         hardware.vision.getArtifactPattern();
 
         if(hardware.vision.getPioNerdAprilTag(target) != null){
