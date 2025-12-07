@@ -61,6 +61,6 @@ public class Launcher {
         launcher0.setPower(0);
         launcher1.setPower(0);
         launcher0.setVelocity(0);
-        launcher0.setVelocity(0);
+        launcher1.setVelocity(0);
     }
 }
