@@ -294,4 +294,49 @@ public class Raiser {
         }
     }
 
+    public LazySusanPositions[][] getIntakeOutputArrays(){
+
+        Artifact[] pattern = hardware.vision.getArtifactPattern();
+        for (Artifact art : pattern) {
+            hardware.telemetry.addLine("object: " + art.name());
+        }
+
+        LazySusanPositions[] inputEnums = new LazySusanPositions[]{LazySusanPositions.INTAKE1, LazySusanPositions.INTAKE2, LazySusanPositions.INTAKE3};
+        LazySusanPositions[] outputEnums = new LazySusanPositions[]{LazySusanPositions.OUTPUT1, LazySusanPositions.OUTPUT2, LazySusanPositions.OUTPUT3};
+
+        // pattern specific
+        LazySusanPositions[] intake_GPP = {inputEnums[0], inputEnums[1], inputEnums[2]};
+        LazySusanPositions[] intake_PGP = {inputEnums[1], inputEnums[0], inputEnums[2]};
+        LazySusanPositions[] intake_PPG = {inputEnums[1], inputEnums[2], inputEnums[0]};
+
+        LazySusanPositions[] output_GPP = {outputEnums[0], outputEnums[1], outputEnums[2]};
+        LazySusanPositions[] output_PGP = {outputEnums[1], outputEnums[0], outputEnums[2]};
+        LazySusanPositions[] output_PPG = {outputEnums[1], outputEnums[2], outputEnums[0]};
+
+        LazySusanPositions[] selectedIntake = intake_GPP;
+        LazySusanPositions[] selectedOutput = output_GPP;
+
+        if (pattern[0].equals(Artifact.GREEN) && pattern[1].equals(Artifact.PURPLE) && pattern[2].equals(Artifact.PURPLE)) {
+            selectedIntake = intake_GPP;
+            selectedOutput = output_GPP;
+            hardware.telemetry.addLine("PATTERN IS GPP");
+        } else if (pattern[0].equals(Artifact.PURPLE) && pattern[1].equals(Artifact.GREEN) && pattern[2].equals(Artifact.PURPLE)) {
+            selectedIntake = intake_PGP;
+            selectedOutput = output_PGP;
+            hardware.telemetry.addLine("PATTERN IS PGP");
+        } else if (pattern[0].equals(Artifact.PURPLE) && pattern[1].equals(Artifact.PURPLE) && pattern[2].equals(Artifact.GREEN)) {
+            selectedIntake = intake_PPG;
+            selectedOutput = output_PPG;
+            hardware.telemetry.addLine("PATTERN IS PPG");
+        } else {
+            hardware.telemetry.addLine("PATTERN NOT IN COMPARISONS");
+            hardware.telemetry.addLine("Pattern:");
+            hardware.telemetry.addLine(pattern[0].name());
+            hardware.telemetry.addLine(pattern[1].name());
+            hardware.telemetry.addLine(pattern[2].name());
+        }
+        return new LazySusanPositions[][] {selectedIntake,selectedOutput};
+    }
+
+
 }
