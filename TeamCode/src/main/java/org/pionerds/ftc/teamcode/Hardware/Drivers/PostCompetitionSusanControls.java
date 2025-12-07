@@ -33,7 +33,7 @@ public class PostCompetitionSusanControls extends DriverControls {
         targetName = (isRed ? AprilTagNames.RedTarget : AprilTagNames.BlueTarget);
         movingSusan = false;
         lazySusanPositions = LazySusanPositions.values();
-        maxSusanVelocity = 1500;
+        maxSusanVelocity = 200;
         isLauncherOn = false;
         isTogglingLauncher = false;
         isFeederOn = false;
@@ -49,7 +49,7 @@ public class PostCompetitionSusanControls extends DriverControls {
         LazySusanPositions currentPos = hardware.storage.getCurrentSusanPositionEnum();
 
         // Control Lazy Susan - Adjust
-        if((gamepad.left_trigger > 0.1 || gamepad.right_trigger > 0.1) && !movingSusan) {
+        if((gamepad.left_trigger > 0.05 || gamepad.right_trigger > 0.05) && !movingSusan) {
             hardware.storage.sendVelocitySusan(maxSusanVelocity * (gamepad.right_trigger - gamepad.left_trigger));
             adjustingSusan = true;
 

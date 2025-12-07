@@ -16,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 public class Storage {
     private final int susanVelocityRequest = 300;  // Requested velocity for susan motor
     private final double gearRatio = (17.0/9.0);    // Gear ratio: (17/9) = 3:1
-    private final double TPR = (560 * gearRatio); // Ticks per revolution before gearing (288 TPR FOR CORE HEX MOTOR | 560 TPR for HD HEX MOTOR)
+    private final double TPR = (1000); //(560 * gearRatio); // Ticks per revolution before gearing (288 TPR FOR CORE HEX MOTOR | 560 TPR for HD HEX MOTOR)
     private final Artifact[] inventory = new Artifact[]{Artifact.EMPTY, Artifact.EMPTY, Artifact.EMPTY};  // Stores what artifact is in each of 3 storage slots
     private Hardware hardware;
     // Servos and motors for storage mechanism
@@ -165,11 +165,11 @@ public class Storage {
             hardware.telemetry.addLine("Error updating inventory: " + e.getMessage());
         }
     }
-    private final int INTAKE2_OFFSET = computeOffsets ? ((int) ((1.0/3.0 * 360) * ((TPR)/360))) : 350;
-    private final int INTAKE3_OFFSET = computeOffsets ? ((int) ((2.0/3.0 * 360) * ((TPR)/360))) : 690;
-    private final int OUTPUT1_OFFSET = computeOffsets ? ((int) (((180 - (0) * 360)) * ((TPR)/360))) : 510;
-    private final int OUTPUT2_OFFSET = computeOffsets ? ((int) (((180 + (1.0/3.0) * 360)) * ((TPR)/360))) : 835;
-    private final int OUTPUT3_OFFSET = computeOffsets ? ((int) (((180 - (1.0/3.0) * 360)) * ((TPR)/360))) : 1175;
+    private final int INTAKE2_OFFSET = computeOffsets ? ((int) ((1.0/3.0 * 360) * ((TPR)/360))) : 330;
+    private final int INTAKE3_OFFSET = computeOffsets ? ((int) ((2.0/3.0 * 360) * ((TPR)/360))) : 660;
+    private final int OUTPUT1_OFFSET = computeOffsets ? ((int) (((180 - (0) * 360)) * ((TPR)/360))) : 500;
+    private final int OUTPUT2_OFFSET = computeOffsets ? ((int) (((180 + (1.0/3.0) * 360)) * ((TPR)/360))) : 830;
+    private final int OUTPUT3_OFFSET = computeOffsets ? ((int) (((180 - (1.0/3.0) * 360)) * ((TPR)/360))) : 1160;
 
 
 
@@ -397,7 +397,7 @@ public class Storage {
         if (!isInitialized) return;
         susanMotorEx.setTargetPosition(susanTargetTicks);
         susanMotorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        susanMotorEx.setVelocity(1500);  // Full power for fast positioning
+        susanMotorEx.setVelocity(700);  // fast speeder!
     }
 
     /**
@@ -478,7 +478,7 @@ public class Storage {
 
     public void sendVelocitySusan(double velocity) {
         susanMotorEx.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        susanMotorEx.setPower(velocity);
+        susanMotorEx.setVelocity(velocity);
     }
 
     public void waitForSusanRotation(){
