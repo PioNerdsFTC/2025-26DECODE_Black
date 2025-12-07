@@ -33,7 +33,7 @@ public class PostCompetitionSusanControls extends DriverControls {
         targetName = (isRed ? AprilTagNames.RedTarget : AprilTagNames.BlueTarget);
         movingSusan = false;
         lazySusanPositions = LazySusanPositions.values();
-        maxSusanVelocity = 300;
+        maxSusanVelocity = 1500;
         isLauncherOn = false;
         isTogglingLauncher = false;
         isFeederOn = false;

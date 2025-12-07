@@ -64,6 +64,12 @@ public class SusanTestOpMode extends LinearOpMode {
                 currentPower = 0;
             }
 
+            if(gamepad1.a){
+                hardware.storage.enableIntakeManual(1);
+            } else if(gamepad1.b){
+                hardware.storage.enableIntakeManual(-1);
+            }
+
             telemetry.addLine("\nPower: " + currentPower);
             hardware.storage.testRotateSusan(currentPower);
 

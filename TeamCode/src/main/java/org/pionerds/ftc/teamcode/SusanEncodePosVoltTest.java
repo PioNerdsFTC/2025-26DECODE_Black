@@ -66,7 +66,7 @@ public class SusanEncodePosVoltTest extends LinearOpMode {
             }
 
             telemetry.addLine("\nPosition: " + currentPos);
-            telemetry.addLine("\nCURRENT Pos: " + hardware.storage.currentSusanVelocity());
+            telemetry.addLine("\nCURRENT Pos: " + hardware.storage.getSusanCurrentTicks());
             telemetry.addLine("\nCurrent: " + hardware.storage.susanAmperage()+"A");
 
             telemetry.update();

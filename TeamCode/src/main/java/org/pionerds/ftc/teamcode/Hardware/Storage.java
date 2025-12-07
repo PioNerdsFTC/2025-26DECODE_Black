@@ -56,7 +56,7 @@ public class Storage {
             feederServo = bumpUpFeeder;
             tiltFeedServo = tempFeederTiltServo;
             susanMotorEx = susan;
-            susanMotorEx.setTargetPositionTolerance(3);  // Set precision for position control (within 1 tick)
+            susanMotorEx.setTargetPositionTolerance(2);  // Set precision for position control (within 1 tick)
             intakeMotorEx = intake;
             isInitialized = true;  // Mark system as ready
         } else {
@@ -64,6 +64,7 @@ public class Storage {
             hardware.telemetry.clearAll();
             hardware.telemetry.addLine("STORAGE IS NOT INITIALIZED!");
         }
+        susanMotorEx.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     /**
@@ -164,11 +165,11 @@ public class Storage {
             hardware.telemetry.addLine("Error updating inventory: " + e.getMessage());
         }
     }
-    private final int INTAKE2_OFFSET = computeOffsets ? ((int) ((1.0/3.0 * 360) * ((TPR)/360))) : 335;
-    private final int INTAKE3_OFFSET = computeOffsets ? ((int) ((2.0/3.0 * 360) * ((TPR)/360))) : 669;
-    private final int OUTPUT1_OFFSET = computeOffsets ? ((int) (((180 - (0) * 360)) * ((TPR)/360))) : 494;
-    private final int OUTPUT2_OFFSET = computeOffsets ? ((int) (((180 + (1.0/3.0) * 360)) * ((TPR)/360))) : 820;
-    private final int OUTPUT3_OFFSET = computeOffsets ? ((int) (((180 - (1.0/3.0) * 360)) * ((TPR)/360))) : 139;
+    private final int INTAKE2_OFFSET = computeOffsets ? ((int) ((1.0/3.0 * 360) * ((TPR)/360))) : 350;
+    private final int INTAKE3_OFFSET = computeOffsets ? ((int) ((2.0/3.0 * 360) * ((TPR)/360))) : 690;
+    private final int OUTPUT1_OFFSET = computeOffsets ? ((int) (((180 - (0) * 360)) * ((TPR)/360))) : 510;
+    private final int OUTPUT2_OFFSET = computeOffsets ? ((int) (((180 + (1.0/3.0) * 360)) * ((TPR)/360))) : 835;
+    private final int OUTPUT3_OFFSET = computeOffsets ? ((int) (((180 - (1.0/3.0) * 360)) * ((TPR)/360))) : 1175;
 
 
 
@@ -396,7 +397,7 @@ public class Storage {
         if (!isInitialized) return;
         susanMotorEx.setTargetPosition(susanTargetTicks);
         susanMotorEx.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        susanMotorEx.setVelocity(100);  // Full power for fast positioning
+        susanMotorEx.setVelocity(1500);  // Full power for fast positioning
     }
 
     /**
